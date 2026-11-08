@@ -1,0 +1,365 @@
+[
+  {
+    "id": "q01",
+    "stage": "pre",
+    "db": "v1",
+    "text": "What was the total value in EUR of all transactions with status CAPTURED whose ts_utc falls on 2025-03-14 UTC (2025-03-14 00:00:00 <= ts_utc < 2025-03-15 00:00:00)? Convert every transaction amount to EUR (major units) using the daily FX rate (EUR per unit of the transaction currency) for the transaction date. Answer with one number in EUR rounded to 2 decimals, e.g. 12345.67.",
+    "gt_sql": "SELECT ROUND(SUM(t.amount_minor / power(10, c.exponent) * f.rate_to_eur), 2) AS eur_total\nFROM txn t\nJOIN dim_currency c ON c.currency_id = t.currency_id\nJOIN fx_rate f ON f.currency_id = t.currency_id AND f.rate_date = substr(t.ts_utc, 1, 10)\nJOIN txn_status_dict s ON s.status_id = t.status_id\nWHERE s.code = 'CAPTURED'\n  AND t.ts_utc >= '2025-03-14 00:00:00' AND t.ts_utc < '2025-03-15 00:00:00'",
+    "type": "float",
+    "tolerance": 1.0,
+    "knowledge_tags": [
+      "FX_EXPONENT",
+      "DATE_FILTER"
+    ],
+    "difficulty": "medium",
+    "rationale": "amount_minor must be scaled by 10^exponent per currency (JPY=0, KWD=3) before applying the daily rate; dividing everything by 100 inflates JPY and deflates KWD amounts.",
+    "answer_format": "number (EUR, 2 decimals)",
+    "answer": 36531.85
+  },
+  {
+    "id": "q02",
+    "stage": "pre",
+    "db": "v1",
+    "text": "Consider all transactions (any status) made on terminals that were assigned, at the time of each transaction, to a merchant belonging to merchant group 'Helios Grocery' or to any of its sub-groups (at any depth). Which ISO-8601 week had the largest number of such transactions in 2025? Answer in the format YYYY-Www, e.g. 2025-W07.",
+    "gt_sql": "WITH RECURSIVE grp(group_id) AS (\n  SELECT group_id FROM dim_merchant_group WHERE name = 'Helios Grocery'\n  UNION ALL\n  SELECT g.group_id FROM dim_merchant_group g JOIN grp ON g.parent_group_id = grp.group_id\n)\nSELECT strftime('%Y', date(t.ts_utc, '-' || ((strftime('%w', t.ts_utc) + 6) % 7) || ' days', '+3 days')) || '-W' || printf('%02d', (strftime('%j', date(t.ts_utc, '-' || ((strftime('%w', t.ts_utc) + 6) % 7) || ' days', '+3 days')) - 1) / 7 + 1) AS iso_week, COUNT(*) AS n\nFROM txn t\nJOIN terminal_assignment ta ON ta.terminal_id = t.terminal_id\n  AND t.ts_utc >= ta.valid_from AND (ta.valid_to IS NULL OR t.ts_utc < ta.valid_to)\nJOIN dim_merchant m ON m.merchant_id = ta.merchant_id\nJOIN grp ON grp.group_id = m.group_id\nGROUP BY iso_week ORDER BY n DESC LIMIT 1",
+    "type": "str",
+    "tolerance": 0,
+    "knowledge_tags": [
+      "HIERARCHY",
+      "DATE_RANGE_JOIN",
+      "ISO_WEEK"
+    ],
+    "difficulty": "medium",
+    "rationale": "The group is a level-2 division; its merchants hang off level-3 chains, so a recursive roll-up is needed. SQLite's %W is not the ISO week (off by one in 2025); growth + December bump put the peak in W51.",
+    "answer_format": "YYYY-Www",
+    "answer": "2025-W51"
+  },
+  {
+    "id": "q03",
+    "stage": "pre",
+    "db": "v1",
+    "text": "What was the total value in EUR of CAPTURED transactions in the first half of 2025 (2025-01-01 00:00:00 <= ts_utc < 2025-07-01 00:00:00) made on terminals that were assigned, at the time of the transaction, to merchants of merchant group 'Aurora Hospitality' or any of its sub-groups? Convert amounts to EUR with the daily FX rate of the transaction date. Answer with one number in EUR rounded to 2 decimals.",
+    "gt_sql": "WITH RECURSIVE grp(group_id) AS (\n  SELECT group_id FROM dim_merchant_group WHERE name = 'Aurora Hospitality'\n  UNION ALL\n  SELECT g.group_id FROM dim_merchant_group g JOIN grp ON g.parent_group_id = grp.group_id\n)\nSELECT ROUND(SUM(t.amount_minor / power(10, c.exponent) * f.rate_to_eur), 2) AS eur_total\nFROM txn t\nJOIN terminal_assignment ta ON ta.terminal_id = t.terminal_id\n  AND t.ts_utc >= ta.valid_from AND (ta.valid_to IS NULL OR t.ts_utc < ta.valid_to)\nJOIN dim_merchant m ON m.merchant_id = ta.merchant_id\nJOIN grp ON grp.group_id = m.group_id\nJOIN dim_currency c ON c.currency_id = t.currency_id\nJOIN fx_rate f ON f.currency_id = t.currency_id AND f.rate_date = substr(t.ts_utc, 1, 10)\nJOIN txn_status_dict s ON s.status_id = t.status_id\nWHERE s.code = 'CAPTURED'\n  AND t.ts_utc >= '2025-01-01 00:00:00' AND t.ts_utc < '2025-07-01 00:00:00'",
+    "type": "float",
+    "tolerance": 500.0,
+    "knowledge_tags": [
+      "HIERARCHY",
+      "DATE_RANGE_JOIN",
+      "FX_EXPONENT"
+    ],
+    "difficulty": "hard",
+    "rationale": "The 'Aurora Coffee Chain' (a sub-group) sold its 44 terminals on 2025-06-16; they now belong to merchants of another holding. Joining on the current assignment drops their H1 volume.",
+    "answer_format": "number (EUR, 2 decimals)",
+    "answer": 815909.97
+  },
+  {
+    "id": "q04",
+    "stage": "pre",
+    "db": "v1",
+    "text": "For terminal model 'P400', what was the decline rate in August 2025 (2025-08-01 00:00:00 <= ts_utc < 2025-09-01 00:00:00)? A transaction counts as declined if its response code is flagged as a decline in the response-code dictionary version that was valid at the transaction's timestamp. Decline rate = declined transactions / all transactions of that model in the month (any status). Answer as a decimal fraction rounded to 4 decimals, e.g. 0.0712.",
+    "gt_sql": "SELECT ROUND(AVG(rc.is_decline), 4) AS decline_rate\nFROM txn t\nJOIN dim_terminal d ON d.terminal_id = t.terminal_id\nJOIN dim_terminal_model mo ON mo.model_id = d.model_id\nJOIN response_code_dict rc ON rc.code = t.response_code\n  AND t.ts_utc >= rc.valid_from AND (rc.valid_to IS NULL OR t.ts_utc < rc.valid_to)\nWHERE mo.model_name = 'P400'\n  AND t.ts_utc >= '2025-08-01 00:00:00' AND t.ts_utc < '2025-09-01 00:00:00'",
+    "type": "float",
+    "tolerance": 0.0005,
+    "knowledge_tags": [
+      "CODE_DICT_VERSION",
+      "TERMINAL_MODEL"
+    ],
+    "difficulty": "medium",
+    "rationale": "Scheme version 2 (valid from 2025-07-01) re-classifies code 96 (decline -> timeout) and 68 (timeout -> decline); August must be classified with version 2. P400 belongs to the OSX-3 family, whose declines rose after the 2025-08-04 firmware rollout.",
+    "answer_format": "decimal fraction, 4 decimals",
+    "answer": 0.1014
+  },
+  {
+    "id": "q05",
+    "stage": "pre",
+    "db": "v1",
+    "text": "Among terminal firmware families with at least 10,000 transactions in Q4 2025 (2025-10-01 00:00:00 <= ts_utc < 2026-01-01 00:00:00), which family had the highest decline rate? A transaction is declined if its response code is flagged as a decline in the response-code dictionary version valid at the transaction time; decline rate = declined / all transactions of the family in Q4. Answer with the firmware family name exactly as stored.",
+    "gt_sql": "SELECT mo.firmware_family\nFROM txn t\nJOIN dim_terminal d ON d.terminal_id = t.terminal_id\nJOIN dim_terminal_model mo ON mo.model_id = d.model_id\nJOIN response_code_dict rc ON rc.code = t.response_code\n  AND t.ts_utc >= rc.valid_from AND (rc.valid_to IS NULL OR t.ts_utc < rc.valid_to)\nWHERE t.ts_utc >= '2025-10-01 00:00:00' AND t.ts_utc < '2026-01-01 00:00:00'\nGROUP BY mo.firmware_family\nHAVING COUNT(*) >= 10000\nORDER BY AVG(rc.is_decline) DESC LIMIT 1",
+    "type": "str",
+    "tolerance": 0,
+    "knowledge_tags": [
+      "CODE_DICT_VERSION",
+      "TERMINAL_MODEL"
+    ],
+    "difficulty": "hard",
+    "rationale": "Firmware 3.7.2 of family OSX-3 (models V240m, P400) raised declines by ~4.5 pp from 2025-08-04; the other families stay at ~6.5 %.",
+    "answer_format": "firmware_family string",
+    "answer": "OSX-3"
+  },
+  {
+    "id": "q06",
+    "stage": "pre",
+    "db": "v1",
+    "text": "Consider CAPTURED transactions attributed (through the terminal assignment valid at the time of the transaction) to merchants of merchant group 'Helios Grocery' or any of its sub-groups, converted to EUR with the daily FX rate of the transaction date. What was the first calendar month of 2025 in which their total EUR value exceeded 280,000 EUR? Answer in the format YYYY-MM.",
+    "gt_sql": "WITH RECURSIVE grp(group_id) AS (\n  SELECT group_id FROM dim_merchant_group WHERE name = 'Helios Grocery'\n  UNION ALL\n  SELECT g.group_id FROM dim_merchant_group g JOIN grp ON g.parent_group_id = grp.group_id\n)\nSELECT month FROM (\n  SELECT strftime('%Y-%m', t.ts_utc) AS month, SUM(t.amount_minor / power(10, c.exponent) * f.rate_to_eur) AS eur\n  FROM txn t\n  JOIN terminal_assignment ta ON ta.terminal_id = t.terminal_id\n  AND t.ts_utc >= ta.valid_from AND (ta.valid_to IS NULL OR t.ts_utc < ta.valid_to)\nJOIN dim_merchant m ON m.merchant_id = ta.merchant_id\nJOIN grp ON grp.group_id = m.group_id\n  JOIN dim_currency c ON c.currency_id = t.currency_id\nJOIN fx_rate f ON f.currency_id = t.currency_id AND f.rate_date = substr(t.ts_utc, 1, 10)\n  JOIN txn_status_dict s ON s.status_id = t.status_id\n  WHERE s.code = 'CAPTURED'\n  GROUP BY month\n)\nWHERE eur > 280000\nORDER BY month LIMIT 1",
+    "type": "str",
+    "tolerance": 0,
+    "knowledge_tags": [
+      "HIERARCHY",
+      "DATE_RANGE_JOIN",
+      "FX_EXPONENT",
+      "TREND"
+    ],
+    "difficulty": "medium",
+    "rationale": "The group grows ~70 % over the year; the threshold 280,000 EUR sits in the widest gap between a month and the maximum of all earlier months, so the answer is robust to rounding.",
+    "answer_format": "YYYY-MM",
+    "answer": "2025-05"
+  },
+  {
+    "id": "q07",
+    "stage": "pre",
+    "db": "v1",
+    "text": "Incident INC-2025-0005 is linked to service events through correlation ids. Find the earliest ERROR-level service event linked to this incident. Which deployment of the incident's component was the most recent one deployed strictly before that event? Answer with the deployment's version string exactly as stored.",
+    "gt_sql": "WITH inc AS (SELECT incident_id, component_id FROM incident WHERE code = 'INC-2025-0005'),\nfirst_err AS (\n  SELECT MIN(e.ts_utc) AS ts\n  FROM service_event e\n  JOIN incident_link l ON l.correlation_id = e.correlation_id\n  JOIN inc ON inc.incident_id = l.incident_id\n  WHERE e.level = 'ERROR')\nSELECT d.version\nFROM deployment d JOIN inc ON inc.component_id = d.component_id\nWHERE d.deployed_at < (SELECT ts FROM first_err)\nORDER BY d.deployed_at DESC LIMIT 1",
+    "type": "str",
+    "tolerance": 0,
+    "knowledge_tags": [
+      "INCIDENT_LINK",
+      "LOG_WINDOW",
+      "DEPLOYMENT"
+    ],
+    "difficulty": "hard",
+    "rationale": "First linked ERROR is at 2025-03-11 14:21:07; the last deployment before it is v4.18.0 (2025-03-11 14:05:00). A '+restart' re-deploy happened between the first error and the incident opening, and an unlinked ERROR occurred earlier that day.",
+    "answer_format": "version string",
+    "answer": "v4.18.0"
+  },
+  {
+    "id": "q08",
+    "stage": "pre",
+    "db": "v1",
+    "text": "Component 'auth-router' had a deployment with version 'v4.18.0'; let T be its deployed_at. For transactions on the route with code 'ALP-PRX-1', compute the average latency_ms over [T, T + 120 minutes) divided by the average latency_ms over [T - 120 minutes, T) (all transactions regardless of status). Answer with the ratio rounded to 2 decimals.",
+    "gt_sql": "WITH d AS (\n  SELECT dp.deployed_at AS t0 FROM deployment dp\n  JOIN dim_component c ON c.component_id = dp.component_id\n  WHERE c.name = 'auth-router' AND dp.version = 'v4.18.0'),\nr AS (SELECT route_id FROM route WHERE code = 'ALP-PRX-1')\nSELECT ROUND(\n  (SELECT AVG(t.latency_ms) FROM txn t, d, r WHERE t.route_id = r.route_id\n     AND t.ts_utc >= d.t0 AND t.ts_utc < datetime(d.t0, '+120 minutes')) /\n  (SELECT AVG(t.latency_ms) FROM txn t, d, r WHERE t.route_id = r.route_id\n     AND t.ts_utc >= datetime(d.t0, '-120 minutes') AND t.ts_utc < d.t0), 2) AS ratio",
+    "type": "float",
+    "tolerance": 0.05,
+    "knowledge_tags": [
+      "LOG_WINDOW",
+      "DEPLOYMENT",
+      "LATENCY"
+    ],
+    "difficulty": "medium",
+    "rationale": "The bad release multiplied latency x4 on that route and produced 'Z1' processor timeouts (8-30 s), so the mean latency after the deployment is an order of magnitude higher than before.",
+    "answer_format": "ratio, 2 decimals",
+    "answer": 14.96
+  },
+  {
+    "id": "q09",
+    "stage": "pre",
+    "db": "v1",
+    "text": "During incident INC-2025-0018 (from its opened_at inclusive to its closed_at exclusive), what share of transactions on the routes of acquirer 'Meridian Acquiring' ended in a timeout? A timeout is a response code flagged as timeout in the response-code dictionary version valid at the transaction time. Share = timeout transactions / all transactions on those routes in the window (any status). Answer as a decimal fraction rounded to 4 decimals.",
+    "gt_sql": "WITH inc AS (SELECT opened_at, closed_at FROM incident WHERE code = 'INC-2025-0018')\nSELECT ROUND(AVG(rc.is_timeout), 4) AS timeout_share\nFROM txn t\nJOIN route r ON r.route_id = t.route_id\nJOIN dim_acquirer a ON a.acquirer_id = r.acquirer_id\nJOIN response_code_dict rc ON rc.code = t.response_code\n  AND t.ts_utc >= rc.valid_from AND (rc.valid_to IS NULL OR t.ts_utc < rc.valid_to)\nJOIN inc\nWHERE a.name = 'Meridian Acquiring'\n  AND t.ts_utc >= inc.opened_at AND t.ts_utc < inc.closed_at",
+    "type": "float",
+    "tolerance": 0.0005,
+    "knowledge_tags": [
+      "CODE_DICT_VERSION",
+      "INCIDENT_WINDOW",
+      "ROUTE_ACQUIRER"
+    ],
+    "difficulty": "hard",
+    "rationale": "During the outage the acquirer returned Z3/91/96; code 96 is a timeout only in scheme version 2 (valid in September), so classifying with version 1 under-counts timeouts.",
+    "answer_format": "decimal fraction, 4 decimals",
+    "answer": 0.7869
+  },
+  {
+    "id": "q10",
+    "stage": "pre",
+    "db": "v1",
+    "text": "Treat every deployment (deployed_at) and every config change (changed_at) as a 'change' made by its operator on a component. An incident is preceded by a change if the change is on the incident's component and 0 <= opened_at - change time <= 60 minutes. Which operator has the largest number of distinct incidents preceded by their changes? Answer with the operator's login.",
+    "gt_sql": "WITH changes AS (\n  SELECT component_id, operator_id, deployed_at AS at FROM deployment\n  UNION ALL\n  SELECT component_id, operator_id, changed_at FROM config_change),\nhits AS (\n  SELECT DISTINCT ch.operator_id, i.incident_id\n  FROM incident i\n  JOIN changes ch ON ch.component_id = i.component_id\n    AND ch.at <= i.opened_at AND ch.at >= datetime(i.opened_at, '-60 minutes'))\nSELECT o.login\nFROM hits h JOIN operator o ON o.operator_id = h.operator_id\nGROUP BY o.login ORDER BY COUNT(*) DESC LIMIT 1",
+    "type": "str",
+    "tolerance": 0,
+    "knowledge_tags": [
+      "LOG_WINDOW",
+      "OPERATOR_CHANGES",
+      "DEPLOYMENT",
+      "CONFIG_CHANGE"
+    ],
+    "difficulty": "hard",
+    "rationale": "r.svensson (SRE) made config changes 21-44 minutes before four different incidents; the runner-ups have 2 (d.kowalski: the bad auth-router release plus one more deployment; j.mueller: two 'mitigation' changes).",
+    "answer_format": "operator login",
+    "answer": "r.svensson"
+  },
+  {
+    "id": "q11",
+    "stage": "pre",
+    "db": "v1",
+    "text": "How many settlements were converted with an FX rate that deviates from the official daily rate? Count the settlements where |fx_rate_applied - R| / R > 0.005, where R is the official FX rate (EUR per unit of the transaction's currency) for the calendar date of settled_at (UTC). Answer with an integer.",
+    "gt_sql": "SELECT COUNT(*) AS n\nFROM settlement s\nJOIN txn t ON t.txn_id = s.txn_id\nJOIN fx_rate f ON f.currency_id = t.currency_id AND f.rate_date = substr(s.settled_at, 1, 10)\nWHERE ABS(s.fx_rate_applied - f.rate_to_eur) / f.rate_to_eur > 0.005",
+    "type": "int",
+    "tolerance": 2,
+    "knowledge_tags": [
+      "SETTLEMENT",
+      "FX_RATE_DATE"
+    ],
+    "difficulty": "medium",
+    "rationale": "The fx-service cache TTL was set to 7 days on 2025-05-12 09:14:00; settlement batches 2025-05-13..2025-05-19 used the 2025-05-12 snapshot. Only non-EUR settlements whose rate had drifted > 0.5 % by then are counted.",
+    "answer_format": "integer",
+    "answer": 743
+  },
+  {
+    "id": "q12",
+    "stage": "pre",
+    "db": "v1",
+    "text": "Call a settlement 'mis-rated' if |fx_rate_applied - R| / R > 0.005, where R is the official FX rate (EUR per unit of the transaction's currency) for the calendar date of settled_at. Take the earliest mis-rated settlement by settled_at. Which config change on component 'fx-service' was the most recent one made strictly before that settlement time? Answer with its change_id (integer).",
+    "gt_sql": "WITH first_bad AS (\n  SELECT MIN(s.settled_at) AS ts\n  FROM settlement s\n  JOIN txn t ON t.txn_id = s.txn_id\n  JOIN fx_rate f ON f.currency_id = t.currency_id AND f.rate_date = substr(s.settled_at, 1, 10)\n  WHERE ABS(s.fx_rate_applied - f.rate_to_eur) / f.rate_to_eur > 0.005)\nSELECT cc.change_id\nFROM config_change cc\nJOIN dim_component c ON c.component_id = cc.component_id\nWHERE c.name = 'fx-service' AND cc.changed_at < (SELECT ts FROM first_bad)\nORDER BY cc.changed_at DESC LIMIT 1",
+    "type": "int",
+    "tolerance": 0,
+    "knowledge_tags": [
+      "SETTLEMENT",
+      "FX_RATE_DATE",
+      "CONFIG_CHANGE",
+      "LOG_WINDOW"
+    ],
+    "difficulty": "hard",
+    "rationale": "The first settlement with > 0.5 % deviation is in the 2025-05-14 batch; the last fx-service change before it is the rate_cache_ttl_seconds 300 -> 604800 change of 2025-05-12 09:14:00 (a later log.level decoy precedes the incident's opened_at instead).",
+    "answer_format": "integer change_id",
+    "answer": 54
+  },
+  {
+    "id": "q13",
+    "stage": "pre",
+    "db": "v1",
+    "text": "Which top-level merchant group (a group without a parent group) had the highest total EUR value of CAPTURED transactions in November 2025 (2025-11-01 00:00:00 <= ts_utc < 2025-12-01 00:00:00)? Attribute each transaction to the merchant the terminal was assigned to at the time of the transaction, roll every merchant up through the whole group hierarchy to its top-level group, and convert amounts to EUR with the daily FX rate of the transaction date. Answer with the top-level group's name.",
+    "gt_sql": "WITH RECURSIVE tree(group_id, root_id) AS (\n  SELECT group_id, group_id FROM dim_merchant_group WHERE parent_group_id IS NULL\n  UNION ALL\n  SELECT g.group_id, tree.root_id FROM dim_merchant_group g JOIN tree ON g.parent_group_id = tree.group_id)\nSELECT rg.name\nFROM txn t\nJOIN terminal_assignment ta ON ta.terminal_id = t.terminal_id\n  AND t.ts_utc >= ta.valid_from AND (ta.valid_to IS NULL OR t.ts_utc < ta.valid_to)\nJOIN dim_merchant m ON m.merchant_id = ta.merchant_id\nJOIN tree ON tree.group_id = m.group_id\nJOIN dim_merchant_group rg ON rg.group_id = tree.root_id\nJOIN dim_currency c ON c.currency_id = t.currency_id\nJOIN fx_rate f ON f.currency_id = t.currency_id AND f.rate_date = substr(t.ts_utc, 1, 10)\nJOIN txn_status_dict s ON s.status_id = t.status_id\nWHERE s.code = 'CAPTURED'\n  AND t.ts_utc >= '2025-11-01 00:00:00' AND t.ts_utc < '2025-12-01 00:00:00'\nGROUP BY rg.name ORDER BY SUM(t.amount_minor / power(10, c.exponent) * f.rate_to_eur) DESC LIMIT 1",
+    "type": "str",
+    "tolerance": 0,
+    "knowledge_tags": [
+      "HIERARCHY",
+      "DATE_RANGE_JOIN",
+      "FX_EXPONENT"
+    ],
+    "difficulty": "hard",
+    "rationale": "Most merchants hang off level-3 chains; only one flagship store per holding is attached directly to the top-level group, so without the roll-up the ranking is driven by those few stores.",
+    "answer_format": "group name",
+    "answer": "Helios Group"
+  },
+  {
+    "id": "q14",
+    "stage": "pre",
+    "db": "v1",
+    "text": "For terminals whose model belongs to firmware family 'OSX-3', what was the first calendar month of 2025 in which the monthly decline rate exceeded 9.0 %? A transaction is declined if its response code is flagged as a decline in the response-code dictionary version valid at the transaction time; monthly decline rate = declined / all transactions of these terminals in that month. Answer in the format YYYY-MM.",
+    "gt_sql": "SELECT month FROM (\n  SELECT strftime('%Y-%m', t.ts_utc) AS month, AVG(rc.is_decline) AS rate\n  FROM txn t\n  JOIN dim_terminal d ON d.terminal_id = t.terminal_id\nJOIN dim_terminal_model mo ON mo.model_id = d.model_id\n  JOIN response_code_dict rc ON rc.code = t.response_code\n  AND t.ts_utc >= rc.valid_from AND (rc.valid_to IS NULL OR t.ts_utc < rc.valid_to)\n  WHERE mo.firmware_family = 'OSX-3'\n  GROUP BY month)\nWHERE rate > 0.09\nORDER BY month LIMIT 1",
+    "type": "str",
+    "tolerance": 0,
+    "knowledge_tags": [
+      "CODE_DICT_VERSION",
+      "TERMINAL_MODEL",
+      "TREND"
+    ],
+    "difficulty": "medium",
+    "rationale": "Firmware 3.7.2 was pushed to the OSX-3 fleet on 2025-08-04 02:00 UTC; the family's decline rate jumps from ~6.5 % to ~10.5 % in August and stays there.",
+    "answer_format": "YYYY-MM",
+    "answer": "2025-08"
+  },
+  {
+    "id": "q15",
+    "stage": "post",
+    "db": "v2",
+    "text": "What was the total value in EUR of CAPTURED transactions in 2025 attributed to the top-level merchant group 'Aurora Collective' including all of its sub-groups at any depth? Attribute each transaction to the merchant the terminal was linked to at the time of the transaction, and convert amounts to EUR with the daily FX rate of the transaction date. Answer with one number in EUR rounded to 2 decimals.",
+    "gt_sql": "WITH RECURSIVE grp(group_id) AS (\n  SELECT group_id FROM dim_merchant_group WHERE name = 'Aurora Collective'\n  UNION ALL\n  SELECT g.group_id FROM dim_merchant_group g JOIN grp ON g.parent_group_id = grp.group_id\n)\nSELECT ROUND(SUM(t.amount_minor / power(10, c.exponent) * f.eur_per_unit), 2) AS eur_total\nFROM txn t\nJOIN terminal_merchant_link tl ON tl.terminal_id = t.terminal_id\n  AND t.ts_utc >= tl.start_ts AND (tl.end_ts IS NULL OR t.ts_utc < tl.end_ts)\nJOIN dim_merchant m ON m.merchant_id = tl.merchant_id\nJOIN grp ON grp.group_id = m.merchant_group_id\nJOIN dim_currency c ON c.currency_id = t.currency_id\nJOIN fx_rate_daily f ON f.currency_id = t.currency_id AND f.rate_date = substr(t.ts_utc, 1, 10)\nJOIN txn_status_dict s ON s.status_id = t.status_id\nWHERE s.code = 'CAPTURED'",
+    "type": "float",
+    "tolerance": 2500.0,
+    "knowledge_tags": [
+      "HIERARCHY",
+      "DATE_RANGE_JOIN",
+      "FX_EXPONENT",
+      "SCHEMA_DRIFT"
+    ],
+    "difficulty": "hard",
+    "rationale": "Same knowledge as q03/q13 under the renamed schema (terminal_merchant_link.start_ts/end_ts, dim_merchant.merchant_group_id, fx_rate_daily.eur_per_unit); the coffee chain's H1 volume belongs to Aurora only through the historical link.",
+    "answer_format": "number (EUR, 2 decimals)",
+    "answer": 2463087.54
+  },
+  {
+    "id": "q16",
+    "stage": "post",
+    "db": "v2",
+    "text": "Which ISO-8601 week of 2025 had the largest number of ERROR-level service events for component 'auth-router'? Consider all service events of the whole year 2025. Answer in the format YYYY-Www, e.g. 2025-W07.",
+    "gt_sql": "WITH ev AS (\n  SELECT ts_utc, component_id, level FROM service_event_h1\n  UNION ALL\n  SELECT ts_utc, component_id, level FROM service_event_h2)\nSELECT strftime('%Y', date(e.ts_utc, '-' || ((strftime('%w', e.ts_utc) + 6) % 7) || ' days', '+3 days')) || '-W' || printf('%02d', (strftime('%j', date(e.ts_utc, '-' || ((strftime('%w', e.ts_utc) + 6) % 7) || ' days', '+3 days')) - 1) / 7 + 1) AS iso_week\nFROM ev e JOIN dim_component c ON c.component_id = e.component_id\nWHERE c.name = 'auth-router' AND e.level = 'ERROR'\nGROUP BY iso_week ORDER BY COUNT(*) DESC LIMIT 1",
+    "type": "str",
+    "tolerance": 0,
+    "knowledge_tags": [
+      "ISO_WEEK",
+      "LOG_SPLIT",
+      "SCHEMA_DRIFT"
+    ],
+    "difficulty": "medium",
+    "rationale": "The log table is split into service_event_h1/h2; the March release incident (W11) has more ERRORs than the October capacity incident (W41), which is the maximum if only h2 is read.",
+    "answer_format": "YYYY-Www",
+    "answer": "2025-W11"
+  },
+  {
+    "id": "q17",
+    "stage": "post",
+    "db": "v2",
+    "text": "For terminal model 'Lane 3000X', what was the decline rate in November 2025 (2025-11-01 00:00:00 <= ts_utc < 2025-12-01 00:00:00)? A transaction counts as declined if its response code is flagged as a decline in the response-code dictionary version that was valid at the transaction's timestamp. Decline rate = declined / all transactions of that model in the month (any status). Answer as a decimal fraction rounded to 4 decimals.",
+    "gt_sql": "SELECT ROUND(AVG(rc.is_decline), 4) AS decline_rate\nFROM txn t\nJOIN dim_terminal d ON d.terminal_id = t.terminal_id\nJOIN dim_terminal_model mo ON mo.model_id = d.model_id\nJOIN response_code_dict rc ON rc.code = t.response_code\n  AND t.ts_utc >= rc.valid_from AND (rc.valid_to IS NULL OR t.ts_utc < rc.valid_to)\nWHERE mo.model_name = 'Lane 3000X'\n  AND t.ts_utc >= '2025-11-01 00:00:00' AND t.ts_utc < '2025-12-01 00:00:00'",
+    "type": "float",
+    "tolerance": 0.0005,
+    "knowledge_tags": [
+      "CODE_DICT_VERSION",
+      "TERMINAL_MODEL",
+      "SCHEMA_DRIFT"
+    ],
+    "difficulty": "hard",
+    "rationale": "Scheme version 3 (valid from 2025-10-01, present only in the migrated DB) re-maps Z1 and 91 from timeout to decline; using the remembered version 2 under-counts declines in November.",
+    "answer_format": "decimal fraction, 4 decimals",
+    "answer": 0.072
+  },
+  {
+    "id": "q18",
+    "stage": "post",
+    "db": "v2",
+    "text": "Incident INC-2025-0021 is linked to service events through correlation ids. Find the earliest ERROR-level service event linked to this incident. Which config change on the incident's component was the most recent one made strictly before that event? Answer with its change_id (integer).",
+    "gt_sql": "WITH inc AS (SELECT incident_id, component_id FROM incident WHERE code = 'INC-2025-0021'),\nev AS (\n  SELECT ts_utc, level, correlation_id FROM service_event_h1\n  UNION ALL\n  SELECT ts_utc, level, correlation_id FROM service_event_h2),\nfirst_err AS (\n  SELECT MIN(e.ts_utc) AS ts\n  FROM ev e\n  JOIN incident_link l ON l.correlation_id = e.correlation_id\n  JOIN inc ON inc.incident_id = l.incident_id\n  WHERE e.level = 'ERROR')\nSELECT cc.change_id\nFROM config_change cc JOIN inc ON inc.component_id = cc.component_id\nWHERE cc.changed_at < (SELECT ts FROM first_err)\nORDER BY cc.changed_at DESC LIMIT 1",
+    "type": "int",
+    "tolerance": 0,
+    "knowledge_tags": [
+      "INCIDENT_LINK",
+      "LOG_WINDOW",
+      "CONFIG_CHANGE",
+      "LOG_SPLIT",
+      "SCHEMA_DRIFT"
+    ],
+    "difficulty": "hard",
+    "rationale": "The first linked ERROR is 12 minutes before opened_at; r.svensson's jvm.heap_mb change 40 minutes before opening precedes it, while j.mueller's mitigation change 4 minutes before opening does not.",
+    "answer_format": "integer change_id",
+    "answer": 100
+  },
+  {
+    "id": "q19",
+    "stage": "post",
+    "db": "v2",
+    "text": "For every settlement, recompute the settled EUR amount in cents as ROUND(A * R * 100), where A is the transaction amount in major units of its currency and R is the official daily FX rate (EUR per unit of that currency) for the calendar date of settled_at (UTC); then take the absolute difference between this value and settled_eur_minor. Which ISO-8601 week (by settled_at) has the largest sum of these absolute differences? Answer in the format YYYY-Www.",
+    "gt_sql": "SELECT strftime('%Y', date(s.settled_at, '-' || ((strftime('%w', s.settled_at) + 6) % 7) || ' days', '+3 days')) || '-W' || printf('%02d', (strftime('%j', date(s.settled_at, '-' || ((strftime('%w', s.settled_at) + 6) % 7) || ' days', '+3 days')) - 1) / 7 + 1) AS iso_week\nFROM settlement s\nJOIN txn t ON t.txn_id = s.txn_id\nJOIN dim_currency c ON c.currency_id = t.currency_id\nJOIN fx_rate_daily f ON f.currency_id = t.currency_id AND f.rate_date = substr(s.settled_at, 1, 10)\nGROUP BY iso_week\nORDER BY SUM(ABS(s.settled_eur_minor - ROUND(t.amount_minor / power(10, c.exponent) * f.eur_per_unit * 100))) DESC\nLIMIT 1",
+    "type": "str",
+    "tolerance": 0,
+    "knowledge_tags": [
+      "FX_EXPONENT",
+      "SETTLEMENT",
+      "ISO_WEEK",
+      "SCHEMA_DRIFT"
+    ],
+    "difficulty": "medium",
+    "rationale": "Outside the stale-cache window the recomputation matches exactly; six of the seven stale settlement batches (2025-05-13..18) fall into ISO week 2025-W20.",
+    "answer_format": "YYYY-Www",
+    "answer": "2025-W20"
+  },
+  {
+    "id": "q20",
+    "stage": "post",
+    "db": "v2",
+    "text": "How many distinct terminals were linked to a merchant of merchant group 'Borealis Retail AG' or any of its sub-groups at some moment during May 2025, i.e. the terminal-merchant link interval overlaps [2025-05-01 00:00:00, 2025-06-01 00:00:00)? Answer with an integer.",
+    "gt_sql": "WITH RECURSIVE grp(group_id) AS (\n  SELECT group_id FROM dim_merchant_group WHERE name = 'Borealis Retail AG'\n  UNION ALL\n  SELECT g.group_id FROM dim_merchant_group g JOIN grp ON g.parent_group_id = grp.group_id\n)\nSELECT COUNT(DISTINCT tl.terminal_id) AS n_terminals\nFROM terminal_merchant_link tl\nJOIN dim_merchant m ON m.merchant_id = tl.merchant_id\nJOIN grp ON grp.group_id = m.merchant_group_id\nWHERE tl.start_ts < '2025-06-01 00:00:00'\n  AND (tl.end_ts IS NULL OR tl.end_ts > '2025-05-01 00:00:00')",
+    "type": "int",
+    "tolerance": 0,
+    "knowledge_tags": [
+      "HIERARCHY",
+      "DATE_RANGE_JOIN",
+      "SCHEMA_DRIFT"
+    ],
+    "difficulty": "hard",
+    "rationale": "The 44 ex-Aurora coffee terminals were linked to Borealis merchants only from 2025-06-16, so they must not be counted for May; the current-link view includes them.",
+    "answer_format": "integer",
+    "answer": 98
+  }
+]
