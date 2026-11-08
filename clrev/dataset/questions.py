@@ -58,11 +58,22 @@ class Question:
     rationale: str
     answer_format: str
     answer: object = None
-    naive: dict = field(default_factory=dict)   # label -> sql (not exported to questions.json)
+    naive: dict = field(default_factory=dict)   # label -> sql (v1 catalogue; not exported to questions.json)
+    # v2 catalogue only (questions_v2.json): typical wrong approaches, each
+    # {description, sql, answer, discriminative}; answers are filled in by validate.run_naive_variants.
+    naive_variants: list[dict] = field(default_factory=list)
+    # v2 catalogue only: SQL returning (candidate, metric) rows ordered best-first, used to record the
+    # margin between the winning candidate and the runner-up (validate.compute_margins). Not exported.
+    candidates_sql: str | None = None
+    margin: dict | None = None
 
-    def export(self) -> dict:
+    def export(self, with_variants: bool = False) -> dict:
+        """JSON record. ``with_variants=False`` reproduces the original questions.json layout exactly."""
         d = asdict(self)
-        d.pop("naive")
+        for k in ("naive", "candidates_sql", "margin", "naive_variants"):
+            d.pop(k)
+        if with_variants:
+            d["naive_variants"] = [dict(v) for v in self.naive_variants]
         return d
 
 

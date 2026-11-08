@@ -269,3 +269,143 @@ def sanity_checks(ds: Dataset, con: sqlite3.Connection) -> None:
     counts = ds.meta["operator_counts"]
     top = max(counts, key=counts.get)
     assert top == OPERATOR_STORY["operator"] and counts[top] == OPERATOR_STORY["n_incidents"], counts
+
+
+# ============================================================================ v2 catalogue (questions_v2.json)
+def run_naive_variants(questions: list[Question], cons: dict[str, sqlite3.Connection]) -> list[dict]:
+    """Run every ``naive_variants`` entry, fill in its answer and whether it would be graded INCORRECT."""
+    out = []
+    for q in questions:
+        for v in q.naive_variants:
+            try:
+                val = _scalar(cons[q.db], v["sql"])
+            except sqlite3.Error as e:            # pragma: no cover - would be a bug in the naive SQL
+                val = f"SQL error: {e}"
+            if isinstance(val, float) and q.type == "float":
+                val = float(val)
+            v["answer"] = val
+            v["discriminative"] = not matches(q, val)
+            out.append(dict(id=q.id, label=v["description"], naive=val, correct=q.answer, distinguishes=v["discriminative"]))
+    return out
+
+
+def _fmt_metric(v) -> str:
+    if isinstance(v, float):
+        return f"{v:,.4f}".rstrip("0").rstrip(".") if abs(v) < 1000 else f"{v:,.2f}"
+    return str(v)
+
+
+def compute_margins(questions: list[Question], cons: dict[str, sqlite3.Connection]) -> list[dict]:
+    """For 'which X' questions run ``candidates_sql`` (best-first rows of (candidate, metric)), check that the
+    winner is the ground-truth answer and append the margin to the runner-up to the rationale."""
+    out = []
+    for q in questions:
+        if not q.candidates_sql:
+            continue
+        rows = cons[q.db].execute(q.candidates_sql).fetchall()
+        assert len(rows) >= 2, (q.id, rows)
+        (c1, m1), (c2, m2) = rows[0][:2], rows[1][:2]
+        ans = str(q.answer)
+        assert str(c1) == ans or str(c1).split(" ")[0] == ans, f"{q.id}: top candidate {c1!r} != answer {ans!r}"
+        rel = (m1 - m2) / abs(m1) if m1 else None
+        q.margin = dict(top=str(c1), top_metric=m1, second=str(c2), second_metric=m2,
+                        abs_margin=m1 - m2, rel_margin=rel)
+        q.rationale = (q.rationale.rstrip() + f" Margin: '{c1}' = {_fmt_metric(m1)} vs runner-up '{c2}' = "
+                       f"{_fmt_metric(m2)}" + (f" ({rel:.0%} of the winner's value)." if rel is not None else "."))
+        out.append(dict(id=q.id, **q.margin))
+    return out
+
+
+def _iso_weeks(ts: pd.Series) -> pd.Series:
+    """Vectorised 'YYYY-Www' labels."""
+    ic = pd.to_datetime(ts).dt.isocalendar()
+    return ic.year.astype(str) + "-W" + ic.week.astype(int).map("{:02d}".format)
+
+
+def independent_checks_v2(ds: Dataset, questions_v2: list[Question], questions_v1: list[Question]) -> list[dict]:
+    """(a) q01..q20 of the v2 catalogue must have exactly the v1 answers; (b) q21..q26 recomputed with pandas."""
+    v1 = {q.id: q for q in questions_v1}
+    qs = {q.id: q for q in questions_v2}
+    results = []
+    for qid, q1 in v1.items():
+        q2 = qs[qid]
+        assert q2.answer == q1.answer, (qid, q2.answer, q1.answer)
+        assert q2.gt_sql == q1.gt_sql and q2.type == q1.type and q2.tolerance == q1.tolerance, qid
+
+    def record(qid, value):
+        q = qs[qid]
+        results.append(dict(id=qid, pandas=value, sql=q.answer, ok=matches(q, value)))
+
+    txn = ds["txn"]
+    se = ds["service_event"]
+    err = se[se.level == "ERROR"]
+
+    # q21: rolled-back deployments, ERROR events of the component while live
+    dep = ds["deployment"]
+    rb = dep[dep.rolled_back_at.notna()]
+    counts = {}
+    for d in rb.itertuples():
+        m = (err.component_id == d.component_id) & (err.ts_utc >= d.deployed_at) & (err.ts_utc < d.rolled_back_at)
+        counts[int(d.deployment_id)] = int(m.sum())
+    best = max(counts, key=counts.get)
+    record("q21", best)
+
+    # q22: OLS slope of weekly counts per division (hierarchy roll-up, assignment valid at txn time, zero-filled weeks)
+    merchant = _merchant_at_txn(ds, txn)
+    g = ds["dim_merchant_group"]
+    parent = {int(r.group_id): (None if pd.isna(r.parent_group_id) else int(r.parent_group_id)) for r in g.itertuples()}
+    names = dict(zip(g.group_id, g.name))
+    divisions = {gid for gid, p in parent.items() if p is not None and parent[p] is None}
+
+    def division_of(gid):
+        while gid is not None:
+            if gid in divisions:
+                return gid
+            gid = parent[gid]
+        return None
+    m_div = {int(r.merchant_id): division_of(int(r.group_id)) for r in ds["dim_merchant"].itertuples()}
+    div_of_txn = pd.Series(merchant).map(m_div)
+    weeks = _iso_weeks(txn.ts_utc)
+    wnum = weeks.str[6:8].astype(int)
+    in_year = weeks.str.startswith("2025-")
+    df = pd.DataFrame({"div": div_of_txn.to_numpy(), "w": wnum.to_numpy()})[in_year.to_numpy()].dropna()
+    slopes = {}
+    x = np.arange(1, 53)
+    for d, grp in df.groupby("div"):
+        y = grp.w.value_counts().reindex(x, fill_value=0).to_numpy(dtype=float)
+        slopes[int(d)] = float(np.polyfit(x, y, 1)[0])
+    top = max(slopes, key=slopes.get)
+    record("q22", names[top])
+    ds.meta["q22_slopes"] = {names[k]: round(v, 3) for k, v in sorted(slopes.items(), key=lambda kv: -kv[1])}
+
+    # q23: timed-out transactions on 2025-09-18 followed by another txn on the same terminal within 90 s
+    day = txn[(txn.ts_utc >= "2025-09-18 00:00:00") & (txn.ts_utc < "2025-09-19 00:00:00")].copy()
+    _, to = _rc_flags(ds, day.response_code, day.ts_utc)
+    day["is_timeout"] = to
+    day["t"] = pd.to_datetime(day.ts_utc)
+    pairs = day[day.is_timeout == 1][["txn_id", "terminal_id", "t"]].merge(day[["terminal_id", "t"]], on="terminal_id", suffixes=("", "_b"))
+    delta = (pairs.t_b - pairs.t).dt.total_seconds()
+    record("q23", int(pairs[(delta > 0) & (delta <= 90)].txn_id.nunique()))
+
+    # q24: config change followed by the most ERROR events of its component within 60 minutes
+    cc = ds["config_change"]
+    counts = {}
+    for c in cc.itertuples():
+        hi = (parse_ts(c.changed_at) + timedelta(minutes=60)).strftime("%Y-%m-%d %H:%M:%S")
+        m = (err.component_id == c.component_id) & (err.ts_utc >= c.changed_at) & (err.ts_utc < hi)
+        counts[int(c.change_id)] = int(m.sum())
+    record("q24", max(counts, key=counts.get))
+
+    # q25: ISO week with most ERROR events platform-wide
+    record("q25", _iso_weeks(err.ts_utc).value_counts().idxmax())
+
+    # q26: leaf group with the largest H1 - H2 transaction count
+    children = {p for p in parent.values() if p is not None}
+    leaf_of_m = {int(r.merchant_id): (int(r.group_id) if int(r.group_id) not in children else None)
+                 for r in ds["dim_merchant"].itertuples()}
+    leaf = pd.Series(merchant).map(leaf_of_m)
+    h1 = (txn.ts_utc < "2025-07-01 00:00:00").to_numpy()
+    df = pd.DataFrame({"leaf": leaf.to_numpy(), "h1": h1}).dropna()
+    loss = df.groupby("leaf").h1.apply(lambda s: int(s.sum()) - int((~s).sum()))
+    record("q26", names[int(loss.idxmax())])
+    return results

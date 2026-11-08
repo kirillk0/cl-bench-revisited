@@ -203,3 +203,78 @@ def render(ds: Dataset, questions: list[Question], stats: dict, timings: list[di
         w(f"* {k}: {v / 1e6:.1f} MB")
     w("")
     return "\n".join(L)
+
+
+def render_v2(questions_v2: list[Question], timings: list[dict], naive: list[dict], independent: list[dict],
+              drift_after: int, q22_slopes: dict | None = None) -> str:
+    """Section appended to STORIES.md describing data/questions_v2.json (hard wording + investigative questions)."""
+    L: list[str] = []
+    w = L.append
+    w("## Questions v2 — `data/questions_v2.json` (hard wording + investigative questions)\n")
+    w("Second catalogue over the **same databases** (no change to payops.db / payops_v2.db). Motivation: the calibration "
+      "run of gpt-6-luna in stateless mode scored 18/20 on `questions.json`; both misses were the ISO-week trap "
+      "(`strftime('%W')`), everything else was solved because the texts spelled out the mechanics "
+      "(\"assigned at the time of each transaction\", \"dictionary version valid at the transaction's timestamp\", "
+      "\"EUR per unit\", \"through correlation ids\").\n")
+    w("* **q01..q20**: same ids, same `gt_sql`, same answers and tolerances as in `questions.json`; only the wording "
+      "changed. Texts are written the way a manager would brief an analyst: the metric stays unambiguous (interval "
+      "bounds, UTC, rounding, status/class of transactions, \"including all sub-groups at any level\"), but nothing "
+      "says how the schema encodes it — effective-dated terminal assignments, versioned response-code dictionary, "
+      "currency exponents, incident ↔ event linkage and the h1/h2 log split must be discovered from the DDL comments "
+      "and the data.")
+    w("* **q21..q26**: new investigative / trend questions where the path is not prescribed and candidates have to be "
+      "scanned (rolled-back releases, divisions' weekly trends, retries after timeouts, configuration changes followed "
+      "by error bursts, platform-wide error peaks, shrinking chains). Each answer is a single value with a documented "
+      "margin to the runner-up.")
+    w("* Every question carries `naive_variants` (description, SQL, answer, `discriminative`): the typical shortcuts "
+      "— current assignment instead of the date-range join, dictionary v1 after 2025-07-01, no exponent, `%W` instead "
+      "of ISO week, one of h1/h2 only, latest change before `opened_at` instead of before the first linked ERROR, "
+      "status FAILED as decline/timeout, no hierarchy roll-up. `discriminative: false` marks shortcuts that happen to "
+      "give the right answer for that question (controls).")
+    w(f"* **Run order** = file order: pre-drift q01..q14, q21..q24 (v1 DB), then post-drift q15..q20, q25..q26 (v2 DB) "
+      f"→ `--drift-after {drift_after}`.\n")
+
+    w("### Questions v2\n")
+    w("| # | id | stage | db | difficulty | tags | answer | tolerance | margin to runner-up |")
+    w("|---|---|---|---|---|---|---|---|---|")
+    for i, q in enumerate(questions_v2, 1):
+        if q.margin:
+            m = q.margin
+            rel = f" ({m['rel_margin']:.0%})" if m.get("rel_margin") is not None else ""
+            margin = f"`{_fmt(m['top_metric'])}` vs `{m['second']}` = `{_fmt(m['second_metric'])}`{rel}"
+        else:
+            margin = "—"
+        w(f"| {i} | {q.id} | {q.stage} | {q.db} | {q.difficulty} | {', '.join(q.knowledge_tags)} | `{_fmt(q.answer)}` | "
+          f"{q.tolerance} | {margin} |")
+    w("")
+    w("### New questions in detail\n")
+    for q in questions_v2:
+        if q.id in ("q21", "q22", "q23", "q24", "q25", "q26"):
+            w(f"* **{q.id}** ({q.stage}, {q.db}, {q.difficulty}) — {q.text}")
+            w(f"  * answer `{_fmt(q.answer)}`; {q.rationale}")
+    w("")
+    if q22_slopes:
+        w("OLS slopes of weekly transaction counts per division (q22, historical assignment, zero-filled weeks): " +
+          ", ".join(f"{k}: {v}" for k, v in q22_slopes.items()) + "\n")
+
+    w("### Validation v2: naive approach → naive answer → correct answer\n")
+    w("| question | naive approach | naive answer | correct answer | graded incorrect? |")
+    w("|---|---|---|---|---|")
+    for r in naive:
+        w(f"| {r['id']} | {r['label']} | `{_fmt(r['naive'])}` | `{_fmt(r['correct'])}` | "
+          f"{'yes' if r['distinguishes'] else 'NO (same answer)'} |")
+    w("")
+    w("### Validation v2: independent re-computation (pandas on the generated frames)\n")
+    w("q01..q20 are asserted to have exactly the v1 answers (same gt_sql); the new questions are recomputed independently.\n")
+    w("| question | pandas | SQL ground truth | match |")
+    w("|---|---|---|---|")
+    for r in independent:
+        w(f"| {r['id']} | `{_fmt(r['pandas'])}` | `{_fmt(r['sql'])}` | {'ok' if r['ok'] else 'MISMATCH'} |")
+    w("")
+    w("### Ground-truth query timings v2\n")
+    w("| question | db | ms |")
+    w("|---|---|---|")
+    for t in timings:
+        w(f"| {t['id']} | {t['db']} | {t['ms']} |")
+    w("")
+    return "\n".join(L)

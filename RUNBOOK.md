@@ -7,6 +7,10 @@
 2. Calibration on gpt-6-luna `stateless`: aim for ~40–70 % accuracy on pre-drift questions.
    Too easy → harden questions (more hops, hierarchy, date-range joins); too hard → simplify
    wording, not the schema.
+   Result 2026-11-08: 18/20 on `data/questions.json` (both misses = ISO-week trap) → second
+   catalogue `data/questions_v2.json` (same GT for q01..q20, business wording without schema
+   hints, + q21..q26 investigative questions; 18 pre / 8 post → `--drift-after 18`).
+   `python -m clrev.dataset.build --out data/ [--skip-db]` regenerates both catalogues.
 3. Main runs, one sequence per (model × mode): stateless, icl, memory; drift after the last
    pre-drift question. Order: luna (method), then haiku (≤ $20), then glm (≤ $5).
 4. Divergence triage per question (paired across the three modes):

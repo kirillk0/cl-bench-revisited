@@ -152,7 +152,7 @@ Grading: GT has `answer`, `type` (int|float|str), `tolerance` (abs for numbers; 
 case/space-insensitive exact). Accept numbers with thousands separators / currency symbols
 stripped.
 
-## Dataset (clrev/dataset/build.py → data/payops.db, data/payops_v2.db, data/questions.json)
+## Dataset (clrev/dataset/build.py → data/payops.db, data/payops_v2.db, data/questions.json, data/questions_v2.json)
 
 Domain: a card-payment processing platform ("PayOps"), 2025-01-01..2025-12-31.
 Emphasis: convoluted *reference* schemas (dictionaries), trend/correlation questions and
@@ -208,13 +208,32 @@ response_code_dict gains scheme_version 3 (valid from 2025-10-01) that re-maps t
 fx_rate → fx_rate_daily(rate_date, currency_id, eur_per_unit) same semantics. Post-drift
 questions are answerable only against the new schema; GT SQL is written for v2.
 
+### Question catalogues: `questions.json` (explicit) vs `questions_v2.json` (hard)
+
+Calibration (gpt-6-luna, stateless) on `questions.json` gave 18/20 — too easy, because the texts
+explain the schema mechanics ("assigned at the time of each transaction", "dictionary version valid
+at the transaction's timestamp", "EUR per unit", "through correlation ids"). `build.py` therefore
+also writes `data/questions_v2.json` over the *same* databases:
+
+* q01..q20: same ids, `gt_sql`, answers and tolerances; business wording only — the metric stays
+  unambiguous (interval bounds, UTC, rounding, status, "including all sub-groups at any level") but
+  nothing says how the schema encodes it (effective-dated assignments, versioned code dictionary,
+  exponents, incident↔event linkage, h1/h2 split are latent; DDL comments are the only hint).
+* q21..q26: investigative / trend questions requiring a candidate scan (rolled-back release with most
+  errors while live, division with the steepest weekly OLS trend, retries after timeouts on the outage
+  day, config change followed by the largest error burst, platform-wide weekly error peak, chain
+  with the largest H1→H2 loss). Margins to the runner-up are recorded in `rationale`.
+* every question has `naive_variants: [{description, sql, answer, discriminative}]` for error triage.
+* file order = run order: 18 pre-drift (q01..q14, q21..q24) then 8 post-drift (q15..q20, q25..q26)
+  → run with `--questions data/questions_v2.json --drift-after 18`.
+
 ## Repo layout
 
 ```
 SPEC.md  README.md  requirements.txt  .gitignore(secrets/, *.db, runs/**/raw/)
 clrev/providers/{base,anthropic_p,openai_codex,openrouter_p}.py
 clrev/dataset/build.py   clrev/tools.py   clrev/grade.py   clrev/runner.py   clrev/analyze.py
-data/questions.json  data/STORIES.md  data/schema_v1.sql data/schema_v2.sql (DDL dumps)
+data/questions.json  data/questions_v2.json  data/STORIES.md  data/schema_v1.sql data/schema_v2.sql (DDL dumps)
 runs/<run_id>/...   reports/
 tests/
 ```
