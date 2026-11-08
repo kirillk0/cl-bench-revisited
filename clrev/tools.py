@@ -452,16 +452,25 @@ class BashTool:
     def setup(self) -> "BashTool":
         """Create the memory dir, ensure the sandbox user exists and owns it."""
         self.memory_dir.mkdir(parents=True, exist_ok=True)
+        (self.memory_dir / ".tmp").mkdir(exist_ok=True)  # private TMPDIR for the sandboxed shell
         self.sandboxed = bool(shutil.which("runuser")) and ensure_memuser(self.user)
         if self.sandboxed:
             chown_tree(self.memory_dir, self.user)
             os.chmod(self.memory_dir, 0o700)
+            # Keep the shared /tmp out of reach of the sandbox user (other processes in the
+            # container may drop artefacts there). Best effort; mount namespaces are unavailable.
+            try:
+                if os.geteuid() == 0:
+                    os.chmod("/tmp", 0o1770)
+            except OSError:
+                pass
         return self
 
     def _argv(self, command: str) -> list[str]:
         env_cmd = [
             "/usr/bin/env", "-i",
             f"HOME={self.memory_dir}",
+            f"TMPDIR={self.memory_dir}/.tmp",
             "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
             "LANG=C.UTF-8", "LC_ALL=C.UTF-8", "TERM=dumb",
             f"USER={self.user if self.sandboxed else os.environ.get('USER', 'user')}",
