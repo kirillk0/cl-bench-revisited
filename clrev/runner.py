@@ -92,11 +92,26 @@ ICL_ADDENDUM = (
     "You will be asked a series of questions about the same database in this conversation."
 )
 MEMORY_ADDENDUM = (
-    "You also have a `bash` tool. It runs in a persistent working directory that is kept "
-    "between sessions (each question is a separate session with no conversation history). "
-    "Anything you write there is available in later sessions, and anything from earlier "
-    "sessions is already there. Using it is optional; what to keep, if anything, is up to you."
+    "\n\nYou will be asked a series of questions about the same database, but each question is "
+    "handled in a separate session with no conversation history. The only thing that persists "
+    "between sessions is the working directory of the `bash` tool: anything you write there is "
+    "available in later sessions, and anything written in earlier sessions is already there. "
+    "Whether and how to use it is up to you."
 )
+MEMORY_FEEDBACK_SUFFIX = " The session ends when you reply without a tool call."
+GUIDED_ADDENDUM = (
+    " At the start of a session you may want to look at what earlier sessions left there, and "
+    "at the end you may want to leave notes for later sessions."
+)
+_memory_variant = "general"
+
+
+def set_memory_variant(variant: str) -> None:
+    """Select the memory-mode prompt variant: 'general' (default) or 'guided'."""
+    global _memory_variant
+    if variant not in ("general", "guided"):
+        raise ValueError(f"unknown memory prompt variant {variant!r}")
+    _memory_variant = variant
 NUDGE_MESSAGE = "Please call `submit_answer` with your final answer."
 
 
@@ -107,7 +122,8 @@ def system_prompt(mode: str) -> str:
     if mode == "icl":
         return f"{SYSTEM_PROMPT_BASE} {ICL_ADDENDUM}"
     if mode == "memory":
-        return f"{SYSTEM_PROMPT_BASE} {MEMORY_ADDENDUM}"
+        extra = GUIDED_ADDENDUM if _memory_variant == "guided" else ""
+        return f"{SYSTEM_PROMPT_BASE}{MEMORY_ADDENDUM}{extra}"
     raise ValueError(f"unknown mode {mode!r}")
 
 
@@ -208,6 +224,7 @@ class RunConfig:
     row_cap: int = ROW_CAP
     char_cap: int = CHAR_CAP
     memory_dir: str | None = None
+    memory_prompt: str = "general"
     resume: bool = False
     retry_errors: bool = False
     # filled by the runner
@@ -422,6 +439,8 @@ def execute_tool(call: ToolCall, st: EpisodeState) -> tuple[str, dict[str, Any]]
             st.grade = grading.grade_answer(answer_text, st.gt)
             st.feedback = grading.feedback_text(st.grade)
             out = st.feedback
+            if st.bash is not None:  # memory mode: state the session-end rule (mechanics only)
+                out = out + MEMORY_FEEDBACK_SUFFIX
             rec["grade"] = st.grade.to_dict()
         else:
             out = f"An answer was already submitted for this question. {st.feedback}"
@@ -768,6 +787,7 @@ class Runner:
             (self.run_dir / sub).mkdir(parents=True, exist_ok=True)
         cfg.question_ids = [q["id"] for q in self.sequence]
         cfg.n_questions = len(self.sequence)
+        cfg.memory_prompt = _memory_variant
         cfg.system_prompt = system_prompt(cfg.mode)
         cfg.tools = [dataclasses.asdict(t) for t in tool_specs(cfg.mode)]
         cfg.created_at = cfg.created_at or utc_now()
@@ -1175,6 +1195,8 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--row-cap", type=int, default=ROW_CAP)
     r.add_argument("--char-cap", type=int, default=CHAR_CAP)
     r.add_argument("--memory-dir", default=None, help="memory mode: persistent dir (default <out>/memory)")
+    r.add_argument("--memory-prompt", default="general", choices=["general", "guided"],
+                   help="memory mode: system prompt variant (general = availability only; guided = light hint)")
     r.add_argument("--resume", action="store_true", help="skip questions that already have episodes")
     r.add_argument("--retry-errors", action="store_true", help="with --resume: redo episodes that ended in error")
 
@@ -1222,6 +1244,7 @@ def main(argv: list[str] | None = None, provider_factory: ProviderFactory = defa
                             format="%(asctime)s %(levelname)s %(name)s: %(message)s", stream=sys.stderr)
     try:
         if args.cmd == "run":
+            set_memory_variant(args.memory_prompt)
             cfg = config_from_args(args)
             summary = Runner(cfg, provider_factory).run()
             log.info("done: %d/%d correct (acc=%s) cost=$%.4f wall=%.0fs → %s/summary.json",
@@ -1229,6 +1252,11 @@ def main(argv: list[str] | None = None, provider_factory: ProviderFactory = defa
                      summary["totals"]["cost_usd"], summary["totals"]["wall_s"], cfg.out)
             return 0
         if args.cmd == "replay":
+            try:
+                _rcfg = json.loads((Path(args.run) / "config.json").read_text())
+                set_memory_variant(_rcfg.get("memory_prompt", "general"))
+            except (OSError, ValueError):
+                pass
             eps = replay(args.run, args.question, from_snapshot=args.from_snapshot, repeats=args.repeats,
                          memory_dir_override=args.memory_dir_override, provider_factory=provider_factory)
             n_ok = sum(1 for e in eps if e["correct"])
