@@ -287,7 +287,7 @@ QUESTIONS = [
 @pytest.fixture(scope="module")
 def ws() -> Path:
     """Temp workspace with data/{v1.db,v2.db,questions.json}; parents chmod 711 for memuser."""
-    root = Path(tempfile.mkdtemp(prefix="clrev-test-", dir="/tmp"))
+    root = Path(tempfile.mkdtemp(prefix="clrev-test-", dir=os.environ.get("CLREV_TEST_TMP", "/workspace/memdirs") if Path(os.environ.get("CLREV_TEST_TMP", "/workspace/memdirs")).is_dir() else None))  # not /tmp: closed to memuser
     os.chmod(root, 0o711)
     data = root / "data"
     data.mkdir()
