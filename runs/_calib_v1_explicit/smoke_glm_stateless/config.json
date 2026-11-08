@@ -1,0 +1,83 @@
+{
+  "run_id": "smoke_glm_stateless",
+  "model": "glm",
+  "mode": "stateless",
+  "questions": "/workspace/clrev/data/questions.json",
+  "db": "/workspace/clrev/data/payops.db",
+  "db_v2": "/workspace/clrev/data/payops_v2.db",
+  "drift_after": 14,
+  "out": "runs/smoke_glm_stateless",
+  "only": [
+    "q01",
+    "q02",
+    "q07"
+  ],
+  "max_turns": 40,
+  "post_submit_turns": 8,
+  "icl_post_submit_turns": 0,
+  "parallel_questions": 1,
+  "max_nudges": 1,
+  "sql_timeout_s": 30.0,
+  "bash_timeout_s": 30.0,
+  "row_cap": 300,
+  "char_cap": 24000,
+  "memory_dir": "/workspace/memdirs/smoke_glm",
+  "memory_prompt": "general",
+  "resume": false,
+  "retry_errors": false,
+  "question_ids": [
+    "q01",
+    "q02",
+    "q07"
+  ],
+  "n_questions": 3,
+  "system_prompt": "You are a data analyst agent with read-only SQL access to a SQLite database. The schema is not provided — explore it with SQL (sqlite_master, PRAGMA table_info, sampling). Answer the question by running queries with `run_sql`, then call `submit_answer` with the final value only, in the format the question asks for. You may run as many queries as you need. After submitting you will be told whether the answer was correct.",
+  "tools": [
+    {
+      "name": "run_sql",
+      "description": "Run one read-only SQL statement against the SQLite database and return the result as text (header plus up to 300 rows; longer results are truncated and marked). Use sqlite_master and PRAGMA table_info(...) to explore the schema.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sql": {
+            "type": "string",
+            "description": "A single SQL statement."
+          }
+        },
+        "required": [
+          "sql"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "submit_answer",
+      "description": "Submit the final answer to the current question. Pass only the value, in the format the question asks for. Returns whether the answer was correct.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "answer": {
+            "type": "string",
+            "description": "The final answer value."
+          }
+        },
+        "required": [
+          "answer"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "harness_version": "2026.11.1",
+  "created_at": "2026-11-08T17:55:23+00:00",
+  "hostname": "97ff8ccce2ed",
+  "git_commit": "5e498c02d98c4dd449b821c877019d0350854464",
+  "sandboxed_bash": null,
+  "usage_convention": "input_tokens includes cached and cache_write; output_tokens includes reasoning",
+  "prices": {
+    "input": 0.0335,
+    "cached": 0.0335,
+    "cache_write": 0.0335,
+    "output": 0.083
+  }
+}

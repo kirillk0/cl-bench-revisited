@@ -1,0 +1,131 @@
+2026-11-08 18:53:18,089 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (1.66s)
+2026-11-08 18:53:19,541 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (1.45s)
+2026-11-08 18:53:21,931 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.39s)
+2026-11-08 18:53:28,462 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (6.53s)
+2026-11-08 18:53:35,495 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (7.03s)
+2026-11-08 18:53:41,089 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (5.59s)
+2026-11-08 18:53:43,398 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.31s)
+2026-11-08 18:53:43,417 INFO clrev.runner: q01 ✓ answer='36531.85' gt=36531.85 sql=12 slow=0 bash=0 turns=7 in=24452 cached=20224 out=1979 cost=$0.0009 wall=27.0s ctx=5892
+2026-11-08 18:53:47,469 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.68s)
+2026-11-08 18:54:11,479 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (24.01s)
+2026-11-08 18:54:18,767 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (7.29s)
+2026-11-08 18:54:45,206 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (26.36s)
+2026-11-08 18:55:01,538 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (16.33s)
+2026-11-08 18:55:05,034 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.49s)
+2026-11-08 18:55:13,865 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (8.83s)
+2026-11-08 18:55:24,919 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (11.05s)
+2026-11-08 18:55:37,293 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (12.37s)
+2026-11-08 18:55:48,912 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (10.17s)
+2026-11-08 18:55:53,320 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.15s)
+2026-11-08 18:55:53,347 INFO clrev.runner: q02 ✓ answer='2025-W51' gt='2025-W51' sql=20 slow=2 bash=0 turns=11 in=140661 cached=134464 out=8672 cost=$0.0050 wall=129.5s ctx=18132
+2026-11-08 18:55:58,914 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (5.24s)
+2026-11-08 18:56:12,366 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (13.26s)
+2026-11-08 18:56:18,347 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (5.64s)
+2026-11-08 18:56:22,027 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.49s)
+2026-11-08 18:56:22,055 INFO clrev.runner: q03 ✓ answer='815909.97' gt=815909.97 sql=5 slow=0 bash=0 turns=4 in=76639 cached=75584 out=1716 cost=$0.0024 wall=28.4s ctx=20203
+2026-11-08 18:56:25,020 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.60s)
+2026-11-08 18:56:34,480 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (9.46s)
+2026-11-08 18:56:41,255 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (6.75s)
+2026-11-08 18:56:45,009 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.74s)
+2026-11-08 18:56:45,038 INFO clrev.runner: q04 ✓ answer='0.1014' gt=0.1014 sql=5 slow=0 bash=0 turns=4 in=89190 cached=86592 out=1438 cost=$0.0028 wall=22.6s ctx=23773
+2026-11-08 18:56:48,933 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.60s)
+2026-11-08 18:56:53,567 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (4.47s)
+2026-11-08 18:56:53,600 INFO clrev.runner: q05 ✓ answer='OSX-3' gt='OSX-3' sql=1 slow=0 bash=0 turns=2 in=48189 cached=47680 out=480 cost=$0.0015 wall=8.2s ctx=24530
+2026-11-08 18:56:58,259 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (4.32s)
+2026-11-08 18:57:01,583 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.74s)
+2026-11-08 18:57:01,622 INFO clrev.runner: q06 ✓ answer='2025-05' gt='2025-05' sql=1 slow=0 bash=0 turns=2 in=49830 cached=49152 out=492 cost=$0.0015 wall=7.6s ctx=25358
+2026-11-08 18:57:04,327 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.36s)
+2026-11-08 18:57:06,836 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.51s)
+2026-11-08 18:57:17,217 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (10.37s)
+2026-11-08 18:57:20,582 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.36s)
+2026-11-08 18:57:20,632 INFO clrev.runner: q07 ✓ answer='v4.18.0' gt='v4.18.0' sql=6 slow=0 bash=0 turns=4 in=126430 cached=114240 out=1211 cost=$0.0039 wall=18.6s ctx=38273
+2026-11-08 18:57:24,640 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.71s)
+2026-11-08 18:57:33,014 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (8.37s)
+2026-11-08 18:57:40,487 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (7.47s)
+2026-11-08 18:57:43,295 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.81s)
+2026-11-08 18:57:43,329 INFO clrev.runner: q08 ✓ answer='14.96' gt=14.96 sql=4 slow=0 bash=0 turns=4 in=156759 cached=155392 out=1077 cost=$0.0048 wall=22.4s ctx=40056
+2026-11-08 18:57:45,252 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (1.62s)
+2026-11-08 18:57:47,631 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.38s)
+2026-11-08 18:57:50,832 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.20s)
+2026-11-08 18:57:50,871 INFO clrev.runner: q09 ✓ answer='0.7869' gt=0.7869 sql=3 slow=0 bash=0 turns=3 in=121255 cached=120576 out=400 cost=$0.0037 wall=7.2s ctx=40807
+2026-11-08 18:57:53,531 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.36s)
+2026-11-08 18:57:55,871 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.34s)
+2026-11-08 18:58:00,187 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (4.31s)
+2026-11-08 18:58:02,617 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.43s)
+2026-11-08 18:58:02,655 INFO clrev.runner: q10 ✓ answer='r.svensson' gt='r.svensson' sql=5 slow=0 bash=0 turns=4 in=167152 cached=165376 out=712 cost=$0.0051 wall=11.4s ctx=42754
+2026-11-08 18:58:07,090 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (4.15s)
+2026-11-08 18:58:11,265 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.76s)
+2026-11-08 18:58:14,349 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.09s)
+2026-11-08 18:58:14,386 INFO clrev.runner: q11 ✓ answer='743' gt=743 sql=4 slow=0 bash=0 turns=3 in=129747 cached=129088 out=569 cost=$0.0039 wall=11.4s ctx=43713
+2026-11-08 18:58:17,941 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.27s)
+2026-11-08 18:58:21,997 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.88s)
+2026-11-08 18:58:22,034 INFO clrev.runner: q12 ✓ answer='54' gt=54 sql=2 slow=0 bash=0 turns=2 in=88543 cached=87360 out=425 cost=$0.0027 wall=7.3s ctx=44953
+2026-11-08 18:58:29,057 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (6.70s)
+2026-11-08 18:58:30,929 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (1.77s)
+2026-11-08 18:58:30,978 INFO clrev.runner: q13 ✓ answer='Helios Group' gt='Helios Group' sql=1 slow=0 bash=0 turns=2 in=90808 cached=90368 out=630 cost=$0.0028 wall=8.6s ctx=45852
+2026-11-08 18:58:34,359 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.09s)
+2026-11-08 18:58:37,711 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.09s)
+2026-11-08 18:58:37,750 INFO clrev.runner: q14 ✓ answer='2025-08' gt='2025-08' sql=1 slow=0 bash=0 turns=2 in=92407 cached=91904 out=300 cost=$0.0028 wall=6.4s ctx=46560
+2026-11-08 18:58:40,589 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.48s)
+2026-11-08 18:58:42,616 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.02s)
+2026-11-08 18:58:42,655 INFO clrev.runner: q21 ✓ answer='31' gt=31 sql=1 slow=0 bash=0 turns=2 in=94141 cached=92992 out=358 cost=$0.0029 wall=4.5s ctx=47656
+2026-11-08 18:59:06,406 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (23.47s)
+2026-11-08 18:59:31,837 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (17.45s)
+2026-11-08 19:00:02,874 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (31.03s)
+2026-11-08 19:00:16,537 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (12.62s)
+2026-11-08 19:00:25,454 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (8.83s)
+2026-11-08 19:00:39,119 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (13.01s)
+2026-11-08 19:00:48,520 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (7.88s)
+2026-11-08 19:01:06,373 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (13.68s)
+2026-11-08 19:01:37,883 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (23.87s)
+2026-11-08 19:01:48,730 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.43s)
+2026-11-08 19:01:48,784 INFO clrev.runner: q22 ✓ answer='Helios Grocery' gt='Helios Grocery' sql=11 slow=6 bash=0 turns=10 in=543766 cached=539392 out=10013 cost=$0.0172 wall=185.8s ctx=60949
+2026-11-08 19:02:09,389 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (20.23s)
+2026-11-08 19:02:13,820 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (4.43s)
+2026-11-08 19:02:21,371 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (6.06s)
+2026-11-08 19:02:33,724 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (10.85s)
+2026-11-08 19:02:35,961 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.06s)
+2026-11-08 19:02:36,021 INFO clrev.runner: q23 ✓ answer='35' gt=35 sql=4 slow=2 bash=0 turns=5 in=312760 cached=312320 out=2686 cost=$0.0096 wall=46.8s ctx=63888
+2026-11-08 19:02:39,850 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.47s)
+2026-11-08 19:02:42,764 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.91s)
+2026-11-08 19:02:42,817 INFO clrev.runner: q24 ✓ answer='83' gt=83 sql=1 slow=0 bash=0 turns=2 in=128601 cached=127744 out=321 cost=$0.0039 wall=6.4s ctx=64773
+2026-11-08 19:02:47,885 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (4.72s)
+2026-11-08 19:02:53,006 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (5.12s)
+2026-11-08 19:02:55,845 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.84s)
+2026-11-08 19:02:58,862 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.01s)
+2026-11-08 19:03:02,357 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.49s)
+2026-11-08 19:03:09,486 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (7.12s)
+2026-11-08 19:03:14,336 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (4.68s)
+2026-11-08 19:03:18,523 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (4.18s)
+2026-11-08 19:03:20,451 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (1.93s)
+2026-11-08 19:03:25,939 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (5.48s)
+2026-11-08 19:03:32,591 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (6.18s)
+2026-11-08 19:03:40,060 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (7.00s)
+2026-11-08 19:03:43,590 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.09s)
+2026-11-08 19:03:43,647 INFO clrev.runner: q15 ✓ answer='2463087.54' gt=2463087.54 sql=19 slow=0 bash=0 turns=13 in=878212 cached=874560 out=3303 cost=$0.0266 wall=60.4s ctx=70357
+2026-11-08 19:03:47,455 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.42s)
+2026-11-08 19:03:52,753 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (5.23s)
+2026-11-08 19:03:55,922 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.77s)
+2026-11-08 19:03:56,004 INFO clrev.runner: q16 ✓ answer='2025-W11' gt='2025-W11' sql=4 slow=0 bash=0 turns=3 in=212407 cached=211520 out=595 cost=$0.0064 wall=11.9s ctx=71332
+2026-11-08 19:03:58,864 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.55s)
+2026-11-08 19:04:00,901 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.01s)
+2026-11-08 19:04:00,959 INFO clrev.runner: q17 ✓ answer='0.0720' gt=0.072 sql=1 slow=0 bash=0 turns=2 in=143131 cached=142592 out=290 cost=$0.0043 wall=4.6s ctx=71785
+2026-11-08 19:04:02,884 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (1.57s)
+2026-11-08 19:04:05,898 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.01s)
+2026-11-08 19:04:08,178 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.28s)
+2026-11-08 19:04:10,562 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.38s)
+2026-11-08 19:04:10,625 INFO clrev.runner: q18 ✓ answer='100' gt=100 sql=4 slow=0 bash=0 turns=4 in=288796 cached=287872 out=531 cost=$0.0087 wall=9.2s ctx=72775
+2026-11-08 19:04:18,060 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (7.02s)
+2026-11-08 19:04:37,922 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (19.79s)
+2026-11-08 19:04:44,492 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.48s)
+2026-11-08 19:04:44,551 INFO clrev.runner: q19 ✓ answer='2025-W20' gt='2025-W20' sql=3 slow=1 bash=0 turns=3 in=221936 cached=220928 out=2002 cost=$0.0068 wall=33.5s ctx=75484
+2026-11-08 19:04:55,145 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (10.20s)
+2026-11-08 19:04:57,635 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (2.48s)
+2026-11-08 19:04:57,700 INFO clrev.runner: q20 ✓ answer='98' gt=98 sql=1 slow=0 bash=0 turns=2 in=151899 cached=151296 out=759 cost=$0.0046 wall=12.7s ctx=76389
+2026-11-08 19:05:02,201 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (4.13s)
+2026-11-08 19:05:05,936 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.33s)
+2026-11-08 19:05:05,995 INFO clrev.runner: q25 ✓ answer='2025-W38' gt='2025-W38' sql=1 slow=0 bash=0 turns=2 in=153293 cached=152832 out=460 cost=$0.0046 wall=7.9s ctx=76987
+2026-11-08 19:05:20,047 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (13.72s)
+2026-11-08 19:05:24,371 INFO clrev.providers: openrouter[glm_icl_r1:icl]: attempt 1 ok (3.23s)
+2026-11-08 19:05:24,428 INFO clrev.runner: q26 ✓ answer='Aurora Coffee Chain' gt='Aurora Coffee Chain' sql=1 slow=1 bash=0 turns=2 in=155052 cached=154368 out=805 cost=$0.0047 wall=18.0s ctx=78127
+2026-11-08 19:05:24,437 INFO clrev.runner: done: 26/26 correct (acc=1.0) cost=$0.1443 wall=718s → runs/glm_icl_r1/summary.json

@@ -1,0 +1,118 @@
+2026-11-08 18:49:18,996 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.83s)
+2026-11-08 18:49:20,284 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.28s)
+2026-11-08 18:49:21,177 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.89s)
+2026-11-08 18:49:22,065 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.89s)
+2026-11-08 18:49:24,788 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.72s)
+2026-11-08 18:49:26,990 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.19s)
+2026-11-08 18:49:28,759 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.72s)
+2026-11-08 18:49:28,779 INFO clrev.runner: q01 ✓ answer='36531.85' gt=36531.85 sql=12 slow=0 bash=0 turns=7 in=65706 cached=45138 out=1973 cost=$0.0040 wall=11.6s ctx=20721
+2026-11-08 18:49:30,495 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.43s)
+2026-11-08 18:49:31,487 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.99s)
+2026-11-08 18:49:35,154 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (3.67s)
+2026-11-08 18:49:40,702 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (4.64s)
+2026-11-08 18:49:44,522 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.16s)
+2026-11-08 18:49:44,544 INFO clrev.runner: q02 ✓ answer='2025-W51' gt='2025-W51' sql=8 slow=0 bash=0 turns=5 in=113607 cached=109007 out=2899 cost=$0.0031 wall=15.5s ctx=25334
+2026-11-08 18:49:46,302 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.42s)
+2026-11-08 18:49:48,147 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.84s)
+2026-11-08 18:49:49,989 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.67s)
+2026-11-08 18:49:50,901 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.76s)
+2026-11-08 18:49:50,926 INFO clrev.runner: q03 ✓ answer='815909.97' gt=815909.97 sql=3 slow=0 bash=0 turns=4 in=104979 cached=103085 out=1199 cost=$0.0019 wall=6.0s ctx=27094
+2026-11-08 18:49:52,410 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.19s)
+2026-11-08 18:49:54,180 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.77s)
+2026-11-08 18:49:55,553 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.37s)
+2026-11-08 18:49:57,052 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.48s)
+2026-11-08 18:49:57,083 INFO clrev.runner: q04 ✓ answer='0.1014' gt=0.1014 sql=4 slow=0 bash=0 turns=4 in=117138 cached=113814 out=977 cost=$0.0020 wall=5.8s ctx=30472
+2026-11-08 18:49:59,019 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.62s)
+2026-11-08 18:49:59,708 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.54s)
+2026-11-08 18:49:59,741 INFO clrev.runner: q05 ✓ answer='OSX-3' gt='OSX-3' sql=1 slow=0 bash=0 turns=2 in=61930 cached=60989 out=480 cost=$0.0010 wall=2.3s ctx=31329
+2026-11-08 18:50:01,929 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.89s)
+2026-11-08 18:50:03,436 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.98s)
+2026-11-08 18:50:03,466 INFO clrev.runner: q06 ✓ answer='2025-05' gt='2025-05' sql=1 slow=0 bash=0 turns=2 in=63792 cached=62737 out=648 cost=$0.0011 wall=3.4s ctx=32413
+2026-11-08 18:50:04,529 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.71s)
+2026-11-08 18:50:05,322 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.79s)
+2026-11-08 18:50:06,153 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.83s)
+2026-11-08 18:50:07,742 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.59s)
+2026-11-08 18:50:08,999 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.22s)
+2026-11-08 18:50:10,121 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.12s)
+2026-11-08 18:50:10,167 INFO clrev.runner: q07 ✓ answer='v4.18.0' gt='v4.18.0' sql=9 slow=0 bash=0 turns=6 in=204502 cached=200982 out=1087 cost=$0.0030 wall=6.3s ctx=35941
+2026-11-08 18:50:12,224 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.71s)
+2026-11-08 18:50:14,403 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.18s)
+2026-11-08 18:50:16,477 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.07s)
+2026-11-08 18:50:16,511 INFO clrev.runner: q08 ✓ answer='14.96' gt=14.96 sql=4 slow=0 bash=0 turns=3 in=111175 cached=109143 out=1088 cost=$0.0019 wall=6.0s ctx=38076
+2026-11-08 18:50:18,918 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.06s)
+2026-11-08 18:50:19,778 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.86s)
+2026-11-08 18:50:21,614 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.83s)
+2026-11-08 18:50:22,148 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.53s)
+2026-11-08 18:50:22,222 INFO clrev.runner: q09 ✓ answer='0.7869' gt=0.7869 sql=4 slow=0 bash=0 turns=4 in=155128 cached=153548 out=823 cost=$0.0021 wall=5.3s ctx=39477
+2026-11-08 18:50:23,193 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.63s)
+2026-11-08 18:50:23,912 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.72s)
+2026-11-08 18:50:25,538 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.62s)
+2026-11-08 18:50:26,939 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.40s)
+2026-11-08 18:50:28,153 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.20s)
+2026-11-08 18:50:28,711 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.56s)
+2026-11-08 18:50:28,742 INFO clrev.runner: q10 ✓ answer='r.svensson' gt='r.svensson' sql=6 slow=0 bash=0 turns=6 in=244787 cached=242379 out=1295 cost=$0.0034 wall=6.2s ctx=41872
+2026-11-08 18:50:30,707 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.66s)
+2026-11-08 18:50:32,036 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.01s)
+2026-11-08 18:50:32,686 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.51s)
+2026-11-08 18:50:32,734 INFO clrev.runner: q11 ✓ answer='743' gt=743 sql=2 slow=0 bash=0 turns=3 in=126909 cached=126156 out=550 cost=$0.0016 wall=3.6s ctx=42613
+2026-11-08 18:50:34,376 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.26s)
+2026-11-08 18:50:35,309 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.73s)
+2026-11-08 18:50:36,448 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.14s)
+2026-11-08 18:50:36,485 INFO clrev.runner: q12 ✓ answer='54' gt=54 sql=3 slow=0 bash=0 turns=3 in=129482 cached=128499 out=492 cost=$0.0017 wall=3.3s ctx=43630
+2026-11-08 18:50:39,115 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.31s)
+2026-11-08 18:50:41,202 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.92s)
+2026-11-08 18:50:41,257 INFO clrev.runner: q13 ✓ answer='Helios Group' gt='Helios Group' sql=1 slow=0 bash=0 turns=2 in=88410 cached=87329 out=805 cost=$0.0014 wall=4.4s ctx=44750
+2026-11-08 18:50:43,584 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.03s)
+2026-11-08 18:50:45,343 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.44s)
+2026-11-08 18:50:45,379 INFO clrev.runner: q14 ✓ answer='2025-08' gt='2025-08' sql=1 slow=0 bash=0 turns=2 in=90635 cached=89502 out=619 cost=$0.0013 wall=3.8s ctx=45853
+2026-11-08 18:50:46,962 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.29s)
+2026-11-08 18:50:47,526 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.56s)
+2026-11-08 18:50:47,563 INFO clrev.runner: q21 ✓ answer='31' gt=31 sql=1 slow=0 bash=0 turns=2 in=92913 cached=91707 out=306 cost=$0.0012 wall=1.9s ctx=46990
+2026-11-08 18:50:53,196 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (5.32s)
+2026-11-08 18:50:58,468 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (3.62s)
+2026-11-08 18:51:01,436 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.30s)
+2026-11-08 18:51:01,482 INFO clrev.runner: q22 ✓ answer='Helios Grocery' gt='Helios Grocery' sql=2 slow=2 bash=0 turns=3 in=146127 cached=142917 out=2472 cost=$0.0031 wall=13.6s ctx=50241
+2026-11-08 18:51:04,058 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.24s)
+2026-11-08 18:51:05,829 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.97s)
+2026-11-08 18:51:05,864 INFO clrev.runner: q23 ✓ answer='35' gt=35 sql=1 slow=0 bash=0 turns=2 in=101367 cached=100556 out=578 cost=$0.0014 wall=4.0s ctx=51028
+2026-11-08 18:51:07,206 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.04s)
+2026-11-08 18:51:07,807 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.60s)
+2026-11-08 18:51:07,847 INFO clrev.runner: q24 ✓ answer='83' gt=83 sql=1 slow=0 bash=0 turns=2 in=102695 cached=102079 out=290 cost=$0.0012 wall=1.6s ctx=51607
+2026-11-08 18:51:10,150 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.95s)
+2026-11-08 18:51:12,798 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.64s)
+2026-11-08 18:51:14,153 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.35s)
+2026-11-08 18:51:15,498 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.34s)
+2026-11-08 18:51:16,392 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.89s)
+2026-11-08 18:51:19,473 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (3.07s)
+2026-11-08 18:51:20,731 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.25s)
+2026-11-08 18:51:22,589 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.86s)
+2026-11-08 18:51:23,632 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.63s)
+2026-11-08 18:51:23,675 INFO clrev.runner: q15 ✓ answer='2463087.54' gt=2463087.54 sql=10 slow=0 bash=0 turns=9 in=490012 cached=484330 out=3332 cost=$0.0072 wall=15.4s ctx=57273
+2026-11-08 18:51:25,761 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.80s)
+2026-11-08 18:51:27,775 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.95s)
+2026-11-08 18:51:28,629 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.55s)
+2026-11-08 18:51:28,680 INFO clrev.runner: q16 ✓ answer='2025-W11' gt='2025-W11' sql=2 slow=0 bash=0 turns=3 in=173659 cached=172452 out=880 cost=$0.0023 wall=4.7s ctx=58472
+2026-11-08 18:51:30,495 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.47s)
+2026-11-08 18:51:31,057 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.53s)
+2026-11-08 18:51:31,097 INFO clrev.runner: q17 ✓ answer='0.0720' gt=0.072 sql=1 slow=0 bash=0 turns=2 in=117758 cached=117067 out=442 cost=$0.0015 wall=2.0s ctx=59156
+2026-11-08 18:51:33,715 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.31s)
+2026-11-08 18:51:34,790 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.07s)
+2026-11-08 18:51:35,633 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.84s)
+2026-11-08 18:51:36,196 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.56s)
+2026-11-08 18:51:36,238 INFO clrev.runner: q18 ✓ answer='100' gt=100 sql=3 slow=0 bash=0 turns=4 in=239500 cached=238134 out=740 cost=$0.0029 wall=4.8s ctx=60509
+2026-11-08 18:51:38,852 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.24s)
+2026-11-08 18:51:42,089 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.73s)
+2026-11-08 18:51:42,137 INFO clrev.runner: q19 ✓ answer='2025-W20' gt='2025-W20' sql=1 slow=1 bash=0 turns=2 in=122114 cached=121147 out=715 cost=$0.0017 wall=5.5s ctx=61560
+2026-11-08 18:51:43,929 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.49s)
+2026-11-08 18:51:45,255 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.32s)
+2026-11-08 18:51:47,376 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.11s)
+2026-11-08 18:51:47,419 INFO clrev.runner: q20 ✓ answer='98' gt=98 sql=2 slow=0 bash=0 turns=3 in=185897 cached=185040 out=668 cost=$0.0023 wall=4.9s ctx=62467
+2026-11-08 18:51:49,016 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.25s)
+2026-11-08 18:51:50,015 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.58s)
+2026-11-08 18:51:50,057 INFO clrev.runner: q25 ✓ answer='2025-W38' gt='2025-W38' sql=1 slow=0 bash=0 turns=2 in=125487 cached=124812 out=364 cost=$0.0015 wall=2.3s ctx=62992
+2026-11-08 18:51:52,763 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.38s)
+2026-11-08 18:51:55,818 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (2.06s)
+2026-11-08 18:51:57,011 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (1.19s)
+2026-11-08 18:51:57,947 INFO clrev.providers: anthropic[haiku_icl_r1:icl]: attempt 1 ok (0.93s)
+2026-11-08 18:51:57,987 INFO clrev.runner: q26 ✓ answer='Aurora Coffee Chain' gt='Aurora Coffee Chain' sql=3 slow=0 bash=0 turns=4 in=256639 cached=254368 out=1370 cost=$0.0035 wall=7.6s ctx=65332
+2026-11-08 18:51:57,993 INFO clrev.runner: done: 26/26 correct (acc=1.0) cost=$0.0594 wall=152s → runs/haiku_icl_r1/summary.json

@@ -1,0 +1,4 @@
+2026-11-08 20:05:48,348 INFO clrev.providers: anthropic[haiku_memory_guided_r1:replay:q15_r1]: attempt 1 ok (1.52s)
+2026-11-08 20:05:50,231 INFO clrev.providers: anthropic[haiku_memory_guided_r1:replay:q15_r1]: attempt 1 ok (1.86s)
+2026-11-08 20:05:51,077 INFO clrev.providers: anthropic[haiku_memory_guided_r1:replay:q15_r1]: attempt 1 ok (0.85s)
+2026-11-08 20:05:52,693 INFO clrev.providers: anthropic[haiku_memory_guided_r1:replay:q15_r1]: attempt 1 ok (1.61s)

@@ -1,0 +1,107 @@
+2026-11-08 19:53:09,661 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.58s)
+2026-11-08 19:53:12,772 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (3.11s)
+2026-11-08 19:53:14,905 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.13s)
+2026-11-08 19:53:19,803 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (4.90s)
+2026-11-08 19:53:21,106 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.30s)
+2026-11-08 19:53:21,127 INFO clrev.runner: q01 ✓ answer='36531.85' gt=36531.85 sql=8 slow=0 bash=0 turns=5 in=6642 cached=3200 out=389 cost=$0.0006 wall=13.0s ctx=2171
+2026-11-08 19:53:22,780 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.34s)
+2026-11-08 19:53:25,177 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.40s)
+2026-11-08 19:53:29,866 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (4.69s)
+2026-11-08 19:53:39,845 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (9.29s)
+2026-11-08 19:53:45,344 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (4.87s)
+2026-11-08 19:53:45,373 INFO clrev.runner: q02 ✓ answer='2025-W51' gt='2025-W51' sql=6 slow=0 bash=0 turns=5 in=17293 cached=11776 out=785 cost=$0.0011 wall=23.9s ctx=4708
+2026-11-08 19:53:51,217 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (5.47s)
+2026-11-08 19:53:52,743 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.29s)
+2026-11-08 19:53:52,769 INFO clrev.runner: q03 ✓ answer='815909.97' gt=815909.97 sql=1 slow=0 bash=0 turns=2 in=9962 cached=9216 out=269 cost=$0.0003 wall=7.0s ctx=5142
+2026-11-08 19:53:56,258 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (3.18s)
+2026-11-08 19:53:58,667 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.40s)
+2026-11-08 19:54:02,646 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (3.98s)
+2026-11-08 19:54:04,079 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.41s)
+2026-11-08 19:54:04,108 INFO clrev.runner: q04 ✓ answer='0.1014' gt=0.1014 sql=6 slow=0 bash=0 turns=4 in=28100 cached=24704 out=315 cost=$0.0007 wall=11.0s ctx=7866
+2026-11-08 19:54:08,420 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (4.00s)
+2026-11-08 19:54:10,483 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.88s)
+2026-11-08 19:54:10,576 INFO clrev.runner: q05 ✓ answer='OSX-3' gt='OSX-3' sql=1 slow=0 bash=0 turns=2 in=16278 cached=15488 out=179 cost=$0.0003 wall=6.1s ctx=8297
+2026-11-08 19:54:18,208 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (7.20s)
+2026-11-08 19:54:20,504 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.48s)
+2026-11-08 19:54:20,538 INFO clrev.runner: q06 ✓ answer='2025-05' gt='2025-05' sql=1 slow=0 bash=0 turns=2 in=17208 cached=10496 out=300 cost=$0.0009 wall=9.5s ctx=8836
+2026-11-08 19:54:22,224 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.31s)
+2026-11-08 19:54:25,044 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.82s)
+2026-11-08 19:54:27,752 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.71s)
+2026-11-08 19:54:30,103 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.35s)
+2026-11-08 19:54:31,596 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.49s)
+2026-11-08 19:54:31,636 INFO clrev.runner: q07 ✓ answer='v4.18.0' gt='v4.18.0' sql=7 slow=0 bash=0 turns=5 in=48897 cached=45952 out=303 cost=$0.0009 wall=10.7s ctx=10613
+2026-11-08 19:54:34,201 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.25s)
+2026-11-08 19:54:36,374 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.17s)
+2026-11-08 19:54:40,770 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (4.39s)
+2026-11-08 19:54:42,190 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.42s)
+2026-11-08 19:54:42,229 INFO clrev.runner: q08 ✓ answer='14.96' gt=14.96 sql=4 slow=0 bash=0 turns=4 in=44152 cached=40704 out=310 cost=$0.0009 wall=10.2s ctx=11357
+2026-11-08 19:54:45,519 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.86s)
+2026-11-08 19:54:49,252 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (3.73s)
+2026-11-08 19:54:51,677 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.42s)
+2026-11-08 19:54:51,712 INFO clrev.runner: q09 ✓ answer='0.7869' gt=0.7869 sql=4 slow=0 bash=0 turns=3 in=35642 cached=33920 out=255 cost=$0.0006 wall=9.0s ctx=12192
+2026-11-08 19:54:54,618 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.62s)
+2026-11-08 19:54:58,447 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (3.83s)
+2026-11-08 19:55:00,365 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.91s)
+2026-11-08 19:55:00,446 INFO clrev.runner: q10 ✓ answer='r.svensson' gt='r.svensson' sql=4 slow=0 bash=0 turns=3 in=38323 cached=36352 out=239 cost=$0.0007 wall=8.4s ctx=13129
+2026-11-08 19:55:02,325 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.52s)
+2026-11-08 19:55:04,983 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.65s)
+2026-11-08 19:55:06,951 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.68s)
+2026-11-08 19:55:06,992 INFO clrev.runner: q11 ✓ answer='743' gt=743 sql=2 slow=0 bash=0 turns=3 in=40225 cached=39296 out=127 cost=$0.0005 wall=6.2s ctx=13576
+2026-11-08 19:55:10,191 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.84s)
+2026-11-08 19:55:13,904 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (3.71s)
+2026-11-08 19:55:15,791 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.71s)
+2026-11-08 19:55:15,839 INFO clrev.runner: q12 ✓ answer='54' gt=54 sql=3 slow=0 bash=0 turns=3 in=41877 cached=40832 out=224 cost=$0.0006 wall=8.4s ctx=14204
+2026-11-08 19:55:22,695 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (6.56s)
+2026-11-08 19:55:24,267 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.45s)
+2026-11-08 19:55:24,306 INFO clrev.runner: q13 ✓ answer='Helios Group' gt='Helios Group' sql=1 slow=0 bash=0 turns=2 in=29075 cached=28288 out=306 cost=$0.0005 wall=8.1s ctx=14770
+2026-11-08 19:55:29,386 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (4.75s)
+2026-11-08 19:55:31,294 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.58s)
+2026-11-08 19:55:31,335 INFO clrev.runner: q14 ✓ answer='2025-08' gt='2025-08' sql=1 slow=0 bash=0 turns=2 in=30077 cached=29312 out=196 cost=$0.0005 wall=6.7s ctx=15223
+2026-11-08 19:55:36,552 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (4.87s)
+2026-11-08 19:55:38,344 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.79s)
+2026-11-08 19:55:38,394 INFO clrev.runner: q21 ✓ answer='31' gt=31 sql=1 slow=0 bash=0 turns=2 in=31415 cached=30208 out=153 cost=$0.0005 wall=6.7s ctx=16124
+2026-11-08 19:55:51,065 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (12.33s)
+2026-11-08 19:55:59,988 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (8.91s)
+2026-11-08 19:56:02,804 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.73s)
+2026-11-08 19:56:02,878 INFO clrev.runner: q22 ✗ answer='Aurora Hospitality' gt='Helios Grocery' sql=2 slow=1 bash=0 turns=3 in=50708 cached=48896 out=1050 cost=$0.0012 wall=24.1s ctx=17546
+2026-11-08 19:56:07,152 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (3.89s)
+2026-11-08 19:56:09,653 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.71s)
+2026-11-08 19:56:09,703 INFO clrev.runner: q23 ✓ answer='35' gt=35 sql=1 slow=0 bash=0 turns=2 in=35551 cached=34944 out=167 cost=$0.0005 wall=6.4s ctx=17880
+2026-11-08 19:56:13,467 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (3.39s)
+2026-11-08 19:56:15,084 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.61s)
+2026-11-08 19:56:15,153 INFO clrev.runner: q24 ✓ answer='83' gt=83 sql=1 slow=0 bash=0 turns=2 in=36335 cached=35456 out=136 cost=$0.0005 wall=5.0s ctx=18394
+2026-11-08 19:56:21,425 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (5.73s)
+2026-11-08 19:56:25,549 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (4.12s)
+2026-11-08 19:56:29,446 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (3.89s)
+2026-11-08 19:56:35,292 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (5.84s)
+2026-11-08 19:56:40,704 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (5.41s)
+2026-11-08 19:56:42,691 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.98s)
+2026-11-08 19:56:48,178 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (5.48s)
+2026-11-08 19:56:50,587 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.87s)
+2026-11-08 19:56:50,665 INFO clrev.runner: q15 ✓ answer='2463087.54' gt=2463087.54 sql=10 slow=0 bash=0 turns=8 in=156150 cached=144896 out=975 cost=$0.0031 wall=34.9s ctx=20651
+2026-11-08 19:56:52,716 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.76s)
+2026-11-08 19:56:55,296 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.58s)
+2026-11-08 19:57:00,013 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (4.71s)
+2026-11-08 19:57:05,915 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (5.86s)
+2026-11-08 19:57:05,987 INFO clrev.runner: q16 ✓ answer='2025-W11' gt='2025-W11' sql=4 slow=0 bash=0 turns=4 in=84106 cached=81408 out=297 cost=$0.0012 wall=15.0s ctx=21535
+2026-11-08 19:57:10,245 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (3.89s)
+2026-11-08 19:57:11,822 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.55s)
+2026-11-08 19:57:11,882 INFO clrev.runner: q17 ✓ answer='0.0720' gt=0.072 sql=1 slow=0 bash=0 turns=2 in=43534 cached=42880 out=167 cost=$0.0006 wall=5.5s ctx=21886
+2026-11-08 19:57:14,982 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.76s)
+2026-11-08 19:57:18,735 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (3.75s)
+2026-11-08 19:57:20,220 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.48s)
+2026-11-08 19:57:20,281 INFO clrev.runner: q18 ✓ answer='100' gt=100 sql=3 slow=0 bash=0 turns=3 in=66642 cached=65664 out=232 cost=$0.0009 wall=8.0s ctx=22452
+2026-11-08 19:57:22,366 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.73s)
+2026-11-08 19:57:26,417 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (4.05s)
+2026-11-08 19:57:36,678 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (9.43s)
+2026-11-08 19:57:36,739 INFO clrev.runner: q19 ✓ answer='2025-W20' gt='2025-W20' sql=2 slow=0 bash=0 turns=3 in=68433 cached=65664 out=216 cost=$0.0010 wall=16.0s ctx=23091
+2026-11-08 19:57:40,967 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (3.93s)
+2026-11-08 19:57:42,638 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.67s)
+2026-11-08 19:57:42,704 INFO clrev.runner: q20 ✓ answer='98' gt=98 sql=1 slow=0 bash=0 turns=2 in=46577 cached=45568 out=169 cost=$0.0006 wall=5.6s ctx=23399
+2026-11-08 19:57:47,403 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (4.39s)
+2026-11-08 19:57:51,837 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (4.38s)
+2026-11-08 19:57:51,893 INFO clrev.runner: q25 ✓ answer='2025-W38' gt='2025-W38' sql=1 slow=0 bash=0 turns=2 in=47272 cached=46336 out=176 cost=$0.0006 wall=8.8s ctx=23847
+2026-11-08 19:57:58,500 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (6.28s)
+2026-11-08 19:58:01,414 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (2.07s)
+2026-11-08 19:58:01,469 INFO clrev.runner: q26 ✓ answer='Aurora Coffee Chain' gt='Aurora Coffee Chain' sql=1 slow=0 bash=0 turns=2 in=48399 cached=46976 out=292 cost=$0.0008 wall=9.2s ctx=24480
+2026-11-08 19:58:01,480 INFO clrev.runner: done: 25/26 correct (acc=0.9615) cost=$0.0207 wall=283s → runs/luna_icl_r2/summary.json
