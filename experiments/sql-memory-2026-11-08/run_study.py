@@ -6,6 +6,7 @@ from sandbox import Sandbox
 ROOT=pathlib.Path(__file__).resolve().parent
 COMMON='''You are a SQL analyst working with a local SQLite database. You have a generic bash tool. The read-only database is ../data/current.db; README.md describes the business data contract. Inspect files, schema and data as needed; sqlite3 CLI and Python are available. Return the JSON requested by the user, with executable SQL evidence. Your work directory is scratch space and is recreated for every new task. There is no network access. Tool output is limited to 60,000 characters, with explicit truncation; use normal shell filtering or files for larger outputs. There is no score or penalty for the number of SQL queries. Focus on correct, supported answers.'''
 MEMORY=' A persistent writable directory ../memory is available for notes between tasks. You may read and maintain it using normal shell commands if useful.'
+MEMORY_LIFECYCLE=' Future tasks will start in a fresh conversation with no access to this conversation. Only files in ../memory persist across tasks; other working files are cleared. You may use and maintain that directory to carry forward anything you consider useful, using the normal shell tools. Its contents are not automatically added to your context.'
 MODELS={'codex':'gpt-6-luna','anthropic':'claude-haiku-5-5','openrouter':'z-ai/glm-5.3-flash'}
 def dump(path,obj):
  path=pathlib.Path(path);path.parent.mkdir(parents=True,exist_ok=True);tmp=path.with_suffix(path.suffix+'.tmp');tmp.write_text(json.dumps(obj,ensure_ascii=False,indent=2));tmp.chmod(0o600);tmp.replace(path)
@@ -36,7 +37,7 @@ def run(args):
  out=ROOT/'runs'/job;out.mkdir(parents=True,exist_ok=False)
  idx={'codex':0,'anthropic':1,'openrouter':2}[args.provider]*3+{'stateless':0,'icl':1,'managed':2}[args.arm]
  sb=Sandbox(job,22000+idx+args.uid_offset,args.arm=='managed')
- cfg={'max_tokens':8192,'read_timeout':240}
+ cfg={'max_tokens':args.max_output_tokens,'read_timeout':240}
  if args.provider=='anthropic':cfg.update(thinking={'type':'adaptive'},rates={'input':.10,'output':.50,'cache_read':.01,'cache_write_5m':.125,'cache_write_1h':.20})
  session=None
  if args.state:session=from_state(json.loads(pathlib.Path(args.state).read_text()))
@@ -44,7 +45,8 @@ def run(args):
   mem=json.loads(pathlib.Path(args.memory).read_text())
   for name,text in mem.items():
    p=sb.root/'memory'/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text);os.chown(p,sb.uid,sb.uid)
- metadata={'job':job,'provider':args.provider,'model':MODELS[args.provider],'arm':args.arm,'tasks':[t.get('id',t.get('task_id')) for t in tasks],'started_at':time.time(),'valid_for_comparison':True,'sandbox_version':'chroot-v2','system':COMMON+(MEMORY if args.arm=='managed' else ''),'guards':{'model_turns':80,'task_wall_s':900,'shell_wall_s':60,'output_chars':60000},'protocol_sha256':sha(ROOT/'analysis/protocol.md')}
+ memory_instruction=MEMORY_LIFECYCLE if args.memory_instruction=='lifecycle' else MEMORY
+ metadata={'job':job,'provider':args.provider,'model':MODELS[args.provider],'arm':args.arm,'tasks':[t.get('id',t.get('task_id')) for t in tasks],'started_at':time.time(),'valid_for_comparison':True,'sandbox_version':'chroot-v2','memory_instruction_variant':args.memory_instruction,'system':COMMON+(memory_instruction if args.arm=='managed' else ''),'guards':{'model_turns':80,'task_wall_s':900,'shell_wall_s':60,'output_chars':60000,'max_output_tokens':args.max_output_tokens},'protocol_sha256':sha(ROOT/'analysis/protocol.md')}
  dump(out/'manifest.json',metadata)
  for task in tasks:
   tid=task.get('id',task.get('task_id'));ep=out/tid;ep.mkdir()
@@ -90,4 +92,4 @@ def run(args):
   if record['status']!='completed':break
  metadata['finished_at']=time.time();dump(out/'manifest.json',metadata);dump(ROOT/'public_results'/job/'manifest.json',metadata)
 if __name__=='__main__':
- ap=argparse.ArgumentParser();ap.add_argument('--provider',choices=MODELS,required=True);ap.add_argument('--arm',choices=['stateless','icl','managed'],required=True);ap.add_argument('--job');ap.add_argument('--tasks');ap.add_argument('--state');ap.add_argument('--memory');ap.add_argument('--uid-offset',type=int,default=0);run(ap.parse_args())
+ ap=argparse.ArgumentParser();ap.add_argument('--provider',choices=MODELS,required=True);ap.add_argument('--arm',choices=['stateless','icl','managed'],required=True);ap.add_argument('--job');ap.add_argument('--tasks');ap.add_argument('--state');ap.add_argument('--memory');ap.add_argument('--uid-offset',type=int,default=0);ap.add_argument('--max-output-tokens',type=int,default=8192);ap.add_argument('--memory-instruction',choices=['minimal','lifecycle'],default='minimal');run(ap.parse_args())

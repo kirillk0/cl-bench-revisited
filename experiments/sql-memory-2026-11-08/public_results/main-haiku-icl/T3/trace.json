@@ -1,0 +1,642 @@
+{
+  "task_id": "T3",
+  "db_sha256": "2823f7089388a1737e8b95389ae2f83598f581389b9af600453a6b2016835e03",
+  "snapshot": "post.db",
+  "prompt": "Use only the supplied current.db and README. All windows below are UTC and half-open, selected by logical-operation open time. A terminal-failure percentage has logical operations as its denominator; attempt-failure percentage has attempts as its denominator. Return only JSON matching the provided schema. Percentages use 0–100, differences use percentage points. evidence_sql must contain executable read-only SQLite queries with literal bounds, not pseudocode. Arrays may be in any order; include every requested group. A zero numerator is not missing data. No web or network access is needed.\n\nReport ledger-sync reliability for 2026-05-09: reference 10:00–11:00 versus incident 11:00–12:00. Report the authoritative event source for these windows (registry version, event table, event grain and effective start). For each period and actual serving PHYSICAL pool, report logical operations, terminal failures, terminal-failure percentage, retried operations, retry percentage and mean end-to-end latency_ms. Do not treat routing intent or an individual execution identity as a physical pool. Also give all-pool operations, terminal failures and terminal-failure percentage per period; identify the physical pool with the largest increase and report that increase in pp. In assessment state what the report establishes and the important attribution/counting limitations.\n\nRequired JSON response schema:\n{\"$schema\": \"https://json-schema.org/draft/2020-12/schema\", \"additionalProperties\": false, \"properties\": {\"answer\": {\"additionalProperties\": false, \"properties\": {\"assessment\": {\"type\": \"string\"}, \"largest_increase\": {\"additionalProperties\": false, \"properties\": {\"incident_failure_pct\": {\"type\": \"number\"}, \"increase_pp\": {\"type\": \"number\"}, \"pool_code\": {\"type\": \"string\"}, \"reference_failure_pct\": {\"type\": \"number\"}}, \"required\": [\"pool_code\", \"reference_failure_pct\", \"incident_failure_pct\", \"increase_pp\"], \"type\": \"object\"}, \"pool_metrics\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"mean_latency_ms\": {\"type\": \"number\"}, \"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"pool_code\": {\"type\": \"string\"}, \"retried_operations\": {\"type\": \"integer\"}, \"retry_pct\": {\"type\": \"number\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"period\", \"pool_code\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\", \"retried_operations\", \"retry_pct\", \"mean_latency_ms\"], \"type\": \"object\"}, \"maxItems\": 4, \"minItems\": 4, \"type\": \"array\"}, \"source\": {\"additionalProperties\": false, \"properties\": {\"effective_from_ms\": {\"type\": \"integer\"}, \"event_grain\": {\"type\": \"string\"}, \"event_table\": {\"type\": \"string\"}, \"version\": {\"type\": \"integer\"}}, \"required\": [\"version\", \"event_table\", \"event_grain\", \"effective_from_ms\"], \"type\": \"object\"}, \"totals\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"period\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\"], \"type\": \"object\"}, \"maxItems\": 2, \"minItems\": 2, \"type\": \"array\"}}, \"required\": [\"source\", \"pool_metrics\", \"totals\", \"largest_increase\", \"assessment\"], \"type\": \"object\"}, \"caveats\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}, \"evidence_sql\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}}, \"required\": [\"answer\", \"evidence_sql\", \"caveats\"], \"type\": \"object\"}",
+  "turns": [
+    {
+      "tool_calls": [
+        {
+          "id": "toolu_01TCi12Gq2rcuJQbcbmKLCfi",
+          "name": "bash",
+          "arguments": {
+            "command": "cd /data; sqlite3 -header current.db \"select * from feed_registry; select strftime('%Y-%m-%d %H:%M',1778284800000/1000,'unixepoch');\"; cat > /work/ls9.sql <<'EOF'\nwith ops as (select o.operation_id, o.route_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period\n from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000),\nasg as (select ops.*, ra.pool_id from ops join route_assignments ra on ra.route_id=ops.route_id and ops.opened_at_ms>=ra.effective_from_ms and ops.opened_at_ms<ra.effective_to_ms),\natt as (select a.operation_id, count(*) n from attempt_events a group by a.operation_id),\nlst as (select a.operation_id, f.is_success last_ok, a.completed_at_ms from attempt_events a join failure_codes f using(code_id) where a.attempt_no=(select max(b.attempt_no) from attempt_events b where b.operation_id=a.operation_id))\nselect asg.period, p.pool_code, count(*) operations, sum(lst.last_ok=0) terminal_failures, round(100.0*sum(lst.last_ok=0)/count(*),4) terminal_failure_pct,\n sum(att.n>1) retried_operations, round(100.0*sum(att.n>1)/count(*),4) retry_pct, round(avg(lst.completed_at_ms-asg.opened_at_ms),4) mean_latency_ms\nfrom asg join worker_pools p using(pool_id) join att using(operation_id) join lst using(operation_id) where asg.period is not null group by asg.period, p.pool_code order by 1,2;\nEOF\nsqlite3 -header current.db < /work/ls9.sql\nsqlite3 -header current.db \"select asg_period, count(*) from (select case when o.opened_at_ms<1778324400000 then 'ref' else 'inc' end asg_period from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000) group by 1;\nselect r.route_key, ra.pool_id, ra.effective_from_ms, ra.effective_to_ms, count(*) from logical_operations o join service_routes r using(route_id) join route_assignments ra on ra.route_id=o.route_id and o.opened_at_ms>=ra.effective_from_ms and o.opened_at_ms<ra.effective_to_ms where r.service_id=2 and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2,3,4;\nselect count(*) from logical_operations o where o.route_id in (select route_id from service_routes where service_id=2) and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 and not exists (select 1 from attempt_events a where a.operation_id=o.operation_id);\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 6211,
+        "cache_read_input_tokens": 49938,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 6211,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 1606,
+        "output_tokens_details": {
+          "thinking_tokens": 369
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.0020791549999999996,
+      "response_id": "msg_011Cgqj6b8e6h3LaqBZpCPpr",
+      "elapsed_s": 5.5670376140624285,
+      "token_accounting": {
+        "input_tokens": 56153,
+        "input_uncached_tokens": 4,
+        "cache_read_input_tokens": 49938,
+        "cache_creation_input_tokens": 6211,
+        "cache_creation_5m_input_tokens": 6211,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 1606,
+        "reasoning_tokens": 0,
+        "total_tokens": 57759
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011Cgqj6b8e6h3LaqBZpCPpr",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": {
+              "omitted": true,
+              "sha256": "24542ad5586342c80167c7ab531400549cd555ec4d1ae2fb7f010a612e8561bc",
+              "length": 2132
+            }
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01TCi12Gq2rcuJQbcbmKLCfi",
+            "name": "bash",
+            "input": {
+              "command": "cd /data; sqlite3 -header current.db \"select * from feed_registry; select strftime('%Y-%m-%d %H:%M',1778284800000/1000,'unixepoch');\"; cat > /work/ls9.sql <<'EOF'\nwith ops as (select o.operation_id, o.route_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period\n from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000),\nasg as (select ops.*, ra.pool_id from ops join route_assignments ra on ra.route_id=ops.route_id and ops.opened_at_ms>=ra.effective_from_ms and ops.opened_at_ms<ra.effective_to_ms),\natt as (select a.operation_id, count(*) n from attempt_events a group by a.operation_id),\nlst as (select a.operation_id, f.is_success last_ok, a.completed_at_ms from attempt_events a join failure_codes f using(code_id) where a.attempt_no=(select max(b.attempt_no) from attempt_events b where b.operation_id=a.operation_id))\nselect asg.period, p.pool_code, count(*) operations, sum(lst.last_ok=0) terminal_failures, round(100.0*sum(lst.last_ok=0)/count(*),4) terminal_failure_pct,\n sum(att.n>1) retried_operations, round(100.0*sum(att.n>1)/count(*),4) retry_pct, round(avg(lst.completed_at_ms-asg.opened_at_ms),4) mean_latency_ms\nfrom asg join worker_pools p using(pool_id) join att using(operation_id) join lst using(operation_id) where asg.period is not null group by asg.period, p.pool_code order by 1,2;\nEOF\nsqlite3 -header current.db < /work/ls9.sql\nsqlite3 -header current.db \"select asg_period, count(*) from (select case when o.opened_at_ms<1778324400000 then 'ref' else 'inc' end asg_period from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000) group by 1;\nselect r.route_key, ra.pool_id, ra.effective_from_ms, ra.effective_to_ms, count(*) from logical_operations o join service_routes r using(route_id) join route_assignments ra on ra.route_id=o.route_id and o.opened_at_ms>=ra.effective_from_ms and o.opened_at_ms<ra.effective_to_ms where r.service_id=2 and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2,3,4;\nselect count(*) from logical_operations o where o.route_id in (select route_id from service_routes where service_id=2) and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 and not exists (select 1 from attempt_events a where a.operation_id=o.operation_id);\""
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 4,
+          "cache_creation_input_tokens": 6211,
+          "cache_read_input_tokens": 49938,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 6211,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 1606,
+          "output_tokens_details": {
+            "thinking_tokens": 369
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 172205,
+      "tool_results": [
+        {
+          "output": "version|event_table|event_grain|effective_from_ms|effective_to_ms|lifecycle|operation_key_column|attribution_basis\n1|attempt_events|attempt|1777593600000|1778284800000|historical|operation_id|Routing decision effective at logical operation open\n2|outcome_events|operation|1778284800000||active|operation_id|Actual execution cell recorded on the outcome; routing intent is not serving attribution\nstrftime('%Y-%m-%d %H:%M',1778284800000/1000,'unixepoch')\n2026-05-09 00:00\nasg_period|count(*)\ninc|2000\nref|2000\ncount(*)\n4000\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.012758042896166444, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.06751065398566425, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.05048734904266894, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 2.2136595889460295,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.012758042896166444,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.06751065398566425,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.05048734904266894,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd /data; sqlite3 -header current.db \"select * from feed_registry; select strftime('%Y-%m-%d %H:%M',1778284800000/1000,'unixepoch');\"; cat > /work/ls9.sql <<'EOF'\nwith ops as (select o.operation_id, o.route_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period\n from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000),\nasg as (select ops.*, ra.pool_id from ops join route_assignments ra on ra.route_id=ops.route_id and ops.opened_at_ms>=ra.effective_from_ms and ops.opened_at_ms<ra.effective_to_ms),\natt as (select a.operation_id, count(*) n from attempt_events a group by a.operation_id),\nlst as (select a.operation_id, f.is_success last_ok, a.completed_at_ms from attempt_events a join failure_codes f using(code_id) where a.attempt_no=(select max(b.attempt_no) from attempt_events b where b.operation_id=a.operation_id))\nselect asg.period, p.pool_code, count(*) operations, sum(lst.last_ok=0) terminal_failures, round(100.0*sum(lst.last_ok=0)/count(*),4) terminal_failure_pct,\n sum(att.n>1) retried_operations, round(100.0*sum(att.n>1)/count(*),4) retry_pct, round(avg(lst.completed_at_ms-asg.opened_at_ms),4) mean_latency_ms\nfrom asg join worker_pools p using(pool_id) join att using(operation_id) join lst using(operation_id) where asg.period is not null group by asg.period, p.pool_code order by 1,2;\nEOF\nsqlite3 -header current.db < /work/ls9.sql\nsqlite3 -header current.db \"select asg_period, count(*) from (select case when o.opened_at_ms<1778324400000 then 'ref' else 'inc' end asg_period from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000) group by 1;\nselect r.route_key, ra.pool_id, ra.effective_from_ms, ra.effective_to_ms, count(*) from logical_operations o join service_routes r using(route_id) join route_assignments ra on ra.route_id=o.route_id and o.opened_at_ms>=ra.effective_from_ms and o.opened_at_ms<ra.effective_to_ms where r.service_id=2 and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2,3,4;\nselect count(*) from logical_operations o where o.route_id in (select route_id from service_routes where service_id=2) and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 and not exists (select 1 from attempt_events a where a.operation_id=o.operation_id);\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "toolu_018scLq5fjCoVBUSA88neYYW",
+          "name": "bash",
+          "arguments": {
+            "command": "cd /data; sqlite3 -header current.db \"select type,name from sqlite_master; select count(*) from sqlite_master where name like '%outcome%';\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1978,
+        "cache_read_input_tokens": 56149,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 1978,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 296,
+        "output_tokens_details": {
+          "thinking_tokens": 198
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.0009569400000000001,
+      "response_id": "msg_011Cgqj7CZcSwswzfZa5MAAa",
+      "elapsed_s": 2.0058325049467385,
+      "token_accounting": {
+        "input_tokens": 58129,
+        "input_uncached_tokens": 2,
+        "cache_read_input_tokens": 56149,
+        "cache_creation_input_tokens": 1978,
+        "cache_creation_5m_input_tokens": 1978,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 296,
+        "reasoning_tokens": 0,
+        "total_tokens": 58425
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011Cgqj7CZcSwswzfZa5MAAa",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": {
+              "omitted": true,
+              "sha256": "ff93f19c3a8b4ab5c93f6074a0d8c7fa514cde489640486f98c6b3f6296c3996",
+              "length": 1772
+            }
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_018scLq5fjCoVBUSA88neYYW",
+            "name": "bash",
+            "input": {
+              "command": "cd /data; sqlite3 -header current.db \"select type,name from sqlite_master; select count(*) from sqlite_master where name like '%outcome%';\""
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 1978,
+          "cache_read_input_tokens": 56149,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 1978,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 296,
+          "output_tokens_details": {
+            "thinking_tokens": 198
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 175260,
+      "tool_results": [
+        {
+          "output": "type|name\ntable|subsystems\nindex|sqlite_autoindex_subsystems_1\ntable|services\nindex|sqlite_autoindex_services_1\ntable|regions\nindex|sqlite_autoindex_regions_1\ntable|tenant_tiers\nindex|sqlite_autoindex_tenant_tiers_1\ntable|tenants\nindex|sqlite_autoindex_tenants_1\ntable|worker_pools\nindex|sqlite_autoindex_worker_pools_1\ntable|policy_profiles\nindex|sqlite_autoindex_policy_profiles_1\ntable|failure_codes\nindex|sqlite_autoindex_failure_codes_1\ntable|releases\nindex|sqlite_autoindex_releases_1\ntable|change_kinds\nindex|sqlite_autoindex_change_kinds_1\ntable|change_events\ntable|service_routes\nindex|sqlite_autoindex_service_routes_1\ntable|route_assignments\nindex|sqlite_autoindex_route_assignments_1\ntable|operation_classes\nindex|sqlite_autoindex_operation_classes_1\ntable|logical_operations\ntable|attempt_events\nindex|sqlite_autoindex_attempt_events_1\ntable|telemetry_signals\nindex|sqlite_autoindex_telemetry_signals_1\ntable|telemetry_samples\nindex|sqlite_autoindex_telemetry_samples_1\ntable|incident_windows\nindex|sqlite_autoindex_incident_windows_1\ntable|feed_registry\nindex|sqlite_autoindex_feed_registry_1\ntable|execution_cells\nindex|sqlite_autoindex_execution_cells_1\ntable|outcome_events\nindex|sqlite_autoindex_outcome_events_1\nindex|ops_open\nindex|attempts_operation\nindex|assignments_effective\nindex|samples_window\nindex|outcomes_cell\ncount(*)\n3\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.015727470978163183, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.6212915619835258,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.015727470978163183,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd /data; sqlite3 -header current.db \"select type,name from sqlite_master; select count(*) from sqlite_master where name like '%outcome%';\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "toolu_01WRrHFowp3XpCuUHqLcpRoG",
+          "name": "bash",
+          "arguments": {
+            "command": "cd /data; sqlite3 -header current.db \".schema execution_cells\" \".schema outcome_events\" \"select count(*) from outcome_events;\" \"select * from execution_cells;\" \"select * from outcome_events limit 5;\" \"select count(*), min(o.opened_at_ms), max(o.opened_at_ms) from outcome_events e join logical_operations o using(operation_id);\" \"select count(*) from logical_operations where opened_at_ms>=1778284800000;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 971,
+        "cache_read_input_tokens": 58127,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 971,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 327,
+        "output_tokens_details": {
+          "thinking_tokens": 124
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.000866345,
+      "response_id": "msg_011Cgqj7NW9LL3K982dF5aAK",
+      "elapsed_s": 1.9122685950715095,
+      "token_accounting": {
+        "input_tokens": 59100,
+        "input_uncached_tokens": 2,
+        "cache_read_input_tokens": 58127,
+        "cache_creation_input_tokens": 971,
+        "cache_creation_5m_input_tokens": 971,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 327,
+        "reasoning_tokens": 0,
+        "total_tokens": 59427
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011Cgqj7NW9LL3K982dF5aAK",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": {
+              "omitted": true,
+              "sha256": "5d9cda6b9435ca3a7af2e6a17cbb01bcabcf4c4e7eea89d4140d1bf9a1b98f5e",
+              "length": 1516
+            }
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01WRrHFowp3XpCuUHqLcpRoG",
+            "name": "bash",
+            "input": {
+              "command": "cd /data; sqlite3 -header current.db \".schema execution_cells\" \".schema outcome_events\" \"select count(*) from outcome_events;\" \"select * from execution_cells;\" \"select * from outcome_events limit 5;\" \"select count(*), min(o.opened_at_ms), max(o.opened_at_ms) from outcome_events e join logical_operations o using(operation_id);\" \"select count(*) from logical_operations where opened_at_ms>=1778284800000;\""
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 971,
+          "cache_read_input_tokens": 58127,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 971,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 327,
+          "output_tokens_details": {
+            "thinking_tokens": 124
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 179047,
+      "tool_results": [
+        {
+          "output": "CREATE TABLE execution_cells(cell_id INTEGER PRIMARY KEY, cell_key TEXT NOT NULL UNIQUE, service_id INTEGER NOT NULL REFERENCES services, pool_id INTEGER NOT NULL REFERENCES worker_pools, profile_id INTEGER NOT NULL REFERENCES policy_profiles, release_id INTEGER NOT NULL REFERENCES releases, effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER, CHECK(effective_to_ms IS NULL OR effective_to_ms>effective_from_ms));\nCREATE TABLE outcome_events(outcome_id INTEGER PRIMARY KEY, operation_id INTEGER NOT NULL UNIQUE REFERENCES logical_operations, cell_id INTEGER NOT NULL REFERENCES execution_cells, completed_at_ms INTEGER NOT NULL, final_code_id INTEGER NOT NULL REFERENCES failure_codes, attempt_count INTEGER NOT NULL CHECK(attempt_count>=1), total_queue_ms INTEGER NOT NULL CHECK(total_queue_ms>=0), total_execution_ms INTEGER NOT NULL CHECK(total_execution_ms>=0), total_backoff_ms INTEGER NOT NULL CHECK(total_backoff_ms>=0));\nCREATE INDEX outcomes_cell ON outcome_events(cell_id,operation_id);\ncount(*)\n4000\ncell_id|cell_key|service_id|pool_id|profile_id|release_id|effective_from_ms|effective_to_ms\n1|cell-01|2|3|1|3|1778284800000|\n2|cell-02|2|3|1|3|1778284800000|\n3|cell-03|2|4|1|3|1778284800000|\n4|cell-04|2|4|1|3|1778284800000|\noutcome_id|operation_id|cell_id|completed_at_ms|final_code_id|attempt_count|total_queue_ms|total_execution_ms|total_backoff_ms\n32501|32501|1|1778320800045|1|1|10|35|0\n32502|32502|1|1778320814437|1|1|10|35|0\n32503|32503|1|1778320828829|1|1|10|35|0\n32504|32504|1|1778320843491|1|2|15|280|20\n32505|32505|1|1778320857613|1|1|10|35|0\ncount(*)|min(o.opened_at_ms)|max(o.opened_at_ms)\n4000|1778320800000|1778327986006\ncount(*)\n4000\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.02758483192883432, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.6476051469799131,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.02758483192883432,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd /data; sqlite3 -header current.db \".schema execution_cells\" \".schema outcome_events\" \"select count(*) from outcome_events;\" \"select * from execution_cells;\" \"select * from outcome_events limit 5;\" \"select count(*), min(o.opened_at_ms), max(o.opened_at_ms) from outcome_events e join logical_operations o using(operation_id);\" \"select count(*) from logical_operations where opened_at_ms>=1778284800000;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "toolu_01Ws28DLs8XRx8FsDXFB2vEU",
+          "name": "bash",
+          "arguments": {
+            "command": "cd /data; cat > /work/ls9.sql <<'EOF'\nwith w as (select o.operation_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period\n from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000),\noc as (select w.period, w.opened_at_ms, e.operation_id, e.completed_at_ms, e.attempt_count, f.is_success, c.pool_id, c.cell_id from w join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id and w.opened_at_ms>=c.effective_from_ms and (c.effective_to_ms is null or w.opened_at_ms<c.effective_to_ms) join failure_codes f on f.code_id=e.final_code_id where w.period is not null)\nselect oc.period, p.pool_code, count(*) operations, sum(is_success=0) terminal_failures, round(100.0*sum(is_success=0)/count(*),4) terminal_failure_pct,\n sum(attempt_count>1) retried_operations, round(100.0*sum(attempt_count>1)/count(*),4) retry_pct, round(avg(completed_at_ms-opened_at_ms),4) mean_latency_ms\nfrom oc join worker_pools p on p.pool_id=oc.pool_id group by oc.period, p.pool_code order by 1,2;\nEOF\nsqlite3 -header current.db < /work/ls9.sql\nsqlite3 -header current.db \"select p.pool_code, c.cell_key, o.opened_at_ms>=1778324400000 inc, count(*) from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id join outcome_events e using(operation_id) join execution_cells c using(cell_id) join worker_pools p on p.pool_id=c.pool_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2,3;\nselect o.route_id, c.pool_id, count(*) from logical_operations o join outcome_events e using(operation_id) join execution_cells c using(cell_id) where o.route_id in (3,4,8) and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2;\nselect count(*) mismatch from logical_operations o join outcome_events e using(operation_id) join attempt_events a on a.operation_id=o.operation_id and a.attempt_no=e.attempt_count join failure_codes f on f.code_id=a.code_id join failure_codes g on g.code_id=e.final_code_id where o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 and a.code_id<>e.final_code_id;\nselect count(*) from logical_operations o join outcome_events e using(operation_id) join (select operation_id, count(*) n from attempt_events group by 1) x using(operation_id) where o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 and x.n<>e.attempt_count;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1296,
+        "cache_read_input_tokens": 59098,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 1296,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 1527,
+        "output_tokens_details": {
+          "thinking_tokens": 279
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.00151668,
+      "response_id": "msg_011Cgqj7cXFoRAuPhMSKbhmJ",
+      "elapsed_s": 5.692123410990462,
+      "token_accounting": {
+        "input_tokens": 60396,
+        "input_uncached_tokens": 2,
+        "cache_read_input_tokens": 59098,
+        "cache_creation_input_tokens": 1296,
+        "cache_creation_5m_input_tokens": 1296,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 1527,
+        "reasoning_tokens": 0,
+        "total_tokens": 61923
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011Cgqj7cXFoRAuPhMSKbhmJ",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": {
+              "omitted": true,
+              "sha256": "01ae5d666c7a1561c990fb040658523fcee0e3dbbbab562d7eeb7638964dc01d",
+              "length": 2044
+            }
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01Ws28DLs8XRx8FsDXFB2vEU",
+            "name": "bash",
+            "input": {
+              "command": "cd /data; cat > /work/ls9.sql <<'EOF'\nwith w as (select o.operation_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period\n from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000),\noc as (select w.period, w.opened_at_ms, e.operation_id, e.completed_at_ms, e.attempt_count, f.is_success, c.pool_id, c.cell_id from w join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id and w.opened_at_ms>=c.effective_from_ms and (c.effective_to_ms is null or w.opened_at_ms<c.effective_to_ms) join failure_codes f on f.code_id=e.final_code_id where w.period is not null)\nselect oc.period, p.pool_code, count(*) operations, sum(is_success=0) terminal_failures, round(100.0*sum(is_success=0)/count(*),4) terminal_failure_pct,\n sum(attempt_count>1) retried_operations, round(100.0*sum(attempt_count>1)/count(*),4) retry_pct, round(avg(completed_at_ms-opened_at_ms),4) mean_latency_ms\nfrom oc join worker_pools p on p.pool_id=oc.pool_id group by oc.period, p.pool_code order by 1,2;\nEOF\nsqlite3 -header current.db < /work/ls9.sql\nsqlite3 -header current.db \"select p.pool_code, c.cell_key, o.opened_at_ms>=1778324400000 inc, count(*) from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id join outcome_events e using(operation_id) join execution_cells c using(cell_id) join worker_pools p on p.pool_id=c.pool_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2,3;\nselect o.route_id, c.pool_id, count(*) from logical_operations o join outcome_events e using(operation_id) join execution_cells c using(cell_id) where o.route_id in (3,4,8) and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2;\nselect count(*) mismatch from logical_operations o join outcome_events e using(operation_id) join attempt_events a on a.operation_id=o.operation_id and a.attempt_no=e.attempt_count join failure_codes f on f.code_id=a.code_id join failure_codes g on g.code_id=e.final_code_id where o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 and a.code_id<>e.final_code_id;\nselect count(*) from logical_operations o join outcome_events e using(operation_id) join (select operation_id, count(*) n from attempt_events group by 1) x using(operation_id) where o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 and x.n<>e.attempt_count;\""
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 1296,
+          "cache_read_input_tokens": 59098,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 1296,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 1527,
+          "output_tokens_details": {
+            "thinking_tokens": 279
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 185962,
+      "tool_results": [
+        {
+          "output": "period|pool_code|operations|terminal_failures|terminal_failure_pct|retried_operations|retry_pct|mean_latency_ms\nincident_11_12|sync-north|1000|30|3.0|130|13.0|108.87\nincident_11_12|sync-south|1000|180|18.0|380|38.0|261.8\nreference_10_11|sync-north|1000|30|3.0|130|13.0|108.87\nreference_10_11|sync-south|1000|30|3.0|130|13.0|108.9\npool_code|cell_key|inc|count(*)\nsync-north|cell-01|0|500\nsync-north|cell-01|1|500\nsync-north|cell-02|0|500\nsync-north|cell-02|1|500\nsync-south|cell-03|0|400\nsync-south|cell-03|1|400\nsync-south|cell-04|0|600\nsync-south|cell-04|1|600\nroute_id|pool_id|count(*)\n3|3|400\n3|4|1600\n4|3|1600\n4|4|400\nmismatch\n0\ncount(*)\n0\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.06679094408173114, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.17864561406895518, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 1.8288370090303943,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.06679094408173114,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.17864561406895518,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd /data; cat > /work/ls9.sql <<'EOF'\nwith w as (select o.operation_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period\n from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000),\noc as (select w.period, w.opened_at_ms, e.operation_id, e.completed_at_ms, e.attempt_count, f.is_success, c.pool_id, c.cell_id from w join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id and w.opened_at_ms>=c.effective_from_ms and (c.effective_to_ms is null or w.opened_at_ms<c.effective_to_ms) join failure_codes f on f.code_id=e.final_code_id where w.period is not null)\nselect oc.period, p.pool_code, count(*) operations, sum(is_success=0) terminal_failures, round(100.0*sum(is_success=0)/count(*),4) terminal_failure_pct,\n sum(attempt_count>1) retried_operations, round(100.0*sum(attempt_count>1)/count(*),4) retry_pct, round(avg(completed_at_ms-opened_at_ms),4) mean_latency_ms\nfrom oc join worker_pools p on p.pool_id=oc.pool_id group by oc.period, p.pool_code order by 1,2;\nEOF\nsqlite3 -header current.db < /work/ls9.sql\nsqlite3 -header current.db \"select p.pool_code, c.cell_key, o.opened_at_ms>=1778324400000 inc, count(*) from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id join outcome_events e using(operation_id) join execution_cells c using(cell_id) join worker_pools p on p.pool_id=c.pool_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2,3;\nselect o.route_id, c.pool_id, count(*) from logical_operations o join outcome_events e using(operation_id) join execution_cells c using(cell_id) where o.route_id in (3,4,8) and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2;\nselect count(*) mismatch from logical_operations o join outcome_events e using(operation_id) join attempt_events a on a.operation_id=o.operation_id and a.attempt_no=e.attempt_count join failure_codes f on f.code_id=a.code_id join failure_codes g on g.code_id=e.final_code_id where o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 and a.code_id<>e.final_code_id;\nselect count(*) from logical_operations o join outcome_events e using(operation_id) join (select operation_id, count(*) n from attempt_events group by 1) x using(operation_id) where o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 and x.n<>e.attempt_count;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "toolu_01SJ37F6K6XdXePBZfvvUZyE",
+          "name": "bash",
+          "arguments": {
+            "command": "cd /data; sqlite3 -header current.db \"with w as (select o.operation_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000), oc as (select w.period, e.operation_id, f.is_success from w join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id and w.opened_at_ms>=c.effective_from_ms and (c.effective_to_ms is null or w.opened_at_ms<c.effective_to_ms) join failure_codes f on f.code_id=e.final_code_id where w.period is not null) select period, count(*), sum(is_success=0), round(100.0*sum(is_success=0)/count(*),4) from oc group by period;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1988,
+        "cache_read_input_tokens": 60394,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 1988,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 977,
+        "output_tokens_details": {
+          "thinking_tokens": 528
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.00134114,
+      "response_id": "msg_011Cgqj8BuwPsQtGi46TmbHP",
+      "elapsed_s": 4.378585935919546,
+      "token_accounting": {
+        "input_tokens": 62384,
+        "input_uncached_tokens": 2,
+        "cache_read_input_tokens": 60394,
+        "cache_creation_input_tokens": 1988,
+        "cache_creation_5m_input_tokens": 1988,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 977,
+        "reasoning_tokens": 0,
+        "total_tokens": 63361
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011Cgqj8BuwPsQtGi46TmbHP",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": {
+              "omitted": true,
+              "sha256": "3c8b21ffe9caf5f3c6ed2e41bce53f04f27eb3f262ea0b316f01d51e433d4a58",
+              "length": 2768
+            }
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01SJ37F6K6XdXePBZfvvUZyE",
+            "name": "bash",
+            "input": {
+              "command": "cd /data; sqlite3 -header current.db \"with w as (select o.operation_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000), oc as (select w.period, e.operation_id, f.is_success from w join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id and w.opened_at_ms>=c.effective_from_ms and (c.effective_to_ms is null or w.opened_at_ms<c.effective_to_ms) join failure_codes f on f.code_id=e.final_code_id where w.period is not null) select period, count(*), sum(is_success=0), round(100.0*sum(is_success=0)/count(*),4) from oc group by period;\""
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 1988,
+          "cache_read_input_tokens": 60394,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 1988,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 977,
+          "output_tokens_details": {
+            "thinking_tokens": 528
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 190871,
+      "tool_results": [
+        {
+          "output": "period|count(*)|sum(is_success=0)|round(100.0*sum(is_success=0)/count(*),4)\nincident_11_12|2000|210|10.5\nreference_10_11|2000|60|3.0\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.025168473017401993, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.49548366002272815,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.025168473017401993,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd /data; sqlite3 -header current.db \"with w as (select o.operation_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000), oc as (select w.period, e.operation_id, f.is_success from w join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id and w.opened_at_ms>=c.effective_from_ms and (c.effective_to_ms is null or w.opened_at_ms<c.effective_to_ms) join failure_codes f on f.code_id=e.final_code_id where w.period is not null) select period, count(*), sum(is_success=0), round(100.0*sum(is_success=0)/count(*),4) from oc group by period;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [],
+      "final_text": "```json\n{\"answer\":{\"source\":{\"version\":2,\"event_table\":\"outcome_events\",\"event_grain\":\"operation\",\"effective_from_ms\":1778284800000},\"pool_metrics\":[{\"period\":\"reference_10_11\",\"pool_code\":\"sync-north\",\"operations\":1000,\"terminal_failures\":30,\"terminal_failure_pct\":3.0,\"retried_operations\":130,\"retry_pct\":13.0,\"mean_latency_ms\":108.87},{\"period\":\"reference_10_11\",\"pool_code\":\"sync-south\",\"operations\":1000,\"terminal_failures\":30,\"terminal_failure_pct\":3.0,\"retried_operations\":130,\"retry_pct\":13.0,\"mean_latency_ms\":108.9},{\"period\":\"incident_11_12\",\"pool_code\":\"sync-north\",\"operations\":1000,\"terminal_failures\":30,\"terminal_failure_pct\":3.0,\"retried_operations\":130,\"retry_pct\":13.0,\"mean_latency_ms\":108.87},{\"period\":\"incident_11_12\",\"pool_code\":\"sync-south\",\"operations\":1000,\"terminal_failures\":180,\"terminal_failure_pct\":18.0,\"retried_operations\":380,\"retry_pct\":38.0,\"mean_latency_ms\":261.8}],\"totals\":[{\"period\":\"reference_10_11\",\"operations\":2000,\"terminal_failures\":60,\"terminal_failure_pct\":3.0},{\"period\":\"incident_11_12\",\"operations\":2000,\"terminal_failures\":210,\"terminal_failure_pct\":10.5}],\"largest_increase\":{\"pool_code\":\"sync-south\",\"reference_failure_pct\":3.0,\"incident_failure_pct\":18.0,\"increase_pp\":15.0},\"assessment\":\"Using the authoritative source for 2026-05-09 (registry v2, outcome_events, operation grain, active from 2026-05-09 00:00 UTC), the 11:00–12:00 incident window shows all-pool terminal failures rising from 3.0% (60/2000) to 10.5% (210/2000). The increase is concentrated in sync-south (execution pool 4), where terminal failures went from 3.0% to 18.0% (+15.0 pp) and retried operations from 13.0% to 38.0%, with mean end-to-end latency rising from about 108.9 ms to 261.8 ms. sync-north stayed at 3.0% with unchanged latency (108.87 ms) and retry rate (13.0%). The report establishes where failures were recorded: operations executed on sync-south, measured by the execution cell on each outcome. It does not establish why. This report does not include telemetry or change analysis, so it cannot attribute the increase to a configuration, capacity, or deadline cause. Attribution limitation: routing intent does not match execution. Under routing-time assignments, route 3 (sync-primary-n) sends 1600 of its 2000 operations to pool 4 (sync-south), and route 4 sends 1600 to pool 3. Counting by route intent would therefore misattribute pool-level failures. Counting limitation: operations are counted from logical_operations.opened_at_ms, and terminal failure uses the final outcome code (is_success=0), so the percentages are per logical operation, not per attempt. The outcome_events table is one row per operation, and I did not find attempt-level mismatches for these operations.\"},\"evidence_sql\":[\"with w as (select o.operation_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000), oc as (select w.period, w.opened_at_ms, e.operation_id, e.completed_at_ms, e.attempt_count, f.is_success, c.pool_id from w join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id and w.opened_at_ms>=c.effective_from_ms and (c.effective_to_ms is null or w.opened_at_ms<c.effective_to_ms) join failure_codes f on f.code_id=e.final_code_id where w.period is not null) select oc.period, p.pool_code, count(*) operations, sum(is_success=0) terminal_failures, round(100.0*sum(is_success=0)/count(*),4) terminal_failure_pct, sum(attempt_count>1) retried_operations, round(100.0*sum(attempt_count>1)/count(*),4) retry_pct, round(avg(completed_at_ms-opened_at_ms),4) mean_latency_ms from oc join worker_pools p on p.pool_id=oc.pool_id group by oc.period, p.pool_code order by 1,2;\",\"with w as (select o.operation_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000), oc as (select w.period, e.operation_id, f.is_success from w join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id and w.opened_at_ms>=c.effective_from_ms and (c.effective_to_ms is null or w.opened_at_ms<c.effective_to_ms) join failure_codes f on f.code_id=e.final_code_id where w.period is not null) select period, count(*) operations, sum(is_success=0) terminal_failures, round(100.0*sum(is_success=0)/count(*),4) terminal_failure_pct from oc group by period order by period;\",\"select c.cell_key, p.pool_code, r.route_key, o.opened_at_ms>=1778324400000 as incident, count(*) operations from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id join worker_pools p on p.pool_id=c.pool_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2,3,4 order by 1,2,3,4;\",\"select r.route_key, ra.pool_id as routing_intent_pool, c.pool_id as execution_pool, count(*) operations from logical_operations o join service_routes r using(route_id) join route_assignments ra on ra.route_id=o.route_id and o.opened_at_ms>=ra.effective_from_ms and o.opened_at_ms<ra.effective_to_ms join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id where r.service_id=2 and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2,3 order by 1,2,3;\"],\"caveats\":[\"Source selection: for 2026-05-09 the active registry entry is version 2 (outcome_events, operation grain, execution-cell attribution, effective from 1778284800000). Version 1 (attempt_events, routing-time attribution) is historical and ends at that time, so it is not used for these windows.\",\"Physical pools are counted from execution_cells.pool_id. Routing intent differs from execution: route 3 sends 1600 operations to sync-south and route 4 sends 1600 to sync-north under the routing-time assignment, so route-based pool counts would be wrong for this day.\",\"Windows are UTC half-open on logical_operations.opened_at_ms: reference [1778320800000, 1778324400000) and incident [1778324400000, 1778328000000). Latency is outcome completed_at_ms minus logical operation opened_at_ms, including queueing, execution and retry backoff.\",\"Retry percentage uses logical operations as denominator and counts operations with attempt_count > 1, including operations that ultimately failed.\",\"This is a counting and attribution report. It does not identify a cause; no configuration or telemetry evidence for 2026-05-09 was analyzed here.\"]}\n```",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1111,
+        "cache_read_input_tokens": 62382,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 1111,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 2914,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.002219895,
+      "response_id": "msg_011Cgqj8Z3SYdkF9pGAA5dDA",
+      "elapsed_s": 10.013530180905946,
+      "token_accounting": {
+        "input_tokens": 63495,
+        "input_uncached_tokens": 2,
+        "cache_read_input_tokens": 62382,
+        "cache_creation_input_tokens": 1111,
+        "cache_creation_5m_input_tokens": 1111,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 2914,
+        "reasoning_tokens": 0,
+        "total_tokens": 66409
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011Cgqj8Z3SYdkF9pGAA5dDA",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "```json\n{\"answer\":{\"source\":{\"version\":2,\"event_table\":\"outcome_events\",\"event_grain\":\"operation\",\"effective_from_ms\":1778284800000},\"pool_metrics\":[{\"period\":\"reference_10_11\",\"pool_code\":\"sync-north\",\"operations\":1000,\"terminal_failures\":30,\"terminal_failure_pct\":3.0,\"retried_operations\":130,\"retry_pct\":13.0,\"mean_latency_ms\":108.87},{\"period\":\"reference_10_11\",\"pool_code\":\"sync-south\",\"operations\":1000,\"terminal_failures\":30,\"terminal_failure_pct\":3.0,\"retried_operations\":130,\"retry_pct\":13.0,\"mean_latency_ms\":108.9},{\"period\":\"incident_11_12\",\"pool_code\":\"sync-north\",\"operations\":1000,\"terminal_failures\":30,\"terminal_failure_pct\":3.0,\"retried_operations\":130,\"retry_pct\":13.0,\"mean_latency_ms\":108.87},{\"period\":\"incident_11_12\",\"pool_code\":\"sync-south\",\"operations\":1000,\"terminal_failures\":180,\"terminal_failure_pct\":18.0,\"retried_operations\":380,\"retry_pct\":38.0,\"mean_latency_ms\":261.8}],\"totals\":[{\"period\":\"reference_10_11\",\"operations\":2000,\"terminal_failures\":60,\"terminal_failure_pct\":3.0},{\"period\":\"incident_11_12\",\"operations\":2000,\"terminal_failures\":210,\"terminal_failure_pct\":10.5}],\"largest_increase\":{\"pool_code\":\"sync-south\",\"reference_failure_pct\":3.0,\"incident_failure_pct\":18.0,\"increase_pp\":15.0},\"assessment\":\"Using the authoritative source for 2026-05-09 (registry v2, outcome_events, operation grain, active from 2026-05-09 00:00 UTC), the 11:00–12:00 incident window shows all-pool terminal failures rising from 3.0% (60/2000) to 10.5% (210/2000). The increase is concentrated in sync-south (execution pool 4), where terminal failures went from 3.0% to 18.0% (+15.0 pp) and retried operations from 13.0% to 38.0%, with mean end-to-end latency rising from about 108.9 ms to 261.8 ms. sync-north stayed at 3.0% with unchanged latency (108.87 ms) and retry rate (13.0%). The report establishes where failures were recorded: operations executed on sync-south, measured by the execution cell on each outcome. It does not establish why. This report does not include telemetry or change analysis, so it cannot attribute the increase to a configuration, capacity, or deadline cause. Attribution limitation: routing intent does not match execution. Under routing-time assignments, route 3 (sync-primary-n) sends 1600 of its 2000 operations to pool 4 (sync-south), and route 4 sends 1600 to pool 3. Counting by route intent would therefore misattribute pool-level failures. Counting limitation: operations are counted from logical_operations.opened_at_ms, and terminal failure uses the final outcome code (is_success=0), so the percentages are per logical operation, not per attempt. The outcome_events table is one row per operation, and I did not find attempt-level mismatches for these operations.\"},\"evidence_sql\":[\"with w as (select o.operation_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000), oc as (select w.period, w.opened_at_ms, e.operation_id, e.completed_at_ms, e.attempt_count, f.is_success, c.pool_id from w join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id and w.opened_at_ms>=c.effective_from_ms and (c.effective_to_ms is null or w.opened_at_ms<c.effective_to_ms) join failure_codes f on f.code_id=e.final_code_id where w.period is not null) select oc.period, p.pool_code, count(*) operations, sum(is_success=0) terminal_failures, round(100.0*sum(is_success=0)/count(*),4) terminal_failure_pct, sum(attempt_count>1) retried_operations, round(100.0*sum(attempt_count>1)/count(*),4) retry_pct, round(avg(completed_at_ms-opened_at_ms),4) mean_latency_ms from oc join worker_pools p on p.pool_id=oc.pool_id group by oc.period, p.pool_code order by 1,2;\",\"with w as (select o.operation_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000), oc as (select w.period, e.operation_id, f.is_success from w join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id and w.opened_at_ms>=c.effective_from_ms and (c.effective_to_ms is null or w.opened_at_ms<c.effective_to_ms) join failure_codes f on f.code_id=e.final_code_id where w.period is not null) select period, count(*) operations, sum(is_success=0) terminal_failures, round(100.0*sum(is_success=0)/count(*),4) terminal_failure_pct from oc group by period order by period;\",\"select c.cell_key, p.pool_code, r.route_key, o.opened_at_ms>=1778324400000 as incident, count(*) operations from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id join worker_pools p on p.pool_id=c.pool_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2,3,4 order by 1,2,3,4;\",\"select r.route_key, ra.pool_id as routing_intent_pool, c.pool_id as execution_pool, count(*) operations from logical_operations o join service_routes r using(route_id) join route_assignments ra on ra.route_id=o.route_id and o.opened_at_ms>=ra.effective_from_ms and o.opened_at_ms<ra.effective_to_ms join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id where r.service_id=2 and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2,3 order by 1,2,3;\"],\"caveats\":[\"Source selection: for 2026-05-09 the active registry entry is version 2 (outcome_events, operation grain, execution-cell attribution, effective from 1778284800000). Version 1 (attempt_events, routing-time attribution) is historical and ends at that time, so it is not used for these windows.\",\"Physical pools are counted from execution_cells.pool_id. Routing intent differs from execution: route 3 sends 1600 operations to sync-south and route 4 sends 1600 to sync-north under the routing-time assignment, so route-based pool counts would be wrong for this day.\",\"Windows are UTC half-open on logical_operations.opened_at_ms: reference [1778320800000, 1778324400000) and incident [1778324400000, 1778328000000). Latency is outcome completed_at_ms minus logical operation opened_at_ms, including queueing, execution and retry backoff.\",\"Retry percentage uses logical operations as denominator and counts operations with attempt_count > 1, including operations that ultimately failed.\",\"This is a counting and attribution report. It does not identify a cause; no configuration or telemetry evidence for 2026-05-09 was analyzed here.\"]}\n```"
+          }
+        ],
+        "container": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 1111,
+          "cache_read_input_tokens": 62382,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 1111,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 2914,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 198595,
+      "tool_results": []
+    }
+  ],
+  "status": "completed",
+  "final_text": "```json\n{\"answer\":{\"source\":{\"version\":2,\"event_table\":\"outcome_events\",\"event_grain\":\"operation\",\"effective_from_ms\":1778284800000},\"pool_metrics\":[{\"period\":\"reference_10_11\",\"pool_code\":\"sync-north\",\"operations\":1000,\"terminal_failures\":30,\"terminal_failure_pct\":3.0,\"retried_operations\":130,\"retry_pct\":13.0,\"mean_latency_ms\":108.87},{\"period\":\"reference_10_11\",\"pool_code\":\"sync-south\",\"operations\":1000,\"terminal_failures\":30,\"terminal_failure_pct\":3.0,\"retried_operations\":130,\"retry_pct\":13.0,\"mean_latency_ms\":108.9},{\"period\":\"incident_11_12\",\"pool_code\":\"sync-north\",\"operations\":1000,\"terminal_failures\":30,\"terminal_failure_pct\":3.0,\"retried_operations\":130,\"retry_pct\":13.0,\"mean_latency_ms\":108.87},{\"period\":\"incident_11_12\",\"pool_code\":\"sync-south\",\"operations\":1000,\"terminal_failures\":180,\"terminal_failure_pct\":18.0,\"retried_operations\":380,\"retry_pct\":38.0,\"mean_latency_ms\":261.8}],\"totals\":[{\"period\":\"reference_10_11\",\"operations\":2000,\"terminal_failures\":60,\"terminal_failure_pct\":3.0},{\"period\":\"incident_11_12\",\"operations\":2000,\"terminal_failures\":210,\"terminal_failure_pct\":10.5}],\"largest_increase\":{\"pool_code\":\"sync-south\",\"reference_failure_pct\":3.0,\"incident_failure_pct\":18.0,\"increase_pp\":15.0},\"assessment\":\"Using the authoritative source for 2026-05-09 (registry v2, outcome_events, operation grain, active from 2026-05-09 00:00 UTC), the 11:00–12:00 incident window shows all-pool terminal failures rising from 3.0% (60/2000) to 10.5% (210/2000). The increase is concentrated in sync-south (execution pool 4), where terminal failures went from 3.0% to 18.0% (+15.0 pp) and retried operations from 13.0% to 38.0%, with mean end-to-end latency rising from about 108.9 ms to 261.8 ms. sync-north stayed at 3.0% with unchanged latency (108.87 ms) and retry rate (13.0%). The report establishes where failures were recorded: operations executed on sync-south, measured by the execution cell on each outcome. It does not establish why. This report does not include telemetry or change analysis, so it cannot attribute the increase to a configuration, capacity, or deadline cause. Attribution limitation: routing intent does not match execution. Under routing-time assignments, route 3 (sync-primary-n) sends 1600 of its 2000 operations to pool 4 (sync-south), and route 4 sends 1600 to pool 3. Counting by route intent would therefore misattribute pool-level failures. Counting limitation: operations are counted from logical_operations.opened_at_ms, and terminal failure uses the final outcome code (is_success=0), so the percentages are per logical operation, not per attempt. The outcome_events table is one row per operation, and I did not find attempt-level mismatches for these operations.\"},\"evidence_sql\":[\"with w as (select o.operation_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000), oc as (select w.period, w.opened_at_ms, e.operation_id, e.completed_at_ms, e.attempt_count, f.is_success, c.pool_id from w join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id and w.opened_at_ms>=c.effective_from_ms and (c.effective_to_ms is null or w.opened_at_ms<c.effective_to_ms) join failure_codes f on f.code_id=e.final_code_id where w.period is not null) select oc.period, p.pool_code, count(*) operations, sum(is_success=0) terminal_failures, round(100.0*sum(is_success=0)/count(*),4) terminal_failure_pct, sum(attempt_count>1) retried_operations, round(100.0*sum(attempt_count>1)/count(*),4) retry_pct, round(avg(completed_at_ms-opened_at_ms),4) mean_latency_ms from oc join worker_pools p on p.pool_id=oc.pool_id group by oc.period, p.pool_code order by 1,2;\",\"with w as (select o.operation_id, o.opened_at_ms, case when o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778324400000 then 'reference_10_11' when o.opened_at_ms>=1778324400000 and o.opened_at_ms<1778328000000 then 'incident_11_12' end period from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000), oc as (select w.period, e.operation_id, f.is_success from w join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id and w.opened_at_ms>=c.effective_from_ms and (c.effective_to_ms is null or w.opened_at_ms<c.effective_to_ms) join failure_codes f on f.code_id=e.final_code_id where w.period is not null) select period, count(*) operations, sum(is_success=0) terminal_failures, round(100.0*sum(is_success=0)/count(*),4) terminal_failure_pct from oc group by period order by period;\",\"select c.cell_key, p.pool_code, r.route_key, o.opened_at_ms>=1778324400000 as incident, count(*) operations from logical_operations o join service_routes r using(route_id) join services s on s.service_id=r.service_id join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id join worker_pools p on p.pool_id=c.pool_id where s.service_code='ledger-sync' and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2,3,4 order by 1,2,3,4;\",\"select r.route_key, ra.pool_id as routing_intent_pool, c.pool_id as execution_pool, count(*) operations from logical_operations o join service_routes r using(route_id) join route_assignments ra on ra.route_id=o.route_id and o.opened_at_ms>=ra.effective_from_ms and o.opened_at_ms<ra.effective_to_ms join outcome_events e using(operation_id) join execution_cells c on c.cell_id=e.cell_id where r.service_id=2 and o.opened_at_ms>=1778320800000 and o.opened_at_ms<1778328000000 group by 1,2,3 order by 1,2,3;\"],\"caveats\":[\"Source selection: for 2026-05-09 the active registry entry is version 2 (outcome_events, operation grain, execution-cell attribution, effective from 1778284800000). Version 1 (attempt_events, routing-time attribution) is historical and ends at that time, so it is not used for these windows.\",\"Physical pools are counted from execution_cells.pool_id. Routing intent differs from execution: route 3 sends 1600 operations to sync-south and route 4 sends 1600 to sync-north under the routing-time assignment, so route-based pool counts would be wrong for this day.\",\"Windows are UTC half-open on logical_operations.opened_at_ms: reference [1778320800000, 1778324400000) and incident [1778324400000, 1778328000000). Latency is outcome completed_at_ms minus logical operation opened_at_ms, including queueing, execution and retry backoff.\",\"Retry percentage uses logical operations as denominator and counts operations with attempt_count > 1, including operations that ultimately failed.\",\"This is a counting and attribution report. It does not identify a cause; no configuration or telemetry evidence for 2026-05-09 was analyzed here.\"]}\n```",
+  "memory_before": {},
+  "elapsed_s": 36.72536827903241,
+  "memory_after": {},
+  "db_hash_after": "2823f7089388a1737e8b95389ae2f83598f581389b9af600453a6b2016835e03",
+  "db_unchanged": true
+}

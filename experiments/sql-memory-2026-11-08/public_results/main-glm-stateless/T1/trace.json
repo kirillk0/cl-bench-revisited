@@ -1,0 +1,1135 @@
+{
+  "task_id": "T1",
+  "db_sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+  "snapshot": "pre.db",
+  "prompt": "Use only the supplied current.db and README. All windows below are UTC and half-open, selected by logical-operation open time. A terminal-failure percentage has logical operations as its denominator; attempt-failure percentage has attempts as its denominator. Return only JSON matching the provided schema. Percentages use 0–100, differences use percentage points. evidence_sql must contain executable read-only SQLite queries with literal bounds, not pseudocode. Arrays may be in any order; include every requested group. A zero numerator is not missing data. No web or network access is needed.\n\nEvaluate parcel-index during early 2026-05-04 00:00–01:00 and late 2026-05-05 00:00–01:00. Candidate build is idx-r19 and reference is idx-r18. (1) For each period report operations, terminal failures, failure percentage, and candidate traffic percentage. (2) Pool both periods and report operations, terminal failures and failure percentage per build. (3) Report operations, terminal failures and failure percentage for each period × region × operation-class × build cell. These define eight matched slices (period × region × operation class), each containing both builds. (4) Standardize each build by giving those eight slices equal weight; report both standardized failure percentages, candidate minus reference in pp, and the number of slices where candidate is worse. (5) Report period × operation-class traffic shares and failure percentages. In assessment, explain whether the time trend and pooled build comparison support the claim “expanding the candidate improved reliability.” Identify the strongest measured association and distinguish a possible root-cause hypothesis from causal identification. Do not extrapolate beyond the observed strata. Equal weighting here is the specified target population, not weighting by observed build traffic.\n\nRequired JSON response schema:\n{\"$schema\": \"https://json-schema.org/draft/2020-12/schema\", \"additionalProperties\": false, \"properties\": {\"answer\": {\"additionalProperties\": false, \"properties\": {\"assessment\": {\"type\": \"string\"}, \"builds\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"build_code\": {\"type\": \"string\"}, \"operations\": {\"type\": \"integer\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"build_code\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\"], \"type\": \"object\"}, \"maxItems\": 2, \"minItems\": 2, \"type\": \"array\"}, \"matched_cells\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"build_code\": {\"type\": \"string\"}, \"class_code\": {\"type\": \"string\"}, \"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"region_code\": {\"type\": \"string\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"period\", \"region_code\", \"class_code\", \"build_code\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\"], \"type\": \"object\"}, \"maxItems\": 16, \"minItems\": 16, \"type\": \"array\"}, \"periods\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"candidate_traffic_pct\": {\"type\": \"number\"}, \"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"period\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\", \"candidate_traffic_pct\"], \"type\": \"object\"}, \"maxItems\": 2, \"minItems\": 2, \"type\": \"array\"}, \"standardized\": {\"additionalProperties\": false, \"properties\": {\"candidate_failure_pct\": {\"type\": \"number\"}, \"candidate_minus_reference_pp\": {\"type\": \"number\"}, \"candidate_worse_slices\": {\"type\": \"integer\"}, \"matched_slices\": {\"type\": \"integer\"}, \"reference_failure_pct\": {\"type\": \"number\"}}, \"required\": [\"reference_failure_pct\", \"candidate_failure_pct\", \"candidate_minus_reference_pp\", \"candidate_worse_slices\", \"matched_slices\"], \"type\": \"object\"}, \"workload_mix\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"class_code\": {\"type\": \"string\"}, \"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"traffic_pct\": {\"type\": \"number\"}}, \"required\": [\"period\", \"class_code\", \"operations\", \"traffic_pct\", \"terminal_failure_pct\"], \"type\": \"object\"}, \"maxItems\": 4, \"minItems\": 4, \"type\": \"array\"}}, \"required\": [\"periods\", \"builds\", \"matched_cells\", \"standardized\", \"workload_mix\", \"assessment\"], \"type\": \"object\"}, \"caveats\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}, \"evidence_sql\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}}, \"required\": [\"answer\", \"evidence_sql\", \"caveats\"], \"type\": \"object\"}",
+  "turns": [
+    {
+      "tool_calls": [
+        {
+          "id": "chatcmpl-tool-86b22ad4ad732ebd",
+          "name": "bash",
+          "arguments": {
+            "command": "cat README.md; ls -la ../data; sqlite3 ../data/current.db \".schema\" | head -100"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 1407,
+        "completion_tokens": 39,
+        "total_tokens": 1446,
+        "cost": 5.68431e-05,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 5.68431e-05,
+          "upstream_inference_prompt_cost": 4.96671e-05,
+          "upstream_inference_completions_cost": 7.176e-06
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 6,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 5.68431e-05,
+      "response_id": "gen-1794153046-8vF1tNb2FIRNUFa0a0xU",
+      "elapsed_s": 1.2077796180965379,
+      "token_accounting": {
+        "input_tokens": 1407,
+        "input_uncached_tokens": 1407,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 39,
+        "reasoning_tokens": 6,
+        "total_tokens": 1446
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153046-8vF1tNb2FIRNUFa0a0xU",
+        "object": "chat.completion",
+        "created": 1794153046,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Wafer",
+        "system_fingerprint": "vllm-0.33.0rc1.dev229+g3966924d5-tp2-02aa7b21",
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": "Let me explore the DB.",
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "chatcmpl-tool-86b22ad4ad732ebd",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"cat README.md; ls -la ../data; sqlite3 ../data/current.db \\\".schema\\\" | head -100\"}"
+                  }
+                }
+              ],
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Let me explore the DB.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 1407,
+          "completion_tokens": 39,
+          "total_tokens": 1446,
+          "cost": 5.68431e-05,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 5.68431e-05,
+            "upstream_inference_prompt_cost": 4.96671e-05,
+            "upstream_inference_completions_cost": 7.176e-06
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 6,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 6252,
+      "tool_results": [
+        {
+          "output": "# Operations analytics data contract\n\nYou receive `current.db` (SQLite), this README and one task. Inspect the database schema, foreign keys and registry yourself. No network or external data is needed. The database is read-only input; use a read-only connection. All observations are synthetic, internally consistent and complete for the requested windows. Do not interpret absent windows as zero traffic. No hidden business definitions depend on an earlier task.\n\n* Times ending `_ms` are integer Unix milliseconds in UTC. Window membership uses the **logical operation open time**, with inclusive lower and exclusive upper bounds. Effective intervals are also half-open; a NULL end means no known end.\n* One logical operation is one business request. Retries are attempts, not extra incidents or requests. A terminal failure means the final attempt/outcome has a failure code whose `is_success` is 0; an earlier failed attempt followed by success is not a terminal failure. All included operations are finished and attempt ordinals are complete. An operation with more than one attempt is a retried operation, including ultimately failed operations.\n* `feed_registry` is authoritative about event sources, grains, applicable operation-open intervals and serving attribution. The active entry describes current instrumentation; historical entries remain authoritative for their historical intervals. Do not assume the highest version covers all history or that a still-queryable table is current. Historical values are retained without rewriting them into a new meaning.\n* Routing identifiers are routing intent, not necessarily unique physical pools. For routing-time instrumentation, select the assignment effective when the operation opens. For execution-time instrumentation, recorded execution attribution is authoritative. Multiple aliases or execution identities may belong to the same physical pool. Never count each identity as an independent pool.\n* End-to-end latency is final completion minus operation open, including queueing, execution and retry backoff. Per-attempt queue/execution times exclude backoff. Outcome totals cover all its attempts. Rates use logical-operation denominators unless a task explicitly asks for attempt metrics. Percentages are in percent (0–100); rate differences are percentage points.\n* Telemetry is sampled independently. A requested window mean is the ordinary arithmetic mean of samples in that window. An upstream p95 sample is a percentile observation, not an operation-weighted mean. Changes describe applied configuration, not a causal experiment. Tenant tier, operation class, release, region and pool are distinct dimensions.\n\nReturn only the JSON requested in the task: `answer`, `evidence_sql` (a list of executable, read-only SQLite SELECT/WITH statements supporting the answer), and `caveats` (a list of short strings). No placeholders, SQL parameters, temporary tables or external files in evidence. State uncertainty; observational association alone does not prove causation.\ntotal 3508\ndrwxr-xr-x  2 root root     4096 Nov  8 15:47 .\ndrwxr-x--- 13 root 22006    4096 Nov  8 15:50 ..\n-r--r--r--  1 root root  3584000 Nov  8 15:50 current.db\nCREATE TABLE subsystems(subsystem_id INTEGER PRIMARY KEY, subsystem_code TEXT NOT NULL UNIQUE);\nCREATE TABLE services(service_id INTEGER PRIMARY KEY, subsystem_id INTEGER NOT NULL REFERENCES subsystems, service_code TEXT NOT NULL UNIQUE);\nCREATE TABLE regions(region_id INTEGER PRIMARY KEY, region_code TEXT NOT NULL UNIQUE);\nCREATE TABLE tenant_tiers(tier_id INTEGER PRIMARY KEY, tier_code TEXT NOT NULL UNIQUE);\nCREATE TABLE tenants(tenant_id INTEGER PRIMARY KEY, tenant_key TEXT NOT NULL UNIQUE, tier_id INTEGER NOT NULL REFERENCES tenant_tiers);\nCREATE TABLE worker_pools(pool_id INTEGER PRIMARY KEY, region_id INTEGER NOT NULL REFERENCES regions, pool_code TEXT NOT NULL UNIQUE);\nCREATE TABLE policy_profiles(profile_id INTEGER PRIMARY KEY, profile_code TEXT NOT NULL UNIQUE, deadline_ms INTEGER NOT NULL CHECK(deadline_ms>0), max_attempts INTEGER NOT NULL CHECK(max_attempts>=1));\nCREATE TABLE failure_codes(code_id INTEGER PRIMARY KEY, code TEXT NOT NULL UNIQUE, is_success INTEGER NOT NULL CHECK(is_success IN (0,1)), description TEXT NOT NULL);\nCREATE TABLE releases(release_id INTEGER PRIMARY KEY, service_id INTEGER NOT NULL REFERENCES services, build_code TEXT NOT NULL UNIQUE);\nCREATE TABLE change_kinds(kind_id INTEGER PRIMARY KEY, kind_code TEXT NOT NULL UNIQUE);\nCREATE TABLE change_events(change_id INTEGER PRIMARY KEY, effective_at_ms INTEGER NOT NULL, kind_id INTEGER NOT NULL REFERENCES change_kinds, service_id INTEGER NOT NULL REFERENCES services, pool_id INTEGER REFERENCES worker_pools, before_json TEXT NOT NULL CHECK(json_valid(before_json)), after_json TEXT NOT NULL CHECK(json_valid(after_json)), change_note TEXT NOT NULL);\nCREATE TABLE service_routes(route_id INTEGER PRIMARY KEY, service_id INTEGER NOT NULL REFERENCES services, route_key TEXT NOT NULL UNIQUE);\nCREATE TABLE route_assignments(assignment_id INTEGER PRIMARY KEY, route_id INTEGER NOT NULL REFERENCES service_routes, effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER NOT NULL, pool_id INTEGER NOT NULL REFERENCES worker_pools, profile_id INTEGER NOT NULL REFERENCES policy_profiles, release_id INTEGER NOT NULL REFERENCES releases, CHECK(effective_to_ms>effective_from_ms), UNIQUE(route_id,effective_from_ms));\nCREATE TABLE operation_classes(class_id INTEGER PRIMARY KEY, class_code TEXT NOT NULL UNIQUE, description TEXT NOT NULL);\nCREATE TABLE logical_operations(operation_id INTEGER PRIMARY KEY, tenant_id INTEGER NOT NULL REFERENCES tenants, route_id INTEGER NOT NULL REFERENCES service_routes, class_id INTEGER NOT NULL REFERENCES operation_classes, opened_at_ms INTEGER NOT NULL);\nCREATE TABLE attempt_events(attempt_id INTEGER PRIMARY KEY, operation_id INTEGER NOT NULL REFERENCES logical_operations, attempt_no INTEGER NOT NULL CHECK(attempt_no>=1), started_at_ms INTEGER NOT NULL, completed_at_ms INTEGER NOT NULL, code_id INTEGER NOT NULL REFERENCES failure_codes, queue_ms INTEGER NOT NULL CHECK(queue_ms>=0), execution_ms INTEGER NOT NULL CHECK(execution_ms>=0), CHECK(completed_at_ms-started_at_ms=queue_ms+execution_ms), UNIQUE(operation_id,attempt_no));\nCREATE TABLE telemetry_signals(signal_id INTEGER PRIMARY KEY, signal_code TEXT NOT NULL UNIQUE, unit TEXT NOT NULL, description TEXT NOT NULL);\nCREATE TABLE telemetry_samples(sample_id INTEGER PRIMARY KEY, pool_id INTEGER NOT NULL REFERENCES worker_pools, signal_id INTEGER NOT NULL REFERENCES telemetry_signals, measured_at_ms INTEGER NOT NULL, value REAL NOT NULL, UNIQUE(pool_id,signal_id,measured_at_ms));\nCREATE TABLE incident_windows(incident_id INTEGER PRIMARY KEY, incident_key TEXT NOT NULL UNIQUE, subsystem_id INTEGER NOT NULL REFERENCES subsystems, start_ms INTEGER NOT NULL, end_ms INTEGER NOT NULL, report_summary TEXT NOT NULL, CHECK(end_ms>start_ms));\nCREATE TABLE feed_registry(version INTEGER PRIMARY KEY, event_table TEXT NOT NULL UNIQUE, event_grain TEXT NOT NULL CHECK(event_grain IN ('attempt','operation')), effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER, lifecycle TEXT NOT NULL CHECK(lifecycle IN ('active','historical')), operation_key_column TEXT NOT NULL, attribution_basis TEXT NOT NULL, CHECK(effective_to_ms IS NULL OR effective_to_ms>effective_from_ms));\nCREATE INDEX ops_open ON logical_operations(opened_at_ms,route_id);\nCREATE INDEX attempts_operation ON attempt_events(operation_id,attempt_no DESC);\nCREATE INDEX assignments_effective ON route_assignments(route_id,effective_from_ms,effective_to_ms);\nCREATE INDEX samples_window ON telemetry_samples(measured_at_ms,pool_id,signal_id);\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.009271974908187985, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.9122476628981531,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.009271974908187985,
+              "exit_code": 0
+            }
+          ],
+          "command": "cat README.md; ls -la ../data; sqlite3 ../data/current.db \".schema\" | head -100"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "chatcmpl-tool-9a82d0b9a945a6cd",
+          "name": "bash",
+          "arguments": {
+            "command": "sqlite3 ../data/current.db \"select * from feed_registry; select * from releases; select * from operation_classes; select * from regions; select min(opened_at_ms),max(opened_at_ms) from logical_operations; select * from failure_codes;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 3004,
+        "completion_tokens": 62,
+        "total_tokens": 3066,
+        "cost": 0.0001174492,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0001174492,
+          "upstream_inference_prompt_cost": 0.0001060412,
+          "upstream_inference_completions_cost": 1.1408e-05
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.0001174492,
+      "response_id": "gen-1794153048-OgQdKvRcALLrfyh7lEdt",
+      "elapsed_s": 1.0138075789436698,
+      "token_accounting": {
+        "input_tokens": 3004,
+        "input_uncached_tokens": 3004,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 62,
+        "reasoning_tokens": 0,
+        "total_tokens": 3066
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153048-OgQdKvRcALLrfyh7lEdt",
+        "object": "chat.completion",
+        "created": 1794153048,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Wafer",
+        "system_fingerprint": "vllm-0.33.0rc1.dev229+g3966924d5-tp2-02aa7b21",
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": null,
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "chatcmpl-tool-9a82d0b9a945a6cd",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"sqlite3 ../data/current.db \\\"select * from feed_registry; select * from releases; select * from operation_classes; select * from regions; select min(opened_at_ms),max(opened_at_ms) from logical_operations; select * from failure_codes;\\\"\"}"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 3004,
+          "completion_tokens": 62,
+          "total_tokens": 3066,
+          "cost": 0.0001174492,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001174492,
+            "upstream_inference_prompt_cost": 0.0001060412,
+            "upstream_inference_completions_cost": 1.1408e-05
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 14667,
+      "tool_results": [
+        {
+          "output": "1|attempt_events|attempt|1777593600000||active|operation_id|Routing decision effective at logical operation open\n1|1|idx-r18\n2|1|idx-r19\n3|2|sync-r42\n1|small|Small logical payload\n2|large|Large logical payload\n1|north\n2|south\n1777629600000|1778155190804\n1|OK|1|Completed successfully\n2|DEADLINE|0|Attempt or operation deadline exhausted\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.012584166950546205, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.35349888005293906,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.012584166950546205,
+              "exit_code": 0
+            }
+          ],
+          "command": "sqlite3 ../data/current.db \"select * from feed_registry; select * from releases; select * from operation_classes; select * from regions; select min(opened_at_ms),max(opened_at_ms) from logical_operations; select * from failure_codes;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "chatcmpl-tool-92b7bd77094c936a",
+          "name": "bash",
+          "arguments": {
+            "command": "python3 -c \"\nimport datetime\nfor m in [1777629600000,1778155190804,1777593600000]:\n  print(m, datetime.datetime.utcfromtimestamp(m/1000))\nprint(datetime.datetime.utcfromtimestamp(sum(b*1000 for b in [1777593600000])))\nprint('2026-05-04' , datetime.datetime(2026,5,4).timestamp()*1000)\nprint('2026-05-05' , datetime.datetime(2026,5,5).timestamp()*1000)\n\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 3225,
+        "completion_tokens": 188,
+        "total_tokens": 3413,
+        "cost": 0.0001461305,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 2304,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0001461305,
+          "upstream_inference_prompt_cost": 0.0001115385,
+          "upstream_inference_completions_cost": 3.4592e-05
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 55,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.0001461305,
+      "response_id": "gen-1794153049-EcUTJuHeAVZB5nyQZ9zD",
+      "elapsed_s": 1.6817635879851878,
+      "token_accounting": {
+        "input_tokens": 3225,
+        "input_uncached_tokens": 921,
+        "cache_read_input_tokens": 2304,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 188,
+        "reasoning_tokens": 55,
+        "total_tokens": 3413
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153049-EcUTJuHeAVZB5nyQZ9zD",
+        "object": "chat.completion",
+        "created": 1794153049,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Wafer",
+        "system_fingerprint": "vllm-0.33.0rc1.dev229+g3966924d5-tp2-02aa7b21",
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": "Feed registry: active entry attempt_events effective from 1777593600000. Check historical entries? Only one entry. Windows: 2026-05-04 00:00 UTC = ?\n\n1777629600000 ms → let's compute dates.",
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "chatcmpl-tool-92b7bd77094c936a",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"python3 -c \\\"\\nimport datetime\\nfor m in [1777629600000,1778155190804,1777593600000]:\\n  print(m, datetime.datetime.utcfromtimestamp(m/1000))\\nprint(datetime.datetime.utcfromtimestamp(sum(b*1000 for b in [1777593600000])))\\nprint('2026-05-04' , datetime.datetime(2026,5,4).timestamp()*1000)\\nprint('2026-05-05' , datetime.datetime(2026,5,5).timestamp()*1000)\\n\\\"\"}"
+                  }
+                }
+              ],
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Feed registry: active entry attempt_events effective from 1777593600000. Check historical entries? Only one entry. Windows: 2026-05-04 00:00 UTC = ?\n\n1777629600000 ms → let's compute dates.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 3225,
+          "completion_tokens": 188,
+          "total_tokens": 3413,
+          "cost": 0.0001461305,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2304,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001461305,
+            "upstream_inference_prompt_cost": 0.0001115385,
+            "upstream_inference_completions_cost": 3.4592e-05
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 55,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 16295,
+      "tool_results": [
+        {
+          "output": "1777629600000 2026-05-01 10:00:00\n1778155190804 2026-05-07 11:59:50.804000\n1777593600000 2026-05-01 00:00:00\n\nSTDERR:\n<string>:4: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).\n<string>:5: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).\nTraceback (most recent call last):\n  File \"<string>\", line 5, in <module>\nValueError: year 56331668 is out of range\n",
+          "exit_code": 1,
+          "wall_seconds": 0.07899367390200496,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "python3 -c \"\nimport datetime\nfor m in [1777629600000,1778155190804,1777593600000]:\n  print(m, datetime.datetime.utcfromtimestamp(m/1000))\nprint(datetime.datetime.utcfromtimestamp(sum(b*1000 for b in [1777593600000])))\nprint('2026-05-04' , datetime.datetime(2026,5,4).timestamp()*1000)\nprint('2026-05-05' , datetime.datetime(2026,5,5).timestamp()*1000)\n\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "chatcmpl-tool-9c9f92ca563dd7d1",
+          "name": "bash",
+          "arguments": {
+            "command": "python3 -c \"\nimport datetime\nprint(int(datetime.datetime(2026,5,4,tzinfo=datetime.timezone.utc).timestamp()*1000))\nprint(int(datetime.datetime(2026,5,5,tzinfo=datetime.timezone.utc).timestamp()*1000))\n\"; sqlite3 ../data/current.db \"select service_id,route_key from service_routes; select * from route_assignments; select count(*) from logical_operations; select count(*) from attempt_events;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 3621,
+        "completion_tokens": 103,
+        "total_tokens": 3724,
+        "cost": 0.0001444693,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 2304,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0001444693,
+          "upstream_inference_prompt_cost": 0.0001255173,
+          "upstream_inference_completions_cost": 1.8952e-05
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.0001444693,
+      "response_id": "gen-1794153051-Q9QyWEq3UnRAjq3HVovu",
+      "elapsed_s": 1.2657656410010532,
+      "token_accounting": {
+        "input_tokens": 3621,
+        "input_uncached_tokens": 1317,
+        "cache_read_input_tokens": 2304,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 103,
+        "reasoning_tokens": 0,
+        "total_tokens": 3724
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153051-Q9QyWEq3UnRAjq3HVovu",
+        "object": "chat.completion",
+        "created": 1794153051,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Wafer",
+        "system_fingerprint": "vllm-0.33.0rc1.dev229+g3966924d5-tp2-02aa7b21",
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": null,
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "chatcmpl-tool-9c9f92ca563dd7d1",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"python3 -c \\\"\\nimport datetime\\nprint(int(datetime.datetime(2026,5,4,tzinfo=datetime.timezone.utc).timestamp()*1000))\\nprint(int(datetime.datetime(2026,5,5,tzinfo=datetime.timezone.utc).timestamp()*1000))\\n\\\"; sqlite3 ../data/current.db \\\"select service_id,route_key from service_routes; select * from route_assignments; select count(*) from logical_operations; select count(*) from attempt_events;\\\"\"}"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 3621,
+          "completion_tokens": 103,
+          "total_tokens": 3724,
+          "cost": 0.0001444693,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2304,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001444693,
+            "upstream_inference_prompt_cost": 0.0001255173,
+            "upstream_inference_completions_cost": 1.8952e-05
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 17775,
+      "tool_results": [
+        {
+          "output": "1777852800000\n1777939200000\n1|idx-primary-n\n1|idx-primary-s\n2|sync-primary-n\n2|sync-primary-s\n1|idx-canary-n\n1|idx-canary-s\n1|idx-alias-n\n2|sync-alias-s\n1|1|1777593600000|1777719600000|1|1|1\n2|1|1777719600000|1777723200000|1|2|1\n3|1|1777723200000|1780272000000|1|1|1\n4|2|1777593600000|1780272000000|2|1|1\n5|3|1777593600000|1780272000000|3|1|3\n6|4|1777593600000|1780272000000|4|1|3\n7|5|1777593600000|1780272000000|1|1|2\n8|6|1777593600000|1780272000000|2|1|2\n9|7|1777593600000|1777719600000|1|1|1\n10|7|1777719600000|1777723200000|1|2|1\n11|7|1777723200000|1780272000000|1|1|1\n12|8|1777593600000|1780272000000|4|1|3\n32500\n40480\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.01879969402216375, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.6556748220464215,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.01879969402216375,
+              "exit_code": 0
+            }
+          ],
+          "command": "python3 -c \"\nimport datetime\nprint(int(datetime.datetime(2026,5,4,tzinfo=datetime.timezone.utc).timestamp()*1000))\nprint(int(datetime.datetime(2026,5,5,tzinfo=datetime.timezone.utc).timestamp()*1000))\n\"; sqlite3 ../data/current.db \"select service_id,route_key from service_routes; select * from route_assignments; select count(*) from logical_operations; select count(*) from attempt_events;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "chatcmpl-tool-bdd1769003ca743b",
+          "name": "bash",
+          "arguments": {
+            "command": "sqlite3 ../data/current.db \"select * from worker_pools; select * from releases where service_id=1; select route_id,service_id,route_key from service_routes;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 4135,
+        "completion_tokens": 653,
+        "total_tokens": 4788,
+        "cost": 0.0002638135,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 2304,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0002638135,
+          "upstream_inference_prompt_cost": 0.0001436615,
+          "upstream_inference_completions_cost": 0.000120152
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 606,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.0002638135,
+      "response_id": "gen-1794153053-f1iUNWv6EJeeXb39JqDj",
+      "elapsed_s": 6.734375683940016,
+      "token_accounting": {
+        "input_tokens": 4135,
+        "input_uncached_tokens": 1831,
+        "cache_read_input_tokens": 2304,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 653,
+        "reasoning_tokens": 606,
+        "total_tokens": 4788
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153053-f1iUNWv6EJeeXb39JqDj",
+        "object": "chat.completion",
+        "created": 1794153053,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Wafer",
+        "system_fingerprint": "vllm-0.33.0rc1.dev229+g3966924d5-tp2-02aa7b21",
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": "Route_assignments: idx-primary-n (route 1) uses release 1 (idx-r18) from 1777593600000 to 1780272000000 — pool 1. Route 7 idx-alias-n: pool 1 also, release 1... wait rows 9-11 for route 7: pool 1, release 1. Route 3 idx-canary-n: pool 3, release 3 (sync-r42). Hmm, candidate idx-r19 is release_id 2. Which routes use release 2? None in route_assignments! Rows: releases 1,1,1,3,3,1? Let me list: assignments release_id column: 1,1,1,3,3,1? Actually columns: assignment_id, route_id, effective_from, effective_to, pool_id, profile_id, release_id.\n\n1|1|...|pool1|profile1|release1\n2|1|1777719600000|1777723200000|1|2|1\n3|1|1777723200000|1780272000000|1|1|1\n4|2|pool2|profile1|release3\n5|3|pool3|profile1|release3\n6|4|pool4|profile1|release3\n7|5|pool1|profile1|release2  ← route 5 idx-canary-n, release 2 (idx-r19)\n8|6|pool2|release2\n9-12: route 7 alias-n pool1 release1, route 8 alias-s pool4 release3.\n\nSo idx-canary-n (route 5, pool1, release idx-r19) and idx-canary-s (route 6, pool2, idx-r19). Primary routes use r18. Alias routes route 7 → pool1 release1(r18); route 8 → pool4 release3.\n\nNote: routing attribution at open time — use the assignment effective at opened_at_ms. Route 1 had a brief window with profile 2 but release same. Route 7 has changes too.\n\nRouting intent: alias vs primary? The task: candidate idx-r19, reference idx-r18. Traffic attribution by build effective at open time.\n\nRegion: pools 1,3 in north; 2,4 in south. Region of pool determines region? Let's check pools.\n\nNow build the query. Need to join logical_operations → route_assignments effective at open → release → build, pool → region.\n\nNote there's no change_events coverage issue? Check change_events for pool config maybe irrelevant. Also the registry says attempt_events is active from 2026-05-01, covering our windows. Good.\n\nTerminal failure: max attempt's code is failure (is_success=0).\n\nLet me check pools and whether candidate has traffic in both windows.",
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "chatcmpl-tool-bdd1769003ca743b",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"sqlite3 ../data/current.db \\\"select * from worker_pools; select * from releases where service_id=1; select route_id,service_id,route_key from service_routes;\\\"\"}"
+                  }
+                }
+              ],
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Route_assignments: idx-primary-n (route 1) uses release 1 (idx-r18) from 1777593600000 to 1780272000000 — pool 1. Route 7 idx-alias-n: pool 1 also, release 1... wait rows 9-11 for route 7: pool 1, release 1. Route 3 idx-canary-n: pool 3, release 3 (sync-r42). Hmm, candidate idx-r19 is release_id 2. Which routes use release 2? None in route_assignments! Rows: releases 1,1,1,3,3,1? Let me list: assignments release_id column: 1,1,1,3,3,1? Actually columns: assignment_id, route_id, effective_from, effective_to, pool_id, profile_id, release_id.\n\n1|1|...|pool1|profile1|release1\n2|1|1777719600000|1777723200000|1|2|1\n3|1|1777723200000|1780272000000|1|1|1\n4|2|pool2|profile1|release3\n5|3|pool3|profile1|release3\n6|4|pool4|profile1|release3\n7|5|pool1|profile1|release2  ← route 5 idx-canary-n, release 2 (idx-r19)\n8|6|pool2|release2\n9-12: route 7 alias-n pool1 release1, route 8 alias-s pool4 release3.\n\nSo idx-canary-n (route 5, pool1, release idx-r19) and idx-canary-s (route 6, pool2, idx-r19). Primary routes use r18. Alias routes route 7 → pool1 release1(r18); route 8 → pool4 release3.\n\nNote: routing attribution at open time — use the assignment effective at opened_at_ms. Route 1 had a brief window with profile 2 but release same. Route 7 has changes too.\n\nRouting intent: alias vs primary? The task: candidate idx-r19, reference idx-r18. Traffic attribution by build effective at open time.\n\nRegion: pools 1,3 in north; 2,4 in south. Region of pool determines region? Let's check pools.\n\nNow build the query. Need to join logical_operations → route_assignments effective at open → release → build, pool → region.\n\nNote there's no change_events coverage issue? Check change_events for pool config maybe irrelevant. Also the registry says attempt_events is active from 2026-05-01, covering our windows. Good.\n\nTerminal failure: max attempt's code is failure (is_success=0).\n\nLet me check pools and whether candidate has traffic in both windows.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 4135,
+          "completion_tokens": 653,
+          "total_tokens": 4788,
+          "cost": 0.0002638135,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2304,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0002638135,
+            "upstream_inference_prompt_cost": 0.0001436615,
+            "upstream_inference_completions_cost": 0.000120152
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 606,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 23142,
+      "tool_results": [
+        {
+          "output": "1|1|idx-north\n2|2|idx-south\n3|1|sync-north\n4|2|sync-south\n1|1|idx-r18\n2|1|idx-r19\n1|1|idx-primary-n\n2|1|idx-primary-s\n3|2|sync-primary-n\n4|2|sync-primary-s\n5|1|idx-canary-n\n6|1|idx-canary-s\n7|1|idx-alias-n\n8|2|sync-alias-s\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.05926658504176885, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.8115240120096132,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.05926658504176885,
+              "exit_code": 0
+            }
+          ],
+          "command": "sqlite3 ../data/current.db \"select * from worker_pools; select * from releases where service_id=1; select route_id,service_id,route_key from service_routes;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "chatcmpl-tool-b3bdb277e6492114",
+          "name": "bash",
+          "arguments": {
+            "command": "cd /tmp && cat > q1.sql <<'EOF'\nWITH ops AS (\n SELECT o.operation_id, o.opened_at_ms, o.class_id,\n  CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early'\n       WHEN o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000 THEN 'late' END AS period,\n  a.pool_id, a.release_id,\n  CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build\n FROM logical_operations o\n JOIN route_assignments a ON a.route_id=o.route_id\n   AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms\n WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000)\n    OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)\n)\nSELECT period, build, count(*), sum(CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=ops.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END)\nFROM ops GROUP BY period, build;\nEOF\nsqlite3 ../data/current.db < q1.sql"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 4949,
+        "completion_tokens": 343,
+        "total_tokens": 5292,
+        "cost": 0.0002355077,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 2304,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0002355077,
+          "upstream_inference_prompt_cost": 0.0001723957,
+          "upstream_inference_completions_cost": 6.3112e-05
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.0002355077,
+      "response_id": "gen-1794153061-lg0ja7iZqCs7n8leNi0w",
+      "elapsed_s": 3.99806613905821,
+      "token_accounting": {
+        "input_tokens": 4949,
+        "input_uncached_tokens": 2645,
+        "cache_read_input_tokens": 2304,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 343,
+        "reasoning_tokens": 0,
+        "total_tokens": 5292
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153061-lg0ja7iZqCs7n8leNi0w",
+        "object": "chat.completion",
+        "created": 1794153061,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Wafer",
+        "system_fingerprint": "vllm-0.33.0rc1.dev229+g3966924d5-tp2-02aa7b21",
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": null,
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "chatcmpl-tool-b3bdb277e6492114",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"cd /tmp && cat > q1.sql <<'EOF'\\nWITH ops AS (\\n SELECT o.operation_id, o.opened_at_ms, o.class_id,\\n  CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early'\\n       WHEN o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000 THEN 'late' END AS period,\\n  a.pool_id, a.release_id,\\n  CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build\\n FROM logical_operations o\\n JOIN route_assignments a ON a.route_id=o.route_id\\n   AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms\\n WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000)\\n    OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)\\n)\\nSELECT period, build, count(*), sum(CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=ops.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END)\\nFROM ops GROUP BY period, build;\\nEOF\\nsqlite3 ../data/current.db < q1.sql\"}"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 4949,
+          "completion_tokens": 343,
+          "total_tokens": 5292,
+          "cost": 0.0002355077,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 2304,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0002355077,
+            "upstream_inference_prompt_cost": 0.0001723957,
+            "upstream_inference_completions_cost": 6.3112e-05
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 24852,
+      "tool_results": [
+        {
+          "output": "early|idx-r18|4000|620\nearly|idx-r19|2000|280\nlate|idx-r18|1000|110\nlate|idx-r19|5500|420\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.047395734931342304, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.29159723699558526,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.047395734931342304,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd /tmp && cat > q1.sql <<'EOF'\nWITH ops AS (\n SELECT o.operation_id, o.opened_at_ms, o.class_id,\n  CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early'\n       WHEN o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000 THEN 'late' END AS period,\n  a.pool_id, a.release_id,\n  CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build\n FROM logical_operations o\n JOIN route_assignments a ON a.route_id=o.route_id\n   AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms\n WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000)\n    OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)\n)\nSELECT period, build, count(*), sum(CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=ops.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END)\nFROM ops GROUP BY period, build;\nEOF\nsqlite3 ../data/current.db < q1.sql"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "chatcmpl-tool-b70359cc041fc0fb",
+          "name": "bash",
+          "arguments": {
+            "command": "cd /tmp && cat > q2.sql <<'EOF'\nWITH ops AS (\n SELECT o.operation_id, o.opened_at_ms, o.class_id, p.region_id,\n  CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early'\n       ELSE 'late' END AS period,\n  CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build,\n  CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed\n FROM logical_operations o\n JOIN route_assignments a ON a.route_id=o.route_id\n   AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms\n JOIN worker_pools p ON p.pool_id=a.pool_id\n WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000)\n    OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)\n)\nSELECT period, region_id, class_id, build, count(*), sum(failed), 100.0*sum(failed)/count(*)\nFROM ops GROUP BY period, region_id, class_id, build ORDER BY period, region_id, class_id, build;\nEOF\nsqlite3 ../data/current.db < q2.sql\necho ---\ncat > q3.sql <<'EOF'\nWITH ops AS (\n SELECT o.class_id,\n  CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early'\n       ELSE 'late' END AS period,\n  CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build,\n  CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed\n FROM logical_operations o\n JOIN route_assignments a ON a.route_id=o.route_id\n   AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms\n WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000)\n    OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)\n)\nSELECT build, sum(cnt), sum(f), 100.0*sum(f)/sum(cnt) FROM (\n SELECT build, count(*) cnt, sum(failed) f FROM ops GROUP BY build, class_id, period) GROUP BY build;\nEOF\nsqlite3 ../data/current.db < q3.sql\necho ---\ncat > q4.sql <<'EOF'\nWITH ops AS (\n SELECT o.class_id,\n  CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early'\n       ELSE 'late' END AS period,\n  CASE WHEN a.release_id=2 THEN 1 ELSE 0 END AS cand,\n  CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed\n FROM logical_operations o\n JOIN route_assignments a ON a.route_id=o.route_id\n   AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms\n WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000)\n    OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)\n)\nSELECT period, class_id, count(*), 100.0*count(*)/sum(count(*)) OVER (PARTITION BY period), sum(failed), 100.0*sum(failed)/count(*)\nFROM ops GROUP BY period, class_id ORDER BY period, class_id;\nEOF\nsqlite3 ../data/current.db < q4.sql"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 5382,
+        "completion_tokens": 1097,
+        "total_tokens": 6479,
+        "cost": 0.0003872246,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 4608,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0003872246,
+          "upstream_inference_prompt_cost": 0.0001853766,
+          "upstream_inference_completions_cost": 0.000201848
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 107,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.0003872246,
+      "response_id": "gen-1794153065-0QfUkoUc0pddYx3OsLHr",
+      "elapsed_s": 7.814744203002192,
+      "token_accounting": {
+        "input_tokens": 5382,
+        "input_uncached_tokens": 774,
+        "cache_read_input_tokens": 4608,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 1097,
+        "reasoning_tokens": 107,
+        "total_tokens": 6479
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153065-0QfUkoUc0pddYx3OsLHr",
+        "object": "chat.completion",
+        "created": 1794153065,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Wafer",
+        "system_fingerprint": "vllm-0.33.0rc1.dev229+g3966924d5-tp2-02aa7b21",
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": "Failure rates: early r18 15.5%, r19 14.0%; late r18 11.0%, r19 7.64%. Pooled: r18 5000 ops, 730 failures =14.6%; r19 7500 ops, 700 failures =9.33%.\n\nCandidate traffic pct: early 2000/6000 = 33.33%; late 5500/6500 = 84.62%.\n\nNow get per-cell data with region and class.",
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "chatcmpl-tool-b70359cc041fc0fb",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"cd /tmp && cat > q2.sql <<'EOF'\\nWITH ops AS (\\n SELECT o.operation_id, o.opened_at_ms, o.class_id, p.region_id,\\n  CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early'\\n       ELSE 'late' END AS period,\\n  CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build,\\n  CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed\\n FROM logical_operations o\\n JOIN route_assignments a ON a.route_id=o.route_id\\n   AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms\\n JOIN worker_pools p ON p.pool_id=a.pool_id\\n WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000)\\n    OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)\\n)\\nSELECT period, region_id, class_id, build, count(*), sum(failed), 100.0*sum(failed)/count(*)\\nFROM ops GROUP BY period, region_id, class_id, build ORDER BY period, region_id, class_id, build;\\nEOF\\nsqlite3 ../data/current.db < q2.sql\\necho ---\\ncat > q3.sql <<'EOF'\\nWITH ops AS (\\n SELECT o.class_id,\\n  CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early'\\n       ELSE 'late' END AS period,\\n  CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build,\\n  CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed\\n FROM logical_operations o\\n JOIN route_assignments a ON a.route_id=o.route_id\\n   AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms\\n WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000)\\n    OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)\\n)\\nSELECT build, sum(cnt), sum(f), 100.0*sum(f)/sum(cnt) FROM (\\n SELECT build, count(*) cnt, sum(failed) f FROM ops GROUP BY build, class_id, period) GROUP BY build;\\nEOF\\nsqlite3 ../data/current.db < q3.sql\\necho ---\\ncat > q4.sql <<'EOF'\\nWITH ops AS (\\n SELECT o.class_id,\\n  CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early'\\n       ELSE 'late' END AS period,\\n  CASE WHEN a.release_id=2 THEN 1 ELSE 0 END AS cand,\\n  CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed\\n FROM logical_operations o\\n JOIN route_assignments a ON a.route_id=o.route_id\\n   AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms\\n WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000)\\n    OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)\\n)\\nSELECT period, class_id, count(*), 100.0*count(*)/sum(count(*)) OVER (PARTITION BY period), sum(failed), 100.0*sum(failed)/count(*)\\nFROM ops GROUP BY period, class_id ORDER BY period, class_id;\\nEOF\\nsqlite3 ../data/current.db < q4.sql\"}"
+                  }
+                }
+              ],
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Failure rates: early r18 15.5%, r19 14.0%; late r18 11.0%, r19 7.64%. Pooled: r18 5000 ops, 730 failures =14.6%; r19 7500 ops, 700 failures =9.33%.\n\nCandidate traffic pct: early 2000/6000 = 33.33%; late 5500/6500 = 84.62%.\n\nNow get per-cell data with region and class.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 5382,
+          "completion_tokens": 1097,
+          "total_tokens": 6479,
+          "cost": 0.0003872246,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 4608,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0003872246,
+            "upstream_inference_prompt_cost": 0.0001853766,
+            "upstream_inference_completions_cost": 0.000201848
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 107,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 29210,
+      "tool_results": [
+        {
+          "output": "early|1|1|idx-r18|500|10|2.0\nearly|1|1|idx-r19|500|20|4.0\nearly|1|2|idx-r18|1500|300|20.0\nearly|1|2|idx-r19|500|120|24.0\nearly|2|1|idx-r18|500|10|2.0\nearly|2|1|idx-r19|500|20|4.0\nearly|2|2|idx-r18|1500|300|20.0\nearly|2|2|idx-r19|500|120|24.0\nlate|1|1|idx-r18|250|5|2.0\nlate|1|1|idx-r19|2250|90|4.0\nlate|1|2|idx-r18|250|50|20.0\nlate|1|2|idx-r19|500|120|24.0\nlate|2|1|idx-r18|250|5|2.0\nlate|2|1|idx-r19|2250|90|4.0\nlate|2|2|idx-r18|250|50|20.0\nlate|2|2|idx-r19|500|120|24.0\n---\nidx-r18|5000|730|14.6\nidx-r19|7500|700|9.33333333333333\n---\nearly|1|2000|33.3333333333333|60|3.0\nearly|2|4000|66.6666666666667|840|21.0\nlate|1|5000|76.9230769230769|190|3.8\nlate|2|1500|23.0769230769231|340|22.6666666666667\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.08021514094434679, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.060295753995887935, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.12633346999064088, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 1.1309271359350532,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.08021514094434679,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.060295753995887935,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.12633346999064088,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd /tmp && cat > q2.sql <<'EOF'\nWITH ops AS (\n SELECT o.operation_id, o.opened_at_ms, o.class_id, p.region_id,\n  CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early'\n       ELSE 'late' END AS period,\n  CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build,\n  CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed\n FROM logical_operations o\n JOIN route_assignments a ON a.route_id=o.route_id\n   AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms\n JOIN worker_pools p ON p.pool_id=a.pool_id\n WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000)\n    OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)\n)\nSELECT period, region_id, class_id, build, count(*), sum(failed), 100.0*sum(failed)/count(*)\nFROM ops GROUP BY period, region_id, class_id, build ORDER BY period, region_id, class_id, build;\nEOF\nsqlite3 ../data/current.db < q2.sql\necho ---\ncat > q3.sql <<'EOF'\nWITH ops AS (\n SELECT o.class_id,\n  CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early'\n       ELSE 'late' END AS period,\n  CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build,\n  CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed\n FROM logical_operations o\n JOIN route_assignments a ON a.route_id=o.route_id\n   AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms\n WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000)\n    OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)\n)\nSELECT build, sum(cnt), sum(f), 100.0*sum(f)/sum(cnt) FROM (\n SELECT build, count(*) cnt, sum(failed) f FROM ops GROUP BY build, class_id, period) GROUP BY build;\nEOF\nsqlite3 ../data/current.db < q3.sql\necho ---\ncat > q4.sql <<'EOF'\nWITH ops AS (\n SELECT o.class_id,\n  CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early'\n       ELSE 'late' END AS period,\n  CASE WHEN a.release_id=2 THEN 1 ELSE 0 END AS cand,\n  CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed\n FROM logical_operations o\n JOIN route_assignments a ON a.route_id=o.route_id\n   AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms\n WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000)\n    OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)\n)\nSELECT period, class_id, count(*), 100.0*count(*)/sum(count(*)) OVER (PARTITION BY period), sum(failed), 100.0*sum(failed)/count(*)\nFROM ops GROUP BY period, class_id ORDER BY period, class_id;\nEOF\nsqlite3 ../data/current.db < q4.sql"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "chatcmpl-tool-ad6e908e09f5f2b8",
+          "name": "bash",
+          "arguments": {
+            "command": "cd /tmp && sqlite3 ../data/current.db \"select sum(f) from (select count(*) c, sum(failed) f from (select o.class_id, case when o.opened_at_ms>=1777852800000 and o.opened_at_ms<1777852800000+3600000 then 'early' else 'late' end period, case when a.release_id=2 then 1 else 0 end build, case when (select c.is_success from attempt_events e join failure_codes c on c.code_id=e.code_id where e.operation_id=o.operation_id order by e.attempt_no desc limit 1)=0 then 1 else 0 end failed from logical_operations o join route_assignments a on a.route_id=o.route_id and o.opened_at_ms>=a.effective_from_ms and o.opened_at_ms<a.effective_to_ms where o.opened_at_ms>=1777852800000 and o.opened_at_ms<1777852800000+3600000)) ;\" 2>/dev/null; echo ok"
+          }
+        }
+      ],
+      "final_text": "All computations done. Compiling the final JSON.",
+      "usage": {
+        "prompt_tokens": 7015,
+        "completion_tokens": 757,
+        "total_tokens": 7772,
+        "cost": 0.0003823095,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 4608,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0003823095,
+          "upstream_inference_prompt_cost": 0.0002430215,
+          "upstream_inference_completions_cost": 0.000139288
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 516,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.0003823095,
+      "response_id": "gen-1794153074-MwiIHFNk9WIXkKvi64lM",
+      "elapsed_s": 8.919274583924562,
+      "token_accounting": {
+        "input_tokens": 7015,
+        "input_uncached_tokens": 2407,
+        "cache_read_input_tokens": 4608,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 757,
+        "reasoning_tokens": 516,
+        "total_tokens": 7772
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153074-MwiIHFNk9WIXkKvi64lM",
+        "object": "chat.completion",
+        "created": 1794153074,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Wafer",
+        "system_fingerprint": "vllm-0.33.0rc1.dev229+g3966924d5-tp2-02aa7b21",
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": "All computations done. Compiling the final JSON.",
+              "refusal": null,
+              "reasoning": "Fascinating: all 16 cells have identical failure rates per region×class×build — build rates are constant: r18: class1=2%, class2=20%; r19: class1=4%, class2=24%. So the candidate is worse in every matched slice! Class mix changed (more small/large? early: small 33%, large 67%; late: small 77%, large 23%). So Simpson's paradox.\n\nStandardized (equal weight over 8 slices):\nReference: slices rates: [2,2,2,2,20,20,20,20] → mean 11.0%.\nCandidate: [4×4, 24×4] → mean 14.0%.\nDiff = +3.0 pp. Candidate worse in all 8 slices → 8.\n\nWorkload mix per period×class: early small 33.33%, 3.0%; early large 66.67%, 21.0%; late small 76.92%, 3.8%; late large 23.08%, 22.67%.\n\nCandidate traffic pct: early 33.33%, late 84.615385%.\n\nClass codes: 1=small, 2=large; region 1=north, 2=south.\n\nAssessment: The crude pooled comparison (14.6% → 9.33%) suggests improvement, and the time trend shows improvement too, but this is confounded by the workload shift to the small class (lower failure rate). Standardization (equal slice weights) shows candidate is worse by 3 pp and worse in all 8 slices. So the claim is NOT supported. Strongest measured association: failure rate differences across build within strata (consistent +2pp small, +4pp large). Root-cause hypothesis: candidate build has intrinsically higher failure rate (perhaps per-attempt or code behavior); distinguishing that from causal identification — observational, could be pool/regional/other config. Note also assignment is not randomized.\n\nLet me double check the candidate window attribution is fine — one nuance: for attempt instrumentation registry attribution basis \"Routing decision effective at logical operation open\" — we used route assignments at open. Good.\n\nCompute exact numbers: 5500/6500 = 84.6153846%.\n\nStandardized diffs: reference 11.0, candidate 14.0, diff +3.0 pp, candidate worse 8 slices.\n\nWrite assessment and caveats.",
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "chatcmpl-tool-ad6e908e09f5f2b8",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"cd /tmp && sqlite3 ../data/current.db \\\"select sum(f) from (select count(*) c, sum(failed) f from (select o.class_id, case when o.opened_at_ms>=1777852800000 and o.opened_at_ms<1777852800000+3600000 then 'early' else 'late' end period, case when a.release_id=2 then 1 else 0 end build, case when (select c.is_success from attempt_events e join failure_codes c on c.code_id=e.code_id where e.operation_id=o.operation_id order by e.attempt_no desc limit 1)=0 then 1 else 0 end failed from logical_operations o join route_assignments a on a.route_id=o.route_id and o.opened_at_ms>=a.effective_from_ms and o.opened_at_ms<a.effective_to_ms where o.opened_at_ms>=1777852800000 and o.opened_at_ms<1777852800000+3600000)) ;\\\" 2>/dev/null; echo ok\"}"
+                  }
+                }
+              ],
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Fascinating: all 16 cells have identical failure rates per region×class×build — build rates are constant: r18: class1=2%, class2=20%; r19: class1=4%, class2=24%. So the candidate is worse in every matched slice! Class mix changed (more small/large? early: small 33%, large 67%; late: small 77%, large 23%). So Simpson's paradox.\n\nStandardized (equal weight over 8 slices):\nReference: slices rates: [2,2,2,2,20,20,20,20] → mean 11.0%.\nCandidate: [4×4, 24×4] → mean 14.0%.\nDiff = +3.0 pp. Candidate worse in all 8 slices → 8.\n\nWorkload mix per period×class: early small 33.33%, 3.0%; early large 66.67%, 21.0%; late small 76.92%, 3.8%; late large 23.08%, 22.67%.\n\nCandidate traffic pct: early 33.33%, late 84.615385%.\n\nClass codes: 1=small, 2=large; region 1=north, 2=south.\n\nAssessment: The crude pooled comparison (14.6% → 9.33%) suggests improvement, and the time trend shows improvement too, but this is confounded by the workload shift to the small class (lower failure rate). Standardization (equal slice weights) shows candidate is worse by 3 pp and worse in all 8 slices. So the claim is NOT supported. Strongest measured association: failure rate differences across build within strata (consistent +2pp small, +4pp large). Root-cause hypothesis: candidate build has intrinsically higher failure rate (perhaps per-attempt or code behavior); distinguishing that from causal identification — observational, could be pool/regional/other config. Note also assignment is not randomized.\n\nLet me double check the candidate window attribution is fine — one nuance: for attempt instrumentation registry attribution basis \"Routing decision effective at logical operation open\" — we used route assignments at open. Good.\n\nCompute exact numbers: 5500/6500 = 84.6153846%.\n\nStandardized diffs: reference 11.0, candidate 14.0, diff +3.0 pp, candidate worse 8 slices.\n\nWrite assessment and caveats.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 7015,
+          "completion_tokens": 757,
+          "total_tokens": 7772,
+          "cost": 0.0003823095,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 4608,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0003823095,
+            "upstream_inference_prompt_cost": 0.0002430215,
+            "upstream_inference_completions_cost": 0.000139288
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 516,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 35348,
+      "tool_results": [
+        {
+          "output": "900\nok\n",
+          "exit_code": 0,
+          "wall_seconds": 0.22985901695210487,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "cd /tmp && sqlite3 ../data/current.db \"select sum(f) from (select count(*) c, sum(failed) f from (select o.class_id, case when o.opened_at_ms>=1777852800000 and o.opened_at_ms<1777852800000+3600000 then 'early' else 'late' end period, case when a.release_id=2 then 1 else 0 end build, case when (select c.is_success from attempt_events e join failure_codes c on c.code_id=e.code_id where e.operation_id=o.operation_id order by e.attempt_no desc limit 1)=0 then 1 else 0 end failed from logical_operations o join route_assignments a on a.route_id=o.route_id and o.opened_at_ms>=a.effective_from_ms and o.opened_at_ms<a.effective_to_ms where o.opened_at_ms>=1777852800000 and o.opened_at_ms<1777852800000+3600000)) ;\" 2>/dev/null; echo ok"
+        }
+      ]
+    },
+    {
+      "tool_calls": [],
+      "final_text": "```json\n{\n  \"answer\": {\n    \"periods\": [\n      {\"period\": \"early\", \"operations\": 6000, \"terminal_failures\": 900, \"terminal_failure_pct\": 15.0, \"candidate_traffic_pct\": 33.333333333333336},\n      {\"period\": \"late\", \"operations\": 6500, \"terminal_failures\": 530, \"terminal_failure_pct\": 8.153846153846155, \"candidate_traffic_pct\": 84.61538461538461}\n    ],\n    \"builds\": [\n      {\"build_code\": \"idx-r18\", \"operations\": 5000, \"terminal_failures\": 730, \"terminal_failure_pct\": 14.6},\n      {\"build_code\": \"idx-r19\", \"operations\": 7500, \"terminal_failures\": 700, \"terminal_failure_pct\": 9.333333333333334}\n    ],\n    \"matched_cells\": [\n      {\"period\": \"early\", \"region_code\": \"north\", \"class_code\": \"small\", \"build_code\": \"idx-r18\", \"operations\": 500, \"terminal_failures\": 10, \"terminal_failure_pct\": 2.0},\n      {\"period\": \"early\", \"region_code\": \"north\", \"class_code\": \"small\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 20, \"terminal_failure_pct\": 4.0},\n      {\"period\": \"early\", \"region_code\": \"north\", \"class_code\": \"large\", \"build_code\": \"idx-r18\", \"operations\": 1500, \"terminal_failures\": 300, \"terminal_failure_pct\": 20.0},\n      {\"period\": \"early\", \"region_code\": \"north\", \"class_code\": \"large\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 120, \"terminal_failure_pct\": 24.0},\n      {\"period\": \"early\", \"region_code\": \"south\", \"class_code\": \"small\", \"build_code\": \"idx-r18\", \"operations\": 500, \"terminal_failures\": 10, \"terminal_failure_pct\": 2.0},\n      {\"period\": \"early\", \"region_code\": \"south\", \"class_code\": \"small\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 20, \"terminal_failure_pct\": 4.0},\n      {\"period\": \"early\", \"region_code\": \"south\", \"class_code\": \"large\", \"build_code\": \"idx-r18\", \"operations\": 1500, \"terminal_failures\": 300, \"terminal_failure_pct\": 20.0},\n      {\"period\": \"early\", \"region_code\": \"south\", \"class_code\": \"large\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 120, \"terminal_failure_pct\": 24.0},\n      {\"period\": \"late\", \"region_code\": \"north\", \"class_code\": \"small\", \"build_code\": \"idx-r18\", \"operations\": 250, \"terminal_failures\": 5, \"terminal_failure_pct\": 2.0},\n      {\"period\": \"late\", \"region_code\": \"north\", \"class_code\": \"small\", \"build_code\": \"idx-r19\", \"operations\": 2250, \"terminal_failures\": 90, \"terminal_failure_pct\": 4.0},\n      {\"period\": \"late\", \"region_code\": \"north\", \"class_code\": \"large\", \"build_code\": \"idx-r18\", \"operations\": 250, \"terminal_failures\": 50, \"terminal_failure_pct\": 20.0},\n      {\"period\": \"late\", \"region_code\": \"north\", \"class_code\": \"large\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 120, \"terminal_failure_pct\": 24.0},\n      {\"period\": \"late\", \"region_code\": \"south\", \"class_code\": \"small\", \"build_code\": \"idx-r18\", \"operations\": 250, \"terminal_failures\": 5, \"terminal_failure_pct\": 2.0},\n      {\"period\": \"late\", \"region_code\": \"south\", \"class_code\": \"small\", \"build_code\": \"idx-r19\", \"operations\": 2250, \"terminal_failures\": 90, \"terminal_failure_pct\": 4.0},\n      {\"period\": \"late\", \"region_code\": \"south\", \"class_code\": \"large\", \"build_code\": \"idx-r18\", \"operations\": 250, \"terminal_failures\": 50, \"terminal_failure_pct\": 20.0},\n      {\"period\": \"late\", \"region_code\": \"south\", \"class_code\": \"large\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 120, \"terminal_failure_pct\": 24.0}\n    ],\n    \"standardized\": {\n      \"reference_failure_pct\": 11.0,\n      \"candidate_failure_pct\": 14.0,\n      \"candidate_minus_reference_pp\": 3.0,\n      \"candidate_worse_slices\": 8,\n      \"matched_slices\": 8\n    },\n    \"workload_mix\": [\n      {\"period\": \"early\", \"class_code\": \"small\", \"operations\": 2000, \"traffic_pct\": 33.333333333333336, \"terminal_failure_pct\": 3.0},\n      {\"period\": \"early\", \"class_code\": \"large\", \"operations\": 4000, \"traffic_pct\": 66.66666666666667, \"terminal_failure_pct\": 21.0},\n      {\"period\": \"late\", \"class_code\": \"small\", \"operations\": 5000, \"traffic_pct\": 76.92307692307693, \"terminal_failure_pct\": 3.8},\n      {\"period\": \"late\", \"class_code\": \"large\", \"operations\": 1500, \"traffic_pct\": 23.076923076923077, \"terminal_failure_pct\": 22.666666666666668}\n    ],\n    \"assessment\": \"The raw numbers support the claim only superficially, and the equal-weighted analysis refutes it. Pooled, idx-r19 shows 9.33% terminal failures vs 14.6% for idx-r18 (-5.27 pp), and across periods the overall failure rate falls from 15.0% to 8.15% as candidate traffic share rises from 33.3% to 84.6%. However, both effects are driven by a workload shift, not by build quality. In every one of the eight matched period x region x operation-class slices, the candidate is worse: 4.0% vs 2.0% for small operations and 24.0% vs 20.0% for large operations (build rates are constant across periods and regions). Standardizing over the eight slices with equal weights gives candidate 14.0% vs reference 11.0%, i.e. candidate worse by +3.0 pp, with the candidate worse in 8 of 8 slices. The time trend is explained by the workload mix moving from 33.3% small / 66.7% large operations (early) to 76.9% small / 23.1% large (late), since small operations fail far less often (2-4%) than large ones (20-24%). The strongest measured association is build versus within-slice failure rate: +2.0 pp on small and +4.0 pp on large operations in all four region x period combinations, i.e. a large-operation penalty about twice the small-operation penalty. The observed expansion of idx-r19 did not improve reliability; it coincided with a lower-failure workload mix. A plausible root-cause hypothesis is that the idx-r19 build introduces an intrinsic per-operation failure penalty (consistent with uniformly worse rates within strata), or that traffic routed to the canary routes/pools serving idx-r19 differs systematically. This is observational association only: traffic to the candidate was not randomized (canary routes were expanded deliberately), so build assignment may correlate with pool configuration, routing policy or workload mix; this identifies nothing causally. No attribution beyond the observed 2026-05-04 and 2026-05-05 00:00-01:00 UTC windows and the small/large operation classes and north/south regions is made.\"\n  },\n  \"caveats\": [\n    \"Windows are 2026-05-04 and 2026-05-05 00:00-01:00 UTC (half-open, inclusive lower / exclusive upper bound on logical-operation open time).\",\n    \"Terminal failure is defined by the final attempt's failure code; retried operations that eventually succeed are not terminal failures.\",\n    \"Build attribution uses route_assignments effective at logical-operation open time (routing-time instrumentation per feed_registry); no other feed versions exist for these windows.\",\n    \"Equal weighting over the eight matched slices is the specified target population, not the observed build traffic mix; the pooled build comparison is Simpson-confounded by operation-class mix.\",\n    \"The candidate and reference were not randomized; the association is observational and does not identify a cause.\",\n    \"Build failure rates were identical across regions and periods in this sample; this homogeneity is an observation and is not extrapolated to other windows, regions, classes or releases.\"\n  ],\n  \"evidence_sql\": [\n    \"WITH ops AS (SELECT o.operation_id, o.class_id, p.region_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' ELSE 'late' END AS period, CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN worker_pools p ON p.pool_id=a.pool_id WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT period, count(*) AS operations, sum(failed) AS terminal_failures, 100.0*sum(failed)/count(*) AS terminal_failure_pct, 100.0*sum(build='idx-r19')/count(*) AS candidate_traffic_pct FROM ops GROUP BY period;\",\n    \"WITH ops AS (SELECT o.operation_id, o.opened_at_ms, o.class_id, p.region_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' WHEN o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000 THEN 'late' END AS period, CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN worker_pools p ON p.pool_id=a.pool_id WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT build, count(*) AS operations, sum(failed) AS terminal_failures, 100.0*sum(failed)/count(*) AS terminal_failure_pct FROM ops GROUP BY build;\",\n    \"WITH ops AS (SELECT o.operation_id, o.class_id, p.region_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' ELSE 'late' END AS period, CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN worker_pools p ON p.pool_id=a.pool_id WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT period, p.region_id, o.class_id, build, count(*) AS operations, sum(failed) AS terminal_failures, 100.0*sum(failed)/count(*) AS terminal_failure_pct FROM ops GROUP BY period, region_id, class_id, build ORDER BY period, region_id, class_id, build;\",\n    \"WITH ops AS (SELECT o.operation_id, o.class_id, p.region_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' ELSE 'late' END AS period, CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN worker_pools p ON p.pool_id=a.pool_id WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT build, 100.0*avg(failed) AS standardized_failure_pct FROM (SELECT build, region_id, class_id, period, avg(failed) AS rate, sum(failed) AS f, count(*) AS n FROM ops GROUP BY build, region_id, class_id, period) GROUP BY build;\",\n    \"WITH ops AS (SELECT o.operation_id, o.class_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' ELSE 'late' END AS period, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT period, c.class_code, count(*) AS operations, 100.0*count(*)/sum(count(*)) OVER (PARTITION BY period) AS traffic_pct, 100.0*sum(failed)/count(*) AS terminal_failure_pct FROM ops o JOIN operation_classes c ON c.class_id=o.class_id GROUP BY period, o.class_id ORDER BY period, o.class_id;\"\n  ]\n}\n```",
+      "usage": {
+        "prompt_tokens": 7786,
+        "completion_tokens": 3620,
+        "total_tokens": 11406,
+        "cost": 0.0009340138,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 6912,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0009340138,
+          "upstream_inference_prompt_cost": 0.0002679338,
+          "upstream_inference_completions_cost": 0.00066608
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.0009340138,
+      "response_id": "gen-1794153083-UBbWgfukhF1O7ZJn2qb9",
+      "elapsed_s": 23.784054712043144,
+      "token_accounting": {
+        "input_tokens": 7786,
+        "input_uncached_tokens": 874,
+        "cache_read_input_tokens": 6912,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 3620,
+        "reasoning_tokens": 0,
+        "total_tokens": 11406
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153083-UBbWgfukhF1O7ZJn2qb9",
+        "object": "chat.completion",
+        "created": 1794153083,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Wafer",
+        "system_fingerprint": "vllm-0.33.0rc1.dev229+g3966924d5-tp2-02aa7b21",
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "```json\n{\n  \"answer\": {\n    \"periods\": [\n      {\"period\": \"early\", \"operations\": 6000, \"terminal_failures\": 900, \"terminal_failure_pct\": 15.0, \"candidate_traffic_pct\": 33.333333333333336},\n      {\"period\": \"late\", \"operations\": 6500, \"terminal_failures\": 530, \"terminal_failure_pct\": 8.153846153846155, \"candidate_traffic_pct\": 84.61538461538461}\n    ],\n    \"builds\": [\n      {\"build_code\": \"idx-r18\", \"operations\": 5000, \"terminal_failures\": 730, \"terminal_failure_pct\": 14.6},\n      {\"build_code\": \"idx-r19\", \"operations\": 7500, \"terminal_failures\": 700, \"terminal_failure_pct\": 9.333333333333334}\n    ],\n    \"matched_cells\": [\n      {\"period\": \"early\", \"region_code\": \"north\", \"class_code\": \"small\", \"build_code\": \"idx-r18\", \"operations\": 500, \"terminal_failures\": 10, \"terminal_failure_pct\": 2.0},\n      {\"period\": \"early\", \"region_code\": \"north\", \"class_code\": \"small\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 20, \"terminal_failure_pct\": 4.0},\n      {\"period\": \"early\", \"region_code\": \"north\", \"class_code\": \"large\", \"build_code\": \"idx-r18\", \"operations\": 1500, \"terminal_failures\": 300, \"terminal_failure_pct\": 20.0},\n      {\"period\": \"early\", \"region_code\": \"north\", \"class_code\": \"large\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 120, \"terminal_failure_pct\": 24.0},\n      {\"period\": \"early\", \"region_code\": \"south\", \"class_code\": \"small\", \"build_code\": \"idx-r18\", \"operations\": 500, \"terminal_failures\": 10, \"terminal_failure_pct\": 2.0},\n      {\"period\": \"early\", \"region_code\": \"south\", \"class_code\": \"small\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 20, \"terminal_failure_pct\": 4.0},\n      {\"period\": \"early\", \"region_code\": \"south\", \"class_code\": \"large\", \"build_code\": \"idx-r18\", \"operations\": 1500, \"terminal_failures\": 300, \"terminal_failure_pct\": 20.0},\n      {\"period\": \"early\", \"region_code\": \"south\", \"class_code\": \"large\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 120, \"terminal_failure_pct\": 24.0},\n      {\"period\": \"late\", \"region_code\": \"north\", \"class_code\": \"small\", \"build_code\": \"idx-r18\", \"operations\": 250, \"terminal_failures\": 5, \"terminal_failure_pct\": 2.0},\n      {\"period\": \"late\", \"region_code\": \"north\", \"class_code\": \"small\", \"build_code\": \"idx-r19\", \"operations\": 2250, \"terminal_failures\": 90, \"terminal_failure_pct\": 4.0},\n      {\"period\": \"late\", \"region_code\": \"north\", \"class_code\": \"large\", \"build_code\": \"idx-r18\", \"operations\": 250, \"terminal_failures\": 50, \"terminal_failure_pct\": 20.0},\n      {\"period\": \"late\", \"region_code\": \"north\", \"class_code\": \"large\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 120, \"terminal_failure_pct\": 24.0},\n      {\"period\": \"late\", \"region_code\": \"south\", \"class_code\": \"small\", \"build_code\": \"idx-r18\", \"operations\": 250, \"terminal_failures\": 5, \"terminal_failure_pct\": 2.0},\n      {\"period\": \"late\", \"region_code\": \"south\", \"class_code\": \"small\", \"build_code\": \"idx-r19\", \"operations\": 2250, \"terminal_failures\": 90, \"terminal_failure_pct\": 4.0},\n      {\"period\": \"late\", \"region_code\": \"south\", \"class_code\": \"large\", \"build_code\": \"idx-r18\", \"operations\": 250, \"terminal_failures\": 50, \"terminal_failure_pct\": 20.0},\n      {\"period\": \"late\", \"region_code\": \"south\", \"class_code\": \"large\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 120, \"terminal_failure_pct\": 24.0}\n    ],\n    \"standardized\": {\n      \"reference_failure_pct\": 11.0,\n      \"candidate_failure_pct\": 14.0,\n      \"candidate_minus_reference_pp\": 3.0,\n      \"candidate_worse_slices\": 8,\n      \"matched_slices\": 8\n    },\n    \"workload_mix\": [\n      {\"period\": \"early\", \"class_code\": \"small\", \"operations\": 2000, \"traffic_pct\": 33.333333333333336, \"terminal_failure_pct\": 3.0},\n      {\"period\": \"early\", \"class_code\": \"large\", \"operations\": 4000, \"traffic_pct\": 66.66666666666667, \"terminal_failure_pct\": 21.0},\n      {\"period\": \"late\", \"class_code\": \"small\", \"operations\": 5000, \"traffic_pct\": 76.92307692307693, \"terminal_failure_pct\": 3.8},\n      {\"period\": \"late\", \"class_code\": \"large\", \"operations\": 1500, \"traffic_pct\": 23.076923076923077, \"terminal_failure_pct\": 22.666666666666668}\n    ],\n    \"assessment\": \"The raw numbers support the claim only superficially, and the equal-weighted analysis refutes it. Pooled, idx-r19 shows 9.33% terminal failures vs 14.6% for idx-r18 (-5.27 pp), and across periods the overall failure rate falls from 15.0% to 8.15% as candidate traffic share rises from 33.3% to 84.6%. However, both effects are driven by a workload shift, not by build quality. In every one of the eight matched period x region x operation-class slices, the candidate is worse: 4.0% vs 2.0% for small operations and 24.0% vs 20.0% for large operations (build rates are constant across periods and regions). Standardizing over the eight slices with equal weights gives candidate 14.0% vs reference 11.0%, i.e. candidate worse by +3.0 pp, with the candidate worse in 8 of 8 slices. The time trend is explained by the workload mix moving from 33.3% small / 66.7% large operations (early) to 76.9% small / 23.1% large (late), since small operations fail far less often (2-4%) than large ones (20-24%). The strongest measured association is build versus within-slice failure rate: +2.0 pp on small and +4.0 pp on large operations in all four region x period combinations, i.e. a large-operation penalty about twice the small-operation penalty. The observed expansion of idx-r19 did not improve reliability; it coincided with a lower-failure workload mix. A plausible root-cause hypothesis is that the idx-r19 build introduces an intrinsic per-operation failure penalty (consistent with uniformly worse rates within strata), or that traffic routed to the canary routes/pools serving idx-r19 differs systematically. This is observational association only: traffic to the candidate was not randomized (canary routes were expanded deliberately), so build assignment may correlate with pool configuration, routing policy or workload mix; this identifies nothing causally. No attribution beyond the observed 2026-05-04 and 2026-05-05 00:00-01:00 UTC windows and the small/large operation classes and north/south regions is made.\"\n  },\n  \"caveats\": [\n    \"Windows are 2026-05-04 and 2026-05-05 00:00-01:00 UTC (half-open, inclusive lower / exclusive upper bound on logical-operation open time).\",\n    \"Terminal failure is defined by the final attempt's failure code; retried operations that eventually succeed are not terminal failures.\",\n    \"Build attribution uses route_assignments effective at logical-operation open time (routing-time instrumentation per feed_registry); no other feed versions exist for these windows.\",\n    \"Equal weighting over the eight matched slices is the specified target population, not the observed build traffic mix; the pooled build comparison is Simpson-confounded by operation-class mix.\",\n    \"The candidate and reference were not randomized; the association is observational and does not identify a cause.\",\n    \"Build failure rates were identical across regions and periods in this sample; this homogeneity is an observation and is not extrapolated to other windows, regions, classes or releases.\"\n  ],\n  \"evidence_sql\": [\n    \"WITH ops AS (SELECT o.operation_id, o.class_id, p.region_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' ELSE 'late' END AS period, CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN worker_pools p ON p.pool_id=a.pool_id WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT period, count(*) AS operations, sum(failed) AS terminal_failures, 100.0*sum(failed)/count(*) AS terminal_failure_pct, 100.0*sum(build='idx-r19')/count(*) AS candidate_traffic_pct FROM ops GROUP BY period;\",\n    \"WITH ops AS (SELECT o.operation_id, o.opened_at_ms, o.class_id, p.region_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' WHEN o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000 THEN 'late' END AS period, CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN worker_pools p ON p.pool_id=a.pool_id WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT build, count(*) AS operations, sum(failed) AS terminal_failures, 100.0*sum(failed)/count(*) AS terminal_failure_pct FROM ops GROUP BY build;\",\n    \"WITH ops AS (SELECT o.operation_id, o.class_id, p.region_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' ELSE 'late' END AS period, CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN worker_pools p ON p.pool_id=a.pool_id WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT period, p.region_id, o.class_id, build, count(*) AS operations, sum(failed) AS terminal_failures, 100.0*sum(failed)/count(*) AS terminal_failure_pct FROM ops GROUP BY period, region_id, class_id, build ORDER BY period, region_id, class_id, build;\",\n    \"WITH ops AS (SELECT o.operation_id, o.class_id, p.region_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' ELSE 'late' END AS period, CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN worker_pools p ON p.pool_id=a.pool_id WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT build, 100.0*avg(failed) AS standardized_failure_pct FROM (SELECT build, region_id, class_id, period, avg(failed) AS rate, sum(failed) AS f, count(*) AS n FROM ops GROUP BY build, region_id, class_id, period) GROUP BY build;\",\n    \"WITH ops AS (SELECT o.operation_id, o.class_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' ELSE 'late' END AS period, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT period, c.class_code, count(*) AS operations, 100.0*count(*)/sum(count(*)) OVER (PARTITION BY period) AS traffic_pct, 100.0*sum(failed)/count(*) AS terminal_failure_pct FROM ops o JOIN operation_classes c ON c.class_id=o.class_id GROUP BY period, o.class_id ORDER BY period, o.class_id;\"\n  ]\n}\n```",
+              "refusal": null,
+              "reasoning": null
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 7786,
+          "completion_tokens": 3620,
+          "total_tokens": 11406,
+          "cost": 0.0009340138,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 6912,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0009340138,
+            "upstream_inference_prompt_cost": 0.0002679338,
+            "upstream_inference_completions_cost": 0.00066608
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 48499,
+      "tool_results": []
+    }
+  ],
+  "status": "completed",
+  "final_text": "```json\n{\n  \"answer\": {\n    \"periods\": [\n      {\"period\": \"early\", \"operations\": 6000, \"terminal_failures\": 900, \"terminal_failure_pct\": 15.0, \"candidate_traffic_pct\": 33.333333333333336},\n      {\"period\": \"late\", \"operations\": 6500, \"terminal_failures\": 530, \"terminal_failure_pct\": 8.153846153846155, \"candidate_traffic_pct\": 84.61538461538461}\n    ],\n    \"builds\": [\n      {\"build_code\": \"idx-r18\", \"operations\": 5000, \"terminal_failures\": 730, \"terminal_failure_pct\": 14.6},\n      {\"build_code\": \"idx-r19\", \"operations\": 7500, \"terminal_failures\": 700, \"terminal_failure_pct\": 9.333333333333334}\n    ],\n    \"matched_cells\": [\n      {\"period\": \"early\", \"region_code\": \"north\", \"class_code\": \"small\", \"build_code\": \"idx-r18\", \"operations\": 500, \"terminal_failures\": 10, \"terminal_failure_pct\": 2.0},\n      {\"period\": \"early\", \"region_code\": \"north\", \"class_code\": \"small\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 20, \"terminal_failure_pct\": 4.0},\n      {\"period\": \"early\", \"region_code\": \"north\", \"class_code\": \"large\", \"build_code\": \"idx-r18\", \"operations\": 1500, \"terminal_failures\": 300, \"terminal_failure_pct\": 20.0},\n      {\"period\": \"early\", \"region_code\": \"north\", \"class_code\": \"large\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 120, \"terminal_failure_pct\": 24.0},\n      {\"period\": \"early\", \"region_code\": \"south\", \"class_code\": \"small\", \"build_code\": \"idx-r18\", \"operations\": 500, \"terminal_failures\": 10, \"terminal_failure_pct\": 2.0},\n      {\"period\": \"early\", \"region_code\": \"south\", \"class_code\": \"small\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 20, \"terminal_failure_pct\": 4.0},\n      {\"period\": \"early\", \"region_code\": \"south\", \"class_code\": \"large\", \"build_code\": \"idx-r18\", \"operations\": 1500, \"terminal_failures\": 300, \"terminal_failure_pct\": 20.0},\n      {\"period\": \"early\", \"region_code\": \"south\", \"class_code\": \"large\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 120, \"terminal_failure_pct\": 24.0},\n      {\"period\": \"late\", \"region_code\": \"north\", \"class_code\": \"small\", \"build_code\": \"idx-r18\", \"operations\": 250, \"terminal_failures\": 5, \"terminal_failure_pct\": 2.0},\n      {\"period\": \"late\", \"region_code\": \"north\", \"class_code\": \"small\", \"build_code\": \"idx-r19\", \"operations\": 2250, \"terminal_failures\": 90, \"terminal_failure_pct\": 4.0},\n      {\"period\": \"late\", \"region_code\": \"north\", \"class_code\": \"large\", \"build_code\": \"idx-r18\", \"operations\": 250, \"terminal_failures\": 50, \"terminal_failure_pct\": 20.0},\n      {\"period\": \"late\", \"region_code\": \"north\", \"class_code\": \"large\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 120, \"terminal_failure_pct\": 24.0},\n      {\"period\": \"late\", \"region_code\": \"south\", \"class_code\": \"small\", \"build_code\": \"idx-r18\", \"operations\": 250, \"terminal_failures\": 5, \"terminal_failure_pct\": 2.0},\n      {\"period\": \"late\", \"region_code\": \"south\", \"class_code\": \"small\", \"build_code\": \"idx-r19\", \"operations\": 2250, \"terminal_failures\": 90, \"terminal_failure_pct\": 4.0},\n      {\"period\": \"late\", \"region_code\": \"south\", \"class_code\": \"large\", \"build_code\": \"idx-r18\", \"operations\": 250, \"terminal_failures\": 50, \"terminal_failure_pct\": 20.0},\n      {\"period\": \"late\", \"region_code\": \"south\", \"class_code\": \"large\", \"build_code\": \"idx-r19\", \"operations\": 500, \"terminal_failures\": 120, \"terminal_failure_pct\": 24.0}\n    ],\n    \"standardized\": {\n      \"reference_failure_pct\": 11.0,\n      \"candidate_failure_pct\": 14.0,\n      \"candidate_minus_reference_pp\": 3.0,\n      \"candidate_worse_slices\": 8,\n      \"matched_slices\": 8\n    },\n    \"workload_mix\": [\n      {\"period\": \"early\", \"class_code\": \"small\", \"operations\": 2000, \"traffic_pct\": 33.333333333333336, \"terminal_failure_pct\": 3.0},\n      {\"period\": \"early\", \"class_code\": \"large\", \"operations\": 4000, \"traffic_pct\": 66.66666666666667, \"terminal_failure_pct\": 21.0},\n      {\"period\": \"late\", \"class_code\": \"small\", \"operations\": 5000, \"traffic_pct\": 76.92307692307693, \"terminal_failure_pct\": 3.8},\n      {\"period\": \"late\", \"class_code\": \"large\", \"operations\": 1500, \"traffic_pct\": 23.076923076923077, \"terminal_failure_pct\": 22.666666666666668}\n    ],\n    \"assessment\": \"The raw numbers support the claim only superficially, and the equal-weighted analysis refutes it. Pooled, idx-r19 shows 9.33% terminal failures vs 14.6% for idx-r18 (-5.27 pp), and across periods the overall failure rate falls from 15.0% to 8.15% as candidate traffic share rises from 33.3% to 84.6%. However, both effects are driven by a workload shift, not by build quality. In every one of the eight matched period x region x operation-class slices, the candidate is worse: 4.0% vs 2.0% for small operations and 24.0% vs 20.0% for large operations (build rates are constant across periods and regions). Standardizing over the eight slices with equal weights gives candidate 14.0% vs reference 11.0%, i.e. candidate worse by +3.0 pp, with the candidate worse in 8 of 8 slices. The time trend is explained by the workload mix moving from 33.3% small / 66.7% large operations (early) to 76.9% small / 23.1% large (late), since small operations fail far less often (2-4%) than large ones (20-24%). The strongest measured association is build versus within-slice failure rate: +2.0 pp on small and +4.0 pp on large operations in all four region x period combinations, i.e. a large-operation penalty about twice the small-operation penalty. The observed expansion of idx-r19 did not improve reliability; it coincided with a lower-failure workload mix. A plausible root-cause hypothesis is that the idx-r19 build introduces an intrinsic per-operation failure penalty (consistent with uniformly worse rates within strata), or that traffic routed to the canary routes/pools serving idx-r19 differs systematically. This is observational association only: traffic to the candidate was not randomized (canary routes were expanded deliberately), so build assignment may correlate with pool configuration, routing policy or workload mix; this identifies nothing causally. No attribution beyond the observed 2026-05-04 and 2026-05-05 00:00-01:00 UTC windows and the small/large operation classes and north/south regions is made.\"\n  },\n  \"caveats\": [\n    \"Windows are 2026-05-04 and 2026-05-05 00:00-01:00 UTC (half-open, inclusive lower / exclusive upper bound on logical-operation open time).\",\n    \"Terminal failure is defined by the final attempt's failure code; retried operations that eventually succeed are not terminal failures.\",\n    \"Build attribution uses route_assignments effective at logical-operation open time (routing-time instrumentation per feed_registry); no other feed versions exist for these windows.\",\n    \"Equal weighting over the eight matched slices is the specified target population, not the observed build traffic mix; the pooled build comparison is Simpson-confounded by operation-class mix.\",\n    \"The candidate and reference were not randomized; the association is observational and does not identify a cause.\",\n    \"Build failure rates were identical across regions and periods in this sample; this homogeneity is an observation and is not extrapolated to other windows, regions, classes or releases.\"\n  ],\n  \"evidence_sql\": [\n    \"WITH ops AS (SELECT o.operation_id, o.class_id, p.region_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' ELSE 'late' END AS period, CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN worker_pools p ON p.pool_id=a.pool_id WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT period, count(*) AS operations, sum(failed) AS terminal_failures, 100.0*sum(failed)/count(*) AS terminal_failure_pct, 100.0*sum(build='idx-r19')/count(*) AS candidate_traffic_pct FROM ops GROUP BY period;\",\n    \"WITH ops AS (SELECT o.operation_id, o.opened_at_ms, o.class_id, p.region_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' WHEN o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000 THEN 'late' END AS period, CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN worker_pools p ON p.pool_id=a.pool_id WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT build, count(*) AS operations, sum(failed) AS terminal_failures, 100.0*sum(failed)/count(*) AS terminal_failure_pct FROM ops GROUP BY build;\",\n    \"WITH ops AS (SELECT o.operation_id, o.class_id, p.region_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' ELSE 'late' END AS period, CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN worker_pools p ON p.pool_id=a.pool_id WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT period, p.region_id, o.class_id, build, count(*) AS operations, sum(failed) AS terminal_failures, 100.0*sum(failed)/count(*) AS terminal_failure_pct FROM ops GROUP BY period, region_id, class_id, build ORDER BY period, region_id, class_id, build;\",\n    \"WITH ops AS (SELECT o.operation_id, o.class_id, p.region_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' ELSE 'late' END AS period, CASE WHEN a.release_id=2 THEN 'idx-r19' ELSE 'idx-r18' END AS build, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN worker_pools p ON p.pool_id=a.pool_id WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT build, 100.0*avg(failed) AS standardized_failure_pct FROM (SELECT build, region_id, class_id, period, avg(failed) AS rate, sum(failed) AS f, count(*) AS n FROM ops GROUP BY build, region_id, class_id, period) GROUP BY build;\",\n    \"WITH ops AS (SELECT o.operation_id, o.class_id, CASE WHEN o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000 THEN 'early' ELSE 'late' END AS period, CASE WHEN (SELECT c.is_success FROM attempt_events e JOIN failure_codes c ON c.code_id=e.code_id WHERE e.operation_id=o.operation_id ORDER BY e.attempt_no DESC LIMIT 1)=0 THEN 1 ELSE 0 END AS failed FROM logical_operations o JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms WHERE (o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777852800000+3600000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777939200000+3600000)) SELECT period, c.class_code, count(*) AS operations, 100.0*count(*)/sum(count(*)) OVER (PARTITION BY period) AS traffic_pct, 100.0*sum(failed)/count(*) AS terminal_failure_pct FROM ops o JOIN operation_classes c ON c.class_id=o.class_id GROUP BY period, o.class_id ORDER BY period, o.class_id;\"\n  ]\n}\n```",
+  "memory_before": {},
+  "elapsed_s": 61.63860174000729,
+  "memory_after": {},
+  "db_hash_after": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+  "db_unchanged": true
+}

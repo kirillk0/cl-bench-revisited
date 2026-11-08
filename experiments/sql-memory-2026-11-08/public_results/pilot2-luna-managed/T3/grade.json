@@ -1,0 +1,71 @@
+{
+  "task": "T3",
+  "schema_valid": true,
+  "schema_errors": [],
+  "metric_fraction": 0.9375,
+  "suggested_metric_points_out_of_70": 65.625,
+  "section_results": {
+    "largest_increase": {
+      "correct": 4,
+      "total": 4,
+      "fraction": 1.0,
+      "failed_paths": []
+    },
+    "pool_metrics": {
+      "correct": 32,
+      "total": 32,
+      "fraction": 1.0,
+      "failed_paths": []
+    },
+    "source": {
+      "correct": 3,
+      "total": 4,
+      "fraction": 0.75,
+      "failed_paths": [
+        "source.event_grain"
+      ]
+    },
+    "totals": {
+      "correct": 8,
+      "total": 8,
+      "fraction": 1.0,
+      "failed_paths": []
+    }
+  },
+  "evidence_execution_checks": [
+    {
+      "index": 0,
+      "read_only_executable_with_table_reads": true,
+      "rows": 1
+    },
+    {
+      "index": 1,
+      "read_only_executable_with_table_reads": true,
+      "rows": 4
+    },
+    {
+      "index": 2,
+      "read_only_executable_with_table_reads": true,
+      "rows": 2
+    }
+  ],
+  "human_review_required": {
+    "evidence_points_out_of_10": "Queries must actually support the reported values and attribution. Executing successfully or SELECTing constants is not sufficient.",
+    "verdict_points_out_of_20": [
+      {
+        "criterion": "Uses registry v2 current operation-grain outcomes; old attempt feed is historical, not empty current business activity.",
+        "id": "source"
+      },
+      {
+        "criterion": "Aggregates actual execution cells to physical pools and does not use stale intended-route assignment as actual service attribution.",
+        "id": "attribution"
+      },
+      {
+        "criterion": "Identifies sync-south +15 pp and does not infer a proven root cause from these aggregate metrics.",
+        "id": "restraint"
+      }
+    ]
+  },
+  "overall_score": null,
+  "note": "No automatic preferred-opinion score. Review factual criteria, uncertainty and evidence support; invalid schema prevents full credit but does not erase diagnostics."
+}

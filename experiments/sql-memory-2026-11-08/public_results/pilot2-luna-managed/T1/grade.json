@@ -1,0 +1,80 @@
+{
+  "task": "T1",
+  "schema_valid": true,
+  "schema_errors": [],
+  "metric_fraction": 1.0,
+  "suggested_metric_points_out_of_70": 70.0,
+  "section_results": {
+    "builds": {
+      "correct": 8,
+      "total": 8,
+      "fraction": 1.0,
+      "failed_paths": []
+    },
+    "matched_cells": {
+      "correct": 112,
+      "total": 112,
+      "fraction": 1.0,
+      "failed_paths": []
+    },
+    "periods": {
+      "correct": 10,
+      "total": 10,
+      "fraction": 1.0,
+      "failed_paths": []
+    },
+    "standardized": {
+      "correct": 5,
+      "total": 5,
+      "fraction": 1.0,
+      "failed_paths": []
+    },
+    "workload_mix": {
+      "correct": 20,
+      "total": 20,
+      "fraction": 1.0,
+      "failed_paths": []
+    }
+  },
+  "evidence_execution_checks": [
+    {
+      "index": 0,
+      "read_only_executable_with_table_reads": true,
+      "rows": 2
+    },
+    {
+      "index": 1,
+      "read_only_executable_with_table_reads": true,
+      "rows": 2
+    },
+    {
+      "index": 2,
+      "read_only_executable_with_table_reads": true,
+      "rows": 16
+    },
+    {
+      "index": 3,
+      "read_only_executable_with_table_reads": true,
+      "rows": 4
+    }
+  ],
+  "human_review_required": {
+    "evidence_points_out_of_10": "Queries must actually support the reported values and attribution. Executing successfully or SELECTing constants is not sufficient.",
+    "verdict_points_out_of_20": [
+      {
+        "criterion": "Recognizes favorable pooled/time comparisons reverse under matched strata; candidate is worse in 8/8, not safer.",
+        "id": "reversal"
+      },
+      {
+        "criterion": "Explains the changing small/large mix and unequal build exposure; cites +3 pp standardized difference or +2/+4 pp stratum differences.",
+        "id": "composition"
+      },
+      {
+        "criterion": "Treats candidate-associated regression as a hypothesis, not proven root cause; notes observational assignment/unmeasured confounding. No required invented alternative cause.",
+        "id": "causality"
+      }
+    ]
+  },
+  "overall_score": null,
+  "note": "No automatic preferred-opinion score. Review factual criteria, uncertainty and evidence support; invalid schema prevents full credit but does not erase diagnostics."
+}

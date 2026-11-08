@@ -1,0 +1,2164 @@
+{
+  "task_id": "W1",
+  "db_sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+  "snapshot": "pre.db",
+  "prompt": "Use only the supplied current.db and README. All windows below are UTC and half-open, selected by logical-operation open time. A terminal-failure percentage has logical operations as its denominator; attempt-failure percentage has attempts as its denominator. Return only JSON matching the provided schema. Percentages use 0–100, differences use percentage points. evidence_sql must contain executable read-only SQLite queries with literal bounds, not pseudocode. Arrays may be in any order; include every requested group. A zero numerator is not missing data. No web or network access is needed.\n\nFor 2026-05-01 10:00–11:00, report total logical operations, attempts, failed attempts, terminal failures, and retried operations across all services. Then report those same five counts for each service, plus its terminal-failure percentage and the number of distinct serving physical pools represented in the window. Explain briefly in caveats why attempts and terminal failures are not interchangeable. This is a counting calibration, not an incident attribution exercise.\n\nRequired JSON response schema:\n{\"$schema\": \"https://json-schema.org/draft/2020-12/schema\", \"additionalProperties\": false, \"properties\": {\"answer\": {\"additionalProperties\": false, \"properties\": {\"services\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"attempts\": {\"type\": \"integer\"}, \"failed_attempts\": {\"type\": \"integer\"}, \"operations\": {\"type\": \"integer\"}, \"physical_pools\": {\"type\": \"integer\"}, \"retried_operations\": {\"type\": \"integer\"}, \"service_code\": {\"type\": \"string\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"service_code\", \"operations\", \"attempts\", \"failed_attempts\", \"terminal_failures\", \"retried_operations\", \"terminal_failure_pct\", \"physical_pools\"], \"type\": \"object\"}, \"maxItems\": 2, \"minItems\": 2, \"type\": \"array\"}, \"totals\": {\"additionalProperties\": false, \"properties\": {\"attempts\": {\"type\": \"integer\"}, \"failed_attempts\": {\"type\": \"integer\"}, \"operations\": {\"type\": \"integer\"}, \"retried_operations\": {\"type\": \"integer\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"operations\", \"attempts\", \"failed_attempts\", \"terminal_failures\", \"retried_operations\"], \"type\": \"object\"}}, \"required\": [\"totals\", \"services\"], \"type\": \"object\"}, \"caveats\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}, \"evidence_sql\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}}, \"required\": [\"answer\", \"evidence_sql\", \"caveats\"], \"type\": \"object\"}",
+  "turns": [
+    {
+      "tool_calls": [
+        {
+          "id": "call_f6660ea0bdaf446096a2007e24f5c33c",
+          "name": "bash",
+          "arguments": {
+            "command": "ls -la; cat README.md; sqlite3 ../data/current.db '.tables'"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 870,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 34,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 904,
+        "attribution": {
+          "items": {
+            "at_0cc0b23c87bf1e25016af098882fe087d0a89ad1e293d0f24d": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 34
+            },
+            "msg_0cc0b23c87bf1e25016af098882fe087d09b5799bcbce074a8": {
+              "input_tokens": 611,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098882fe087d0a02a091c4fec41ad": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0cc0b23c87bf1e25016af098882f0087d0bc265fc5f17060d1",
+      "elapsed_s": 1.5756411250913516,
+      "token_accounting": {
+        "input_tokens": 870,
+        "input_uncached_tokens": 870,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 34,
+        "reasoning_tokens": 0,
+        "total_tokens": 904
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0cc0b23c87bf1e25016af098882f0087d0bc265fc5f17060d1",
+        "object": "response",
+        "created_at": 1794152584,
+        "completed_at": 1794152585,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943",
+            "call_id": "call_f6660ea0bdaf446096a2007e24f5c33c",
+            "name": "bash",
+            "arguments": "{\"command\":\"ls -la; cat README.md; sqlite3 ../data/current.db '.tables'\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "b36bbcc4-07c2-46d7-bd7c-2aa3500db634",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 870,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 34,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 904,
+          "attribution": {
+            "items": {
+              "at_0cc0b23c87bf1e25016af098882fe087d0a89ad1e293d0f24d": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 34
+              },
+              "msg_0cc0b23c87bf1e25016af098882fe087d09b5799bcbce074a8": {
+                "input_tokens": 611,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098882fe087d0a02a091c4fec41ad": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 4226,
+      "tool_results": [
+        {
+          "output": "total 12\ndrwx------  2 22001 22001 4096 Nov  8 15:43 .\ndrwxr-x--- 13 root  22001 4096 Nov  8 15:43 ..\n-r--r--r--  1 root  root  3038 Nov  8 15:43 README.md\n# Operations analytics data contract\n\nYou receive `current.db` (SQLite), this README and one task. Inspect the database schema, foreign keys and registry yourself. No network or external data is needed. The database is read-only input; use a read-only connection. All observations are synthetic, internally consistent and complete for the requested windows. Do not interpret absent windows as zero traffic. No hidden business definitions depend on an earlier task.\n\n* Times ending `_ms` are integer Unix milliseconds in UTC. Window membership uses the **logical operation open time**, with inclusive lower and exclusive upper bounds. Effective intervals are also half-open; a NULL end means no known end.\n* One logical operation is one business request. Retries are attempts, not extra incidents or requests. A terminal failure means the final attempt/outcome has a failure code whose `is_success` is 0; an earlier failed attempt followed by success is not a terminal failure. All included operations are finished and attempt ordinals are complete. An operation with more than one attempt is a retried operation, including ultimately failed operations.\n* `feed_registry` is authoritative about event sources, grains, applicable operation-open intervals and serving attribution. The active entry describes current instrumentation; historical entries remain authoritative for their historical intervals. Do not assume the highest version covers all history or that a still-queryable table is current. Historical values are retained without rewriting them into a new meaning.\n* Routing identifiers are routing intent, not necessarily unique physical pools. For routing-time instrumentation, select the assignment effective when the operation opens. For execution-time instrumentation, recorded execution attribution is authoritative. Multiple aliases or execution identities may belong to the same physical pool. Never count each identity as an independent pool.\n* End-to-end latency is final completion minus operation open, including queueing, execution and retry backoff. Per-attempt queue/execution times exclude backoff. Outcome totals cover all its attempts. Rates use logical-operation denominators unless a task explicitly asks for attempt metrics. Percentages are in percent (0–100); rate differences are percentage points.\n* Telemetry is sampled independently. A requested window mean is the ordinary arithmetic mean of samples in that window. An upstream p95 sample is a percentile observation, not an operation-weighted mean. Changes describe applied configuration, not a causal experiment. Tenant tier, operation class, release, region and pool are distinct dimensions.\n\nReturn only the JSON requested in the task: `answer`, `evidence_sql` (a list of executable, read-only SQLite SELECT/WITH statements supporting the answer), and `caveats` (a list of short strings). No placeholders, SQL parameters, temporary tables or external files in evidence. State uncertainty; observational association alone does not prove causation.\nattempt_events      incident_windows    releases            telemetry_samples \nchange_events       logical_operations  route_assignments   telemetry_signals \nchange_kinds        operation_classes   service_routes      tenant_tiers      \nfailure_codes       policy_profiles     services            tenants           \nfeed_registry       regions             subsystems          worker_pools      \n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.0045816730707883835, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.24664278200361878,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.0045816730707883835,
+              "exit_code": 0
+            }
+          ],
+          "command": "ls -la; cat README.md; sqlite3 ../data/current.db '.tables'"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_4834e2c208494ce1915b3bf80242a3e5",
+          "name": "bash",
+          "arguments": {
+            "command": "sqlite3 ../data/current.db '.schema'"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 1646,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 26,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1672,
+        "attribution": {
+          "items": {
+            "at_0cc0b23c87bf1e25016af09889dc9887d0b08f422304e0894c": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+              "input_tokens": 36,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09889dc9c87d0a12519a62d3ea888": {
+              "input_tokens": 740,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 740,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 26
+            },
+            "msg_0cc0b23c87bf1e25016af09889dc9887d09024d5c2b3c49ae0": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af09889dc9887d0b71fc0dea27be355": {
+              "input_tokens": 611,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0cc0b23c87bf1e25016af09889dc0487d0a6fe8627a9d28276",
+      "elapsed_s": 1.618993042036891,
+      "token_accounting": {
+        "input_tokens": 1646,
+        "input_uncached_tokens": 1646,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 26,
+        "reasoning_tokens": 0,
+        "total_tokens": 1672
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0cc0b23c87bf1e25016af09889dc0487d0a6fe8627a9d28276",
+        "object": "response",
+        "created_at": 1794152586,
+        "completed_at": 1794152587,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29",
+            "call_id": "call_4834e2c208494ce1915b3bf80242a3e5",
+            "name": "bash",
+            "arguments": "{\"command\":\"sqlite3 ../data/current.db '.schema'\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "a0f6df76-5c98-4780-845d-b9d8168effa2",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 1646,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 26,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1672,
+          "attribution": {
+            "items": {
+              "at_0cc0b23c87bf1e25016af09889dc9887d0b08f422304e0894c": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+                "input_tokens": 36,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09889dc9c87d0a12519a62d3ea888": {
+                "input_tokens": 740,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 740,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 26
+              },
+              "msg_0cc0b23c87bf1e25016af09889dc9887d09024d5c2b3c49ae0": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af09889dc9887d0b71fc0dea27be355": {
+                "input_tokens": 611,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 8298,
+      "tool_results": [
+        {
+          "output": "CREATE TABLE subsystems(subsystem_id INTEGER PRIMARY KEY, subsystem_code TEXT NOT NULL UNIQUE);\nCREATE TABLE services(service_id INTEGER PRIMARY KEY, subsystem_id INTEGER NOT NULL REFERENCES subsystems, service_code TEXT NOT NULL UNIQUE);\nCREATE TABLE regions(region_id INTEGER PRIMARY KEY, region_code TEXT NOT NULL UNIQUE);\nCREATE TABLE tenant_tiers(tier_id INTEGER PRIMARY KEY, tier_code TEXT NOT NULL UNIQUE);\nCREATE TABLE tenants(tenant_id INTEGER PRIMARY KEY, tenant_key TEXT NOT NULL UNIQUE, tier_id INTEGER NOT NULL REFERENCES tenant_tiers);\nCREATE TABLE worker_pools(pool_id INTEGER PRIMARY KEY, region_id INTEGER NOT NULL REFERENCES regions, pool_code TEXT NOT NULL UNIQUE);\nCREATE TABLE policy_profiles(profile_id INTEGER PRIMARY KEY, profile_code TEXT NOT NULL UNIQUE, deadline_ms INTEGER NOT NULL CHECK(deadline_ms>0), max_attempts INTEGER NOT NULL CHECK(max_attempts>=1));\nCREATE TABLE failure_codes(code_id INTEGER PRIMARY KEY, code TEXT NOT NULL UNIQUE, is_success INTEGER NOT NULL CHECK(is_success IN (0,1)), description TEXT NOT NULL);\nCREATE TABLE releases(release_id INTEGER PRIMARY KEY, service_id INTEGER NOT NULL REFERENCES services, build_code TEXT NOT NULL UNIQUE);\nCREATE TABLE change_kinds(kind_id INTEGER PRIMARY KEY, kind_code TEXT NOT NULL UNIQUE);\nCREATE TABLE change_events(change_id INTEGER PRIMARY KEY, effective_at_ms INTEGER NOT NULL, kind_id INTEGER NOT NULL REFERENCES change_kinds, service_id INTEGER NOT NULL REFERENCES services, pool_id INTEGER REFERENCES worker_pools, before_json TEXT NOT NULL CHECK(json_valid(before_json)), after_json TEXT NOT NULL CHECK(json_valid(after_json)), change_note TEXT NOT NULL);\nCREATE TABLE service_routes(route_id INTEGER PRIMARY KEY, service_id INTEGER NOT NULL REFERENCES services, route_key TEXT NOT NULL UNIQUE);\nCREATE TABLE route_assignments(assignment_id INTEGER PRIMARY KEY, route_id INTEGER NOT NULL REFERENCES service_routes, effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER NOT NULL, pool_id INTEGER NOT NULL REFERENCES worker_pools, profile_id INTEGER NOT NULL REFERENCES policy_profiles, release_id INTEGER NOT NULL REFERENCES releases, CHECK(effective_to_ms>effective_from_ms), UNIQUE(route_id,effective_from_ms));\nCREATE TABLE operation_classes(class_id INTEGER PRIMARY KEY, class_code TEXT NOT NULL UNIQUE, description TEXT NOT NULL);\nCREATE TABLE logical_operations(operation_id INTEGER PRIMARY KEY, tenant_id INTEGER NOT NULL REFERENCES tenants, route_id INTEGER NOT NULL REFERENCES service_routes, class_id INTEGER NOT NULL REFERENCES operation_classes, opened_at_ms INTEGER NOT NULL);\nCREATE TABLE attempt_events(attempt_id INTEGER PRIMARY KEY, operation_id INTEGER NOT NULL REFERENCES logical_operations, attempt_no INTEGER NOT NULL CHECK(attempt_no>=1), started_at_ms INTEGER NOT NULL, completed_at_ms INTEGER NOT NULL, code_id INTEGER NOT NULL REFERENCES failure_codes, queue_ms INTEGER NOT NULL CHECK(queue_ms>=0), execution_ms INTEGER NOT NULL CHECK(execution_ms>=0), CHECK(completed_at_ms-started_at_ms=queue_ms+execution_ms), UNIQUE(operation_id,attempt_no));\nCREATE TABLE telemetry_signals(signal_id INTEGER PRIMARY KEY, signal_code TEXT NOT NULL UNIQUE, unit TEXT NOT NULL, description TEXT NOT NULL);\nCREATE TABLE telemetry_samples(sample_id INTEGER PRIMARY KEY, pool_id INTEGER NOT NULL REFERENCES worker_pools, signal_id INTEGER NOT NULL REFERENCES telemetry_signals, measured_at_ms INTEGER NOT NULL, value REAL NOT NULL, UNIQUE(pool_id,signal_id,measured_at_ms));\nCREATE TABLE incident_windows(incident_id INTEGER PRIMARY KEY, incident_key TEXT NOT NULL UNIQUE, subsystem_id INTEGER NOT NULL REFERENCES subsystems, start_ms INTEGER NOT NULL, end_ms INTEGER NOT NULL, report_summary TEXT NOT NULL, CHECK(end_ms>start_ms));\nCREATE TABLE feed_registry(version INTEGER PRIMARY KEY, event_table TEXT NOT NULL UNIQUE, event_grain TEXT NOT NULL CHECK(event_grain IN ('attempt','operation')), effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER, lifecycle TEXT NOT NULL CHECK(lifecycle IN ('active','historical')), operation_key_column TEXT NOT NULL, attribution_basis TEXT NOT NULL, CHECK(effective_to_ms IS NULL OR effective_to_ms>effective_from_ms));\nCREATE INDEX ops_open ON logical_operations(opened_at_ms,route_id);\nCREATE INDEX attempts_operation ON attempt_events(operation_id,attempt_no DESC);\nCREATE INDEX assignments_effective ON route_assignments(route_id,effective_from_ms,effective_to_ms);\nCREATE INDEX samples_window ON telemetry_samples(measured_at_ms,pool_id,signal_id);\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.0038118400843814015, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.23704862699378282,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.0038118400843814015,
+              "exit_code": 0
+            }
+          ],
+          "command": "sqlite3 ../data/current.db '.schema'"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_6cc39ca3922e49cfa39e55f8fdd6c766",
+          "name": "bash",
+          "arguments": {
+            "command": "sqlite3 -header -column ../data/current.db 'select * from feed_registry; select service_id,service_code from services;'"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2602,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 43,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2645,
+        "attribution": {
+          "items": {
+            "at_0cc0b23c87bf1e25016af0988bb49887d098e7d7620e256ba1": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+              "input_tokens": 36,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988bb49887d099cbc77e914f04a2": {
+              "input_tokens": 740,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 740,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af0988bb49887d0a8fb39287aff4230": {
+              "input_tokens": 928,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 43
+            },
+            "msg_0cc0b23c87bf1e25016af0988bb49887d0b0fcb3ec05d86659": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af0988bb49887d0b37d5f539d6c1039": {
+              "input_tokens": 611,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0cc0b23c87bf1e25016af0988bb3f487d0861da31db093efff",
+      "elapsed_s": 1.7333766829688102,
+      "token_accounting": {
+        "input_tokens": 2602,
+        "input_uncached_tokens": 2602,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 43,
+        "reasoning_tokens": 0,
+        "total_tokens": 2645
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0cc0b23c87bf1e25016af0988bb3f487d0861da31db093efff",
+        "object": "response",
+        "created_at": 1794152587,
+        "completed_at": 1794152588,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c",
+            "call_id": "call_6cc39ca3922e49cfa39e55f8fdd6c766",
+            "name": "bash",
+            "arguments": "{\"command\":\"sqlite3 -header -column ../data/current.db 'select * from feed_registry; select service_id,service_code from services;'\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "47d41953-9dc6-4e64-9f71-41ffc333ca90",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 2602,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 43,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2645,
+          "attribution": {
+            "items": {
+              "at_0cc0b23c87bf1e25016af0988bb49887d098e7d7620e256ba1": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+                "input_tokens": 36,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988bb49887d099cbc77e914f04a2": {
+                "input_tokens": 740,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 740,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af0988bb49887d0a8fb39287aff4230": {
+                "input_tokens": 928,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 43
+              },
+              "msg_0cc0b23c87bf1e25016af0988bb49887d0b0fcb3ec05d86659": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af0988bb49887d0b37d5f539d6c1039": {
+                "input_tokens": 611,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 13372,
+      "tool_results": [
+        {
+          "output": "version  event_table     event_grain  effective_from_ms  effective_to_ms  lifecycle  operation_key_column  attribution_basis                                   \n-------  --------------  -----------  -----------------  ---------------  ---------  --------------------  ----------------------------------------------------\n1        attempt_events  attempt      1777593600000                       active     operation_id          Routing decision effective at logical operation open\nservice_id  service_code\n----------  ------------\n2           ledger-sync \n1           parcel-index\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004258707049302757, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.2206673149485141,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.004258707049302757,
+              "exit_code": 0
+            }
+          ],
+          "command": "sqlite3 -header -column ../data/current.db 'select * from feed_registry; select service_id,service_code from services;'"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_27df1da558e14ae4a2f64dfd985c4143",
+          "name": "bash",
+          "arguments": {
+            "command": "python3 - <<'PY'\nimport datetime\nfor d in ['2026-05-01T10:00:00+00:00','2026-05-01T11:00:00+00:00']:\n print(int(datetime.datetime.fromisoformat(d).timestamp()*1000))\nPY"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2789,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 85,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2874,
+        "attribution": {
+          "items": {
+            "at_0cc0b23c87bf1e25016af0988db59087d0a0402f00637fb129": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+              "input_tokens": 36,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+              "input_tokens": 45,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988db59087d08b50119709158981": {
+              "input_tokens": 142,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 142,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af0988db59087d09179131987da9de3": {
+              "input_tokens": 928,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af0988db59087d09c8218e571eab2ce": {
+              "input_tokens": 740,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 740,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 85
+            },
+            "msg_0cc0b23c87bf1e25016af0988db59087d080e660dccb888c84": {
+              "input_tokens": 611,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af0988db59087d0b94fb2946a1281fe": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0cc0b23c87bf1e25016af0988db4ec87d097937c0f215382f8",
+      "elapsed_s": 2.714210543083027,
+      "token_accounting": {
+        "input_tokens": 2789,
+        "input_uncached_tokens": 2789,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 85,
+        "reasoning_tokens": 0,
+        "total_tokens": 2874
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0cc0b23c87bf1e25016af0988db4ec87d097937c0f215382f8",
+        "object": "response",
+        "created_at": 1794152589,
+        "completed_at": 1794152591,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033",
+            "call_id": "call_27df1da558e14ae4a2f64dfd985c4143",
+            "name": "bash",
+            "arguments": "{\"command\":\"python3 - <<'PY'\\nimport datetime\\nfor d in ['2026-05-01T10:00:00+00:00','2026-05-01T11:00:00+00:00']:\\n print(int(datetime.datetime.fromisoformat(d).timestamp()*1000))\\nPY\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "bb9d9f6f-eda9-4faa-add4-c9266513ac7b",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 2789,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 85,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2874,
+          "attribution": {
+            "items": {
+              "at_0cc0b23c87bf1e25016af0988db59087d0a0402f00637fb129": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+                "input_tokens": 36,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+                "input_tokens": 45,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988db59087d08b50119709158981": {
+                "input_tokens": 142,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 142,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af0988db59087d09179131987da9de3": {
+                "input_tokens": 928,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af0988db59087d09c8218e571eab2ce": {
+                "input_tokens": 740,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 740,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 85
+              },
+              "msg_0cc0b23c87bf1e25016af0988db59087d080e660dccb888c84": {
+                "input_tokens": 611,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af0988db59087d0b94fb2946a1281fe": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 14557,
+      "tool_results": [
+        {
+          "output": "1777629600000\n1777633200000\n",
+          "exit_code": 0,
+          "wall_seconds": 0.04392809700220823,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "python3 - <<'PY'\nimport datetime\nfor d in ['2026-05-01T10:00:00+00:00','2026-05-01T11:00:00+00:00']:\n print(int(datetime.datetime.fromisoformat(d).timestamp()*1000))\nPY"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_afb573b45d8544dc8f0f355432fa0f79",
+          "name": "bash",
+          "arguments": {
+            "command": "sqlite3 -header -column ../data/current.db <<'SQL'\nWITH ops AS (SELECT o.operation_id,s.service_code FROM logical_operations o JOIN service_routes r USING(route_id) JOIN services s USING(service_id) WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000), stats AS (SELECT ops.operation_id,ops.service_code,count(a.attempt_id) attempts,sum(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) failed_attempts,max(a.attempt_no) max_no,max(CASE WHEN a.attempt_no=(SELECT max(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=ops.operation_id) THEN f.is_success END) final_success FROM ops LEFT JOIN attempt_events a USING(operation_id) LEFT JOIN failure_codes f USING(code_id) GROUP BY ops.operation_id) SELECT service_code,count(*) operations,sum(attempts) attempts,sum(failed_attempts) failed_attempts,sum(final_success=0) terminal_failures,sum(max_no>1) retried FROM stats GROUP BY service_code;\nWITH ops AS (SELECT o.operation_id,o.route_id,s.service_code,o.opened_at_ms FROM logical_operations o JOIN service_routes r USING(route_id) JOIN services s USING(service_id) WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000) SELECT service_code,count(distinct a.pool_id) pools FROM ops JOIN route_assignments a ON a.route_id=ops.route_id AND ops.opened_at_ms>=a.effective_from_ms AND ops.opened_at_ms<a.effective_to_ms GROUP BY service_code;\nSQL"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2903,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 364,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3267,
+        "attribution": {
+          "items": {
+            "at_0cc0b23c87bf1e25016af0989086d487d0a285d6767b2c09f9": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+              "input_tokens": 36,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+              "input_tokens": 45,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+              "input_tokens": 87,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0989086d487d082efb997c9c20893": {
+              "input_tokens": 928,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af0989086d487d08686cd87cbe470e5": {
+              "input_tokens": 740,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 740,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af0989086d487d096cc80073fe1f917": {
+              "input_tokens": 27,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 27,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af0989086d487d0a6e8c7246077f86e": {
+              "input_tokens": 142,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 142,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 364
+            },
+            "msg_0cc0b23c87bf1e25016af0989086d487d0ac4f44dc002c1562": {
+              "input_tokens": 611,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af0989086d487d0ad365bfa1d7e7bf5": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0cc0b23c87bf1e25016af09890863c87d09732e7da70b78b96",
+      "elapsed_s": 7.815479604061693,
+      "token_accounting": {
+        "input_tokens": 2903,
+        "input_uncached_tokens": 2903,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 364,
+        "reasoning_tokens": 0,
+        "total_tokens": 3267
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0cc0b23c87bf1e25016af09890863c87d09732e7da70b78b96",
+        "object": "response",
+        "created_at": 1794152592,
+        "completed_at": 1794152599,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73",
+            "call_id": "call_afb573b45d8544dc8f0f355432fa0f79",
+            "name": "bash",
+            "arguments": "{\"command\":\"sqlite3 -header -column ../data/current.db <<'SQL'\\nWITH ops AS (SELECT o.operation_id,s.service_code FROM logical_operations o JOIN service_routes r USING(route_id) JOIN services s USING(service_id) WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000), stats AS (SELECT ops.operation_id,ops.service_code,count(a.attempt_id) attempts,sum(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) failed_attempts,max(a.attempt_no) max_no,max(CASE WHEN a.attempt_no=(SELECT max(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=ops.operation_id) THEN f.is_success END) final_success FROM ops LEFT JOIN attempt_events a USING(operation_id) LEFT JOIN failure_codes f USING(code_id) GROUP BY ops.operation_id) SELECT service_code,count(*) operations,sum(attempts) attempts,sum(failed_attempts) failed_attempts,sum(final_success=0) terminal_failures,sum(max_no>1) retried FROM stats GROUP BY service_code;\\nWITH ops AS (SELECT o.operation_id,o.route_id,s.service_code,o.opened_at_ms FROM logical_operations o JOIN service_routes r USING(route_id) JOIN services s USING(service_id) WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000) SELECT service_code,count(distinct a.pool_id) pools FROM ops JOIN route_assignments a ON a.route_id=ops.route_id AND ops.opened_at_ms>=a.effective_from_ms AND ops.opened_at_ms<a.effective_to_ms GROUP BY service_code;\\nSQL\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "20fb3df4-ec64-445e-a048-5b1772fbde6e",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 2903,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 364,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 3267,
+          "attribution": {
+            "items": {
+              "at_0cc0b23c87bf1e25016af0989086d487d0a285d6767b2c09f9": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+                "input_tokens": 36,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+                "input_tokens": 45,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+                "input_tokens": 87,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0989086d487d082efb997c9c20893": {
+                "input_tokens": 928,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af0989086d487d08686cd87cbe470e5": {
+                "input_tokens": 740,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 740,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af0989086d487d096cc80073fe1f917": {
+                "input_tokens": 27,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 27,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af0989086d487d0a6e8c7246077f86e": {
+                "input_tokens": 142,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 142,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 364
+              },
+              "msg_0cc0b23c87bf1e25016af0989086d487d0ac4f44dc002c1562": {
+                "input_tokens": 611,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af0989086d487d0ad365bfa1d7e7bf5": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 16300,
+      "tool_results": [
+        {
+          "output": "service_code  operations  attempts  failed_attempts  terminal_failures  retried\n------------  ----------  --------  ---------------  -----------------  -------\nledger-sync   2000        2300      350              50                 250    \nparcel-index  2000        2300      350              50                 250    \nservice_code  pools\n------------  -----\nledger-sync   2    \nparcel-index  2    \n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.03439933399204165, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.29558134300168604,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.03439933399204165,
+              "exit_code": 0
+            }
+          ],
+          "command": "sqlite3 -header -column ../data/current.db <<'SQL'\nWITH ops AS (SELECT o.operation_id,s.service_code FROM logical_operations o JOIN service_routes r USING(route_id) JOIN services s USING(service_id) WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000), stats AS (SELECT ops.operation_id,ops.service_code,count(a.attempt_id) attempts,sum(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) failed_attempts,max(a.attempt_no) max_no,max(CASE WHEN a.attempt_no=(SELECT max(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=ops.operation_id) THEN f.is_success END) final_success FROM ops LEFT JOIN attempt_events a USING(operation_id) LEFT JOIN failure_codes f USING(code_id) GROUP BY ops.operation_id) SELECT service_code,count(*) operations,sum(attempts) attempts,sum(failed_attempts) failed_attempts,sum(final_success=0) terminal_failures,sum(max_no>1) retried FROM stats GROUP BY service_code;\nWITH ops AS (SELECT o.operation_id,o.route_id,s.service_code,o.opened_at_ms FROM logical_operations o JOIN service_routes r USING(route_id) JOIN services s USING(service_id) WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000) SELECT service_code,count(distinct a.pool_id) pools FROM ops JOIN route_assignments a ON a.route_id=ops.route_id AND ops.opened_at_ms>=a.effective_from_ms AND ops.opened_at_ms<a.effective_to_ms GROUP BY service_code;\nSQL"
+        }
+      ]
+    },
+    {
+      "tool_calls": [],
+      "final_text": "{\"answer\":{\"totals\":{\"operations\":4000,\"attempts\":4600,\"failed_attempts\":700,\"terminal_failures\":100,\"retried_operations\":500},\"services\":[{\"service_code\":\"ledger-sync\",\"operations\":2000,\"attempts\":2300,\"failed_attempts\":350,\"terminal_failures\":50,\"retried_operations\":250,\"terminal_failure_pct\":2.5,\"physical_pools\":2},{\"service_code\":\"parcel-index\",\"operations\":2000,\"attempts\":2300,\"failed_attempts\":350,\"terminal_failures\":50,\"retried_operations\":250,\"terminal_failure_pct\":2.5,\"physical_pools\":2}]},\"caveats\":[\"Attempts and terminal failures are not interchangeable: attempts count every try, while terminal failures count operations whose final attempt failed. Earlier failed attempts can be followed by success.\",\"Physical pools are counted from the routing assignment effective when each operation opened.\"] ,\"evidence_sql\":[\"WITH ops AS (SELECT o.operation_id,s.service_code FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000), per_op AS (SELECT ops.operation_id,ops.service_code,COUNT(a.attempt_id) AS attempts,SUM(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) AS failed_attempts,MAX(a.attempt_no) AS max_attempt_no,MAX(CASE WHEN a.attempt_no=(SELECT MAX(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=ops.operation_id) THEN f.is_success END) AS final_success FROM ops LEFT JOIN attempt_events a ON a.operation_id=ops.operation_id LEFT JOIN failure_codes f ON f.code_id=a.code_id GROUP BY ops.operation_id,ops.service_code) SELECT service_code,COUNT(*) AS operations,SUM(attempts) AS attempts,SUM(failed_attempts) AS failed_attempts,SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END) AS terminal_failures,SUM(CASE WHEN max_attempt_no>1 THEN 1 ELSE 0 END) AS retried_operations,100.0*SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END)/COUNT(*) AS terminal_failure_pct FROM per_op GROUP BY service_code ORDER BY service_code;\",\"WITH ops AS (SELECT o.operation_id,o.route_id,o.opened_at_ms,s.service_code FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000) SELECT service_code,COUNT(DISTINCT a.pool_id) AS physical_pools FROM ops JOIN route_assignments a ON a.route_id=ops.route_id AND ops.opened_at_ms>=a.effective_from_ms AND ops.opened_at_ms<a.effective_to_ms GROUP BY service_code ORDER BY service_code;\",\"WITH ops AS (SELECT o.operation_id FROM logical_operations o WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000), per_op AS (SELECT ops.operation_id,COUNT(a.attempt_id) AS attempts,SUM(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) AS failed_attempts,MAX(a.attempt_no) AS max_attempt_no,MAX(CASE WHEN a.attempt_no=(SELECT MAX(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=ops.operation_id) THEN f.is_success END) AS final_success FROM ops LEFT JOIN attempt_events a ON a.operation_id=ops.operation_id LEFT JOIN failure_codes f ON f.code_id=a.code_id GROUP BY ops.operation_id) SELECT COUNT(*) AS operations,SUM(attempts) AS attempts,SUM(failed_attempts) AS failed_attempts,SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END) AS terminal_failures,SUM(CASE WHEN max_attempt_no>1 THEN 1 ELSE 0 END) AS retried_operations FROM per_op;\"]}",
+      "usage": {
+        "input_tokens": 3407,
+        "input_tokens_details": {
+          "cached_tokens": 2432,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 870,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 4277,
+        "attribution": {
+          "items": {
+            "at_0cc0b23c87bf1e25016af09898b01c87d0a9a76b9cd35efecf": {
+              "input_tokens": 120,
+              "cached_tokens": 120,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+              "input_tokens": 36,
+              "cached_tokens": 36,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+              "input_tokens": 28,
+              "cached_tokens": 28,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+              "input_tokens": 45,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+              "input_tokens": 87,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+              "input_tokens": 366,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09898b01c87d0a504c30c1724b0cc": {
+              "input_tokens": 740,
+              "cached_tokens": 740,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 740,
+                  "cached_tokens": 740,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af09898b02087d0960b14f401ba762d": {
+              "input_tokens": 142,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 142,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af09898b02087d0975ecb2cee47f5ab": {
+              "input_tokens": 27,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 27,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af09898b02087d0a948fa4bf8216c4a": {
+              "input_tokens": 138,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 138,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af09898b02087d0aea46ed69b0d870e": {
+              "input_tokens": 928,
+              "cached_tokens": 760,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 760,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af09898b01c87d0aec906ed113756e2": {
+              "input_tokens": 137,
+              "cached_tokens": 137,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 137,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af09898b01c87d0bed507c7cb193211": {
+              "input_tokens": 611,
+              "cached_tokens": 611,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 611,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 870,
+              "content": [
+                {
+                  "input_tokens": 2,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 870
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0cc0b23c87bf1e25016af09898af6087d0a31af9637a47e812",
+      "elapsed_s": 17.315738786011934,
+      "token_accounting": {
+        "input_tokens": 3407,
+        "input_uncached_tokens": 975,
+        "cache_read_input_tokens": 2432,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 870,
+        "reasoning_tokens": 0,
+        "total_tokens": 4277
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0cc0b23c87bf1e25016af09898af6087d0a31af9637a47e812",
+        "object": "response",
+        "created_at": 1794152600,
+        "completed_at": 1794152617,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "message",
+            "id": "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"answer\":{\"totals\":{\"operations\":4000,\"attempts\":4600,\"failed_attempts\":700,\"terminal_failures\":100,\"retried_operations\":500},\"services\":[{\"service_code\":\"ledger-sync\",\"operations\":2000,\"attempts\":2300,\"failed_attempts\":350,\"terminal_failures\":50,\"retried_operations\":250,\"terminal_failure_pct\":2.5,\"physical_pools\":2},{\"service_code\":\"parcel-index\",\"operations\":2000,\"attempts\":2300,\"failed_attempts\":350,\"terminal_failures\":50,\"retried_operations\":250,\"terminal_failure_pct\":2.5,\"physical_pools\":2}]},\"caveats\":[\"Attempts and terminal failures are not interchangeable: attempts count every try, while terminal failures count operations whose final attempt failed. Earlier failed attempts can be followed by success.\",\"Physical pools are counted from the routing assignment effective when each operation opened.\"] ,\"evidence_sql\":[\"WITH ops AS (SELECT o.operation_id,s.service_code FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000), per_op AS (SELECT ops.operation_id,ops.service_code,COUNT(a.attempt_id) AS attempts,SUM(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) AS failed_attempts,MAX(a.attempt_no) AS max_attempt_no,MAX(CASE WHEN a.attempt_no=(SELECT MAX(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=ops.operation_id) THEN f.is_success END) AS final_success FROM ops LEFT JOIN attempt_events a ON a.operation_id=ops.operation_id LEFT JOIN failure_codes f ON f.code_id=a.code_id GROUP BY ops.operation_id,ops.service_code) SELECT service_code,COUNT(*) AS operations,SUM(attempts) AS attempts,SUM(failed_attempts) AS failed_attempts,SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END) AS terminal_failures,SUM(CASE WHEN max_attempt_no>1 THEN 1 ELSE 0 END) AS retried_operations,100.0*SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END)/COUNT(*) AS terminal_failure_pct FROM per_op GROUP BY service_code ORDER BY service_code;\",\"WITH ops AS (SELECT o.operation_id,o.route_id,o.opened_at_ms,s.service_code FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000) SELECT service_code,COUNT(DISTINCT a.pool_id) AS physical_pools FROM ops JOIN route_assignments a ON a.route_id=ops.route_id AND ops.opened_at_ms>=a.effective_from_ms AND ops.opened_at_ms<a.effective_to_ms GROUP BY service_code ORDER BY service_code;\",\"WITH ops AS (SELECT o.operation_id FROM logical_operations o WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000), per_op AS (SELECT ops.operation_id,COUNT(a.attempt_id) AS attempts,SUM(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) AS failed_attempts,MAX(a.attempt_no) AS max_attempt_no,MAX(CASE WHEN a.attempt_no=(SELECT MAX(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=ops.operation_id) THEN f.is_success END) AS final_success FROM ops LEFT JOIN attempt_events a ON a.operation_id=ops.operation_id LEFT JOIN failure_codes f ON f.code_id=a.code_id GROUP BY ops.operation_id) SELECT COUNT(*) AS operations,SUM(attempts) AS attempts,SUM(failed_attempts) AS failed_attempts,SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END) AS terminal_failures,SUM(CASE WHEN max_attempt_no>1 THEN 1 ELSE 0 END) AS retried_operations FROM per_op;\"]}",
+                "annotations": [],
+                "logprobs": []
+              }
+            ],
+            "phase": "final_answer"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "74839554-12d8-4194-8e84-86e5c51309f8",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 3407,
+          "input_tokens_details": {
+            "cached_tokens": 2432,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 870,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 4277,
+          "attribution": {
+            "items": {
+              "at_0cc0b23c87bf1e25016af09898b01c87d0a9a76b9cd35efecf": {
+                "input_tokens": 120,
+                "cached_tokens": 120,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+                "input_tokens": 36,
+                "cached_tokens": 36,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+                "input_tokens": 28,
+                "cached_tokens": 28,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+                "input_tokens": 45,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+                "input_tokens": 87,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+                "input_tokens": 366,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09898b01c87d0a504c30c1724b0cc": {
+                "input_tokens": 740,
+                "cached_tokens": 740,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 740,
+                    "cached_tokens": 740,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af09898b02087d0960b14f401ba762d": {
+                "input_tokens": 142,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 142,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af09898b02087d0975ecb2cee47f5ab": {
+                "input_tokens": 27,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 27,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af09898b02087d0a948fa4bf8216c4a": {
+                "input_tokens": 138,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 138,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af09898b02087d0aea46ed69b0d870e": {
+                "input_tokens": 928,
+                "cached_tokens": 760,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 760,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af09898b01c87d0aec906ed113756e2": {
+                "input_tokens": 137,
+                "cached_tokens": 137,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 137,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af09898b01c87d0bed507c7cb193211": {
+                "input_tokens": 611,
+                "cached_tokens": 611,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 611,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 870,
+                "content": [
+                  {
+                    "input_tokens": 2,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 870
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 20573,
+      "tool_results": []
+    }
+  ],
+  "status": "completed",
+  "final_text": "{\"answer\":{\"totals\":{\"operations\":4000,\"attempts\":4600,\"failed_attempts\":700,\"terminal_failures\":100,\"retried_operations\":500},\"services\":[{\"service_code\":\"ledger-sync\",\"operations\":2000,\"attempts\":2300,\"failed_attempts\":350,\"terminal_failures\":50,\"retried_operations\":250,\"terminal_failure_pct\":2.5,\"physical_pools\":2},{\"service_code\":\"parcel-index\",\"operations\":2000,\"attempts\":2300,\"failed_attempts\":350,\"terminal_failures\":50,\"retried_operations\":250,\"terminal_failure_pct\":2.5,\"physical_pools\":2}]},\"caveats\":[\"Attempts and terminal failures are not interchangeable: attempts count every try, while terminal failures count operations whose final attempt failed. Earlier failed attempts can be followed by success.\",\"Physical pools are counted from the routing assignment effective when each operation opened.\"] ,\"evidence_sql\":[\"WITH ops AS (SELECT o.operation_id,s.service_code FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000), per_op AS (SELECT ops.operation_id,ops.service_code,COUNT(a.attempt_id) AS attempts,SUM(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) AS failed_attempts,MAX(a.attempt_no) AS max_attempt_no,MAX(CASE WHEN a.attempt_no=(SELECT MAX(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=ops.operation_id) THEN f.is_success END) AS final_success FROM ops LEFT JOIN attempt_events a ON a.operation_id=ops.operation_id LEFT JOIN failure_codes f ON f.code_id=a.code_id GROUP BY ops.operation_id,ops.service_code) SELECT service_code,COUNT(*) AS operations,SUM(attempts) AS attempts,SUM(failed_attempts) AS failed_attempts,SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END) AS terminal_failures,SUM(CASE WHEN max_attempt_no>1 THEN 1 ELSE 0 END) AS retried_operations,100.0*SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END)/COUNT(*) AS terminal_failure_pct FROM per_op GROUP BY service_code ORDER BY service_code;\",\"WITH ops AS (SELECT o.operation_id,o.route_id,o.opened_at_ms,s.service_code FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000) SELECT service_code,COUNT(DISTINCT a.pool_id) AS physical_pools FROM ops JOIN route_assignments a ON a.route_id=ops.route_id AND ops.opened_at_ms>=a.effective_from_ms AND ops.opened_at_ms<a.effective_to_ms GROUP BY service_code ORDER BY service_code;\",\"WITH ops AS (SELECT o.operation_id FROM logical_operations o WHERE o.opened_at_ms>=1777629600000 AND o.opened_at_ms<1777633200000), per_op AS (SELECT ops.operation_id,COUNT(a.attempt_id) AS attempts,SUM(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) AS failed_attempts,MAX(a.attempt_no) AS max_attempt_no,MAX(CASE WHEN a.attempt_no=(SELECT MAX(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=ops.operation_id) THEN f.is_success END) AS final_success FROM ops LEFT JOIN attempt_events a ON a.operation_id=ops.operation_id LEFT JOIN failure_codes f ON f.code_id=a.code_id GROUP BY ops.operation_id) SELECT COUNT(*) AS operations,SUM(attempts) AS attempts,SUM(failed_attempts) AS failed_attempts,SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END) AS terminal_failures,SUM(CASE WHEN max_attempt_no>1 THEN 1 ELSE 0 END) AS retried_operations FROM per_op;\"]}",
+  "memory_before": {},
+  "elapsed_s": 33.920049228006974,
+  "memory_after": {},
+  "db_hash_after": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+  "db_unchanged": true
+}

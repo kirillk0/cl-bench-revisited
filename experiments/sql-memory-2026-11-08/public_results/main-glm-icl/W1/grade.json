@@ -1,0 +1,67 @@
+{
+  "task": "W1",
+  "schema_valid": true,
+  "schema_errors": [],
+  "metric_fraction": 0.45,
+  "suggested_metric_points_out_of_70": 31.5,
+  "section_results": {
+    "services": {
+      "correct": 8,
+      "total": 16,
+      "fraction": 0.5,
+      "failed_paths": [
+        "services[service_code=ledger-sync].attempts",
+        "services[service_code=ledger-sync].operations",
+        "services[service_code=ledger-sync].retried_operations",
+        "services[service_code=ledger-sync].terminal_failure_pct",
+        "services[service_code=parcel-index].attempts",
+        "services[service_code=parcel-index].operations",
+        "services[service_code=parcel-index].retried_operations",
+        "services[service_code=parcel-index].terminal_failure_pct"
+      ]
+    },
+    "totals": {
+      "correct": 2,
+      "total": 5,
+      "fraction": 0.4,
+      "failed_paths": [
+        "totals.attempts",
+        "totals.operations",
+        "totals.retried_operations"
+      ]
+    }
+  },
+  "evidence_execution_checks": [
+    {
+      "index": 0,
+      "read_only_executable_with_table_reads": true,
+      "rows": 1
+    },
+    {
+      "index": 1,
+      "read_only_executable_with_table_reads": true,
+      "rows": 2
+    },
+    {
+      "index": 2,
+      "read_only_executable_with_table_reads": false,
+      "error": "no such column: a.natt"
+    },
+    {
+      "index": 3,
+      "read_only_executable_with_table_reads": true,
+      "rows": 1
+    }
+  ],
+  "human_review_required": {
+    "evidence_points_out_of_10": "Queries must actually support the reported values and attribution. Executing successfully or SELECTing constants is not sufficient.",
+    "verdict_points_out_of_20": [
+      {
+        "criterion": "Distinguishes logical operations, retries and terminal failures; a recovered retry is not a failed operation.",
+        "id": "grain"
+      }
+    ]
+  },
+  "overall_score": null,
+  "note": "No automatic preferred-opinion score. Review factual criteria, uncertainty and evidence support; invalid schema prevents full credit but does not erase diagnostics."
+}

@@ -13,3 +13,14 @@
 - Replaced sandbox with a real chroot per arm: normal bash/coreutils/SQLite/Python stdlib, private `/tmp`, `/var/tmp`, `/dev/shm`, per-task cleanup; only managed `memory` persists. Network syscalls still denied; no keys passed. No proxy or tool semantics changed.
 - Tested same `/tmp/q.py` path in two jails (A/B values remain isolated), scratch reset, standard SQLite/Python execution, credentials absence and network denial. Tests passed.
 - `build_jail.py` included for reproducibility. SQLite library/runtime shared read-only via filesystem hardlinks; databases and writable directories separate. New jobs named `pilot2-luna-*`.
+
+
+## Post-run evaluation/guard diagnostics
+The frozen exact-label grader rejects arbitrary but unambiguous period labels although the schema permits strings. Preserve strict grades and add separately documented semantic-normalized grading, never correcting numbers. Haiku stateless T1 stopped at max_tokens=8192 after successful tool work: censored, not memory failure. Add explicit CLI output-token override (default unchanged), run T1-only fresh diagnostic with 32768; run unattempted stateless T2/T3 at original settings in a separately named continuation. Error-response usage is in ledger even when absent from successful-turn totals.
+
+## Selected diagnostic: GLM T2 inherited aggregation error
+Selected after observing primary ICL W1/W2/T2 reuse operation-to-attempt fanout and COUNT(*) at attempt grain, versus fresh/managed trajectories. Run two additional exact pre-T2 native-history replays and two additional fresh T2 runs, identical database/prompts/defaults. Preserve initial runs separately. Test numerical correctness and presence of the specific fanout, not merely overall scores. Selection is exploratory; no population significance claim or inference that memory generally hurts. A reset removes all prior experience, not only the faulty SQL, hence isolates history treatment but not single-token mechanism. No gold correction or evaluator feedback supplied.
+
+
+## Selected diagnostic: memory adoption/lifecycle clarity
+Primary minimal instruction produced no notes in Luna/Haiku and one unconsumed answer.json in GLM. Separate Luna five-task sequence with explicit generic lifecycle wording (fresh conversations, only ../memory persists, no automatic injection), no prescribed note content, memory tool, mandatory write, or answers. Flag memory_instruction_variant=lifecycle. This changes instructions and is not pooled into primary three-arm outcome. Frozen dataset unchanged.

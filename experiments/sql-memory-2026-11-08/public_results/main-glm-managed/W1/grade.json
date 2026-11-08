@@ -1,0 +1,54 @@
+{
+  "task": "W1",
+  "schema_valid": true,
+  "schema_errors": [],
+  "metric_fraction": 1.0,
+  "suggested_metric_points_out_of_70": 70.0,
+  "section_results": {
+    "services": {
+      "correct": 16,
+      "total": 16,
+      "fraction": 1.0,
+      "failed_paths": []
+    },
+    "totals": {
+      "correct": 5,
+      "total": 5,
+      "fraction": 1.0,
+      "failed_paths": []
+    }
+  },
+  "evidence_execution_checks": [
+    {
+      "index": 0,
+      "read_only_executable_with_table_reads": true,
+      "rows": 2
+    },
+    {
+      "index": 1,
+      "read_only_executable_with_table_reads": true,
+      "rows": 1
+    },
+    {
+      "index": 2,
+      "read_only_executable_with_table_reads": true,
+      "rows": 2
+    },
+    {
+      "index": 3,
+      "read_only_executable_with_table_reads": true,
+      "rows": 1
+    }
+  ],
+  "human_review_required": {
+    "evidence_points_out_of_10": "Queries must actually support the reported values and attribution. Executing successfully or SELECTing constants is not sufficient.",
+    "verdict_points_out_of_20": [
+      {
+        "criterion": "Distinguishes logical operations, retries and terminal failures; a recovered retry is not a failed operation.",
+        "id": "grain"
+      }
+    ]
+  },
+  "overall_score": null,
+  "note": "No automatic preferred-opinion score. Review factual criteria, uncertainty and evidence support; invalid schema prevents full credit but does not erase diagnostics."
+}

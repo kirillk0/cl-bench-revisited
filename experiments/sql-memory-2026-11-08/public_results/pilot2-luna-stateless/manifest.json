@@ -1,0 +1,25 @@
+{
+  "job": "pilot2-luna-stateless",
+  "provider": "codex",
+  "model": "gpt-6-luna",
+  "arm": "stateless",
+  "tasks": [
+    "W1",
+    "W2",
+    "T1",
+    "T2",
+    "T3"
+  ],
+  "started_at": 1794152578.0936816,
+  "valid_for_comparison": true,
+  "sandbox_version": "chroot-v2",
+  "system": "You are a SQL analyst working with a local SQLite database. You have a generic bash tool. The read-only database is ../data/current.db; README.md describes the business data contract. Inspect files, schema and data as needed; sqlite3 CLI and Python are available. Return the JSON requested by the user, with executable SQL evidence. Your work directory is scratch space and is recreated for every new task. There is no network access. Tool output is limited to 60,000 characters, with explicit truncation; use normal shell filtering or files for larger outputs. There is no score or penalty for the number of SQL queries. Focus on correct, supported answers.",
+  "guards": {
+    "model_turns": 80,
+    "task_wall_s": 900,
+    "shell_wall_s": 60,
+    "output_chars": 60000
+  },
+  "protocol_sha256": "4b0b3e1ece3703ff4564e60c9b0c2e305c3dc17290f8135c19797e22d3d5b6c3",
+  "finished_at": 1794152899.3825877
+}

@@ -1,0 +1,63 @@
+{
+  "task": "T2",
+  "schema_valid": true,
+  "schema_errors": [],
+  "metric_fraction": 1.0,
+  "suggested_metric_points_out_of_70": 70.0,
+  "section_results": {
+    "changes": {
+      "correct": 5,
+      "total": 5,
+      "fraction": 1.0,
+      "failed_paths": []
+    },
+    "pool_metrics": {
+      "correct": 52,
+      "total": 52,
+      "fraction": 1.0,
+      "failed_paths": []
+    },
+    "telemetry": {
+      "correct": 80,
+      "total": 80,
+      "fraction": 1.0,
+      "failed_paths": []
+    }
+  },
+  "evidence_execution_checks": [
+    {
+      "index": 0,
+      "read_only_executable_with_table_reads": true,
+      "rows": 4
+    },
+    {
+      "index": 1,
+      "read_only_executable_with_table_reads": true,
+      "rows": 16
+    },
+    {
+      "index": 2,
+      "read_only_executable_with_table_reads": true,
+      "rows": 1
+    }
+  ],
+  "human_review_required": {
+    "evidence_points_out_of_10": "Queries must actually support the reported values and attribution. Executing successfully or SELECTing constants is not sufficient.",
+    "verdict_points_out_of_20": [
+      {
+        "criterion": "Names sync-south +15 pp; sync-north unchanged.",
+        "id": "localization"
+      },
+      {
+        "criterion": "Uses unchanged 250 ms policy, workers 16\u21924, queue 4\u2192180 and failed-terminal queue 5\u2192235 ms to favor capacity/queue pressure over deadline tightening or upstream slowdown.",
+        "id": "mechanism"
+      },
+      {
+        "criterion": "Does not transfer the earlier incident explanation despite matching DEADLINE symptom, and does not claim causal proof.",
+        "id": "restraint"
+      }
+    ]
+  },
+  "overall_score": null,
+  "note": "No automatic preferred-opinion score. Review factual criteria, uncertainty and evidence support; invalid schema prevents full credit but does not erase diagnostics."
+}

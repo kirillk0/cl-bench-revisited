@@ -1,0 +1,3256 @@
+{
+  "task_id": "T2",
+  "db_sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+  "snapshot": "pre.db",
+  "prompt": "Use only the supplied current.db and README. All windows below are UTC and half-open, selected by logical-operation open time. A terminal-failure percentage has logical operations as its denominator; attempt-failure percentage has attempts as its denominator. Return only JSON matching the provided schema. Percentages use 0–100, differences use percentage points. evidence_sql must contain executable read-only SQLite queries with literal bounds, not pseudocode. Arrays may be in any order; include every requested group. A zero numerator is not missing data. No web or network access is needed.\n\nInvestigate ledger-sync on 2026-05-07, reference 10:00–11:00 versus incident 11:00–12:00. For every period and serving physical pool report operations, terminal failures and percentage, attempts, failed attempts and percentage, retried operations, minimum/maximum applied deadline_ms, and mean queue_ms and execution_ms of the terminal attempt among terminally failed operations. Report means of every recorded telemetry signal for those pools and applied changes during 10:00–12:00 (kind, pool, effective time, before/after JSON strings). In assessment identify the strongest supported proximal explanation, the affected pool and failure increase in pp. Explicitly evaluate both a deadline-policy change and worker/queue pressure against the current evidence. Explain the remaining causal limitation.\n\nRequired JSON response schema:\n{\"$schema\": \"https://json-schema.org/draft/2020-12/schema\", \"additionalProperties\": false, \"properties\": {\"answer\": {\"additionalProperties\": false, \"properties\": {\"assessment\": {\"type\": \"string\"}, \"changes\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"after_json\": {\"type\": \"string\"}, \"before_json\": {\"type\": \"string\"}, \"effective_at_ms\": {\"type\": \"integer\"}, \"kind_code\": {\"type\": \"string\"}, \"pool_code\": {\"type\": \"string\"}}, \"required\": [\"kind_code\", \"pool_code\", \"effective_at_ms\", \"before_json\", \"after_json\"], \"type\": \"object\"}, \"maxItems\": 1, \"minItems\": 1, \"type\": \"array\"}, \"pool_metrics\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"attempt_failure_pct\": {\"type\": \"number\"}, \"attempts\": {\"type\": \"integer\"}, \"failed_attempts\": {\"type\": \"integer\"}, \"failed_terminal_execution_mean_ms\": {\"type\": \"number\"}, \"failed_terminal_queue_mean_ms\": {\"type\": \"number\"}, \"max_deadline_ms\": {\"type\": \"integer\"}, \"min_deadline_ms\": {\"type\": \"integer\"}, \"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"pool_code\": {\"type\": \"string\"}, \"retried_operations\": {\"type\": \"integer\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"period\", \"pool_code\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\", \"attempts\", \"failed_attempts\", \"attempt_failure_pct\", \"retried_operations\", \"min_deadline_ms\", \"max_deadline_ms\", \"failed_terminal_queue_mean_ms\", \"failed_terminal_execution_mean_ms\"], \"type\": \"object\"}, \"maxItems\": 4, \"minItems\": 4, \"type\": \"array\"}, \"telemetry\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"mean_value\": {\"type\": \"number\"}, \"period\": {\"type\": \"string\"}, \"pool_code\": {\"type\": \"string\"}, \"signal_code\": {\"type\": \"string\"}, \"unit\": {\"type\": \"string\"}}, \"required\": [\"period\", \"pool_code\", \"signal_code\", \"mean_value\", \"unit\"], \"type\": \"object\"}, \"maxItems\": 16, \"minItems\": 16, \"type\": \"array\"}}, \"required\": [\"pool_metrics\", \"telemetry\", \"changes\", \"assessment\"], \"type\": \"object\"}, \"caveats\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}, \"evidence_sql\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}}, \"required\": [\"answer\", \"evidence_sql\", \"caveats\"], \"type\": \"object\"}",
+  "turns": [
+    {
+      "tool_calls": [
+        {
+          "id": "call_5a37e700373e4056ac6758c1d8398e77",
+          "name": "bash",
+          "arguments": {
+            "command": "cat README.md; sqlite3 ../data/current.db '.tables'"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 1175,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 30,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1205,
+        "attribution": {
+          "items": {
+            "at_0a3041fbfe966663016af09941af7487d0a703d2a7e79a9559": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 30
+            },
+            "msg_0a3041fbfe966663016af09941af7487d08ccb3a262988d318": {
+              "input_tokens": 916,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 916,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0a3041fbfe966663016af09941af7487d09e35d14ceda972d9": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0a3041fbfe966663016af09941aed087d0bf6f2ad3d9391e88",
+      "elapsed_s": 1.40556420001667,
+      "token_accounting": {
+        "input_tokens": 1175,
+        "input_uncached_tokens": 1175,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 30,
+        "reasoning_tokens": 0,
+        "total_tokens": 1205
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0a3041fbfe966663016af09941aed087d0bf6f2ad3d9391e88",
+        "object": "response",
+        "created_at": 1794152769,
+        "completed_at": 1794152770,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407",
+            "call_id": "call_5a37e700373e4056ac6758c1d8398e77",
+            "name": "bash",
+            "arguments": "{\"command\":\"cat README.md; sqlite3 ../data/current.db '.tables'\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "352aa994-7081-4c8a-9245-ddc9b85c4cbb",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 1175,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 30,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1205,
+          "attribution": {
+            "items": {
+              "at_0a3041fbfe966663016af09941af7487d0a703d2a7e79a9559": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 30
+              },
+              "msg_0a3041fbfe966663016af09941af7487d08ccb3a262988d318": {
+                "input_tokens": 916,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 916,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0a3041fbfe966663016af09941af7487d09e35d14ceda972d9": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 5489,
+      "tool_results": [
+        {
+          "output": "# Operations analytics data contract\n\nYou receive `current.db` (SQLite), this README and one task. Inspect the database schema, foreign keys and registry yourself. No network or external data is needed. The database is read-only input; use a read-only connection. All observations are synthetic, internally consistent and complete for the requested windows. Do not interpret absent windows as zero traffic. No hidden business definitions depend on an earlier task.\n\n* Times ending `_ms` are integer Unix milliseconds in UTC. Window membership uses the **logical operation open time**, with inclusive lower and exclusive upper bounds. Effective intervals are also half-open; a NULL end means no known end.\n* One logical operation is one business request. Retries are attempts, not extra incidents or requests. A terminal failure means the final attempt/outcome has a failure code whose `is_success` is 0; an earlier failed attempt followed by success is not a terminal failure. All included operations are finished and attempt ordinals are complete. An operation with more than one attempt is a retried operation, including ultimately failed operations.\n* `feed_registry` is authoritative about event sources, grains, applicable operation-open intervals and serving attribution. The active entry describes current instrumentation; historical entries remain authoritative for their historical intervals. Do not assume the highest version covers all history or that a still-queryable table is current. Historical values are retained without rewriting them into a new meaning.\n* Routing identifiers are routing intent, not necessarily unique physical pools. For routing-time instrumentation, select the assignment effective when the operation opens. For execution-time instrumentation, recorded execution attribution is authoritative. Multiple aliases or execution identities may belong to the same physical pool. Never count each identity as an independent pool.\n* End-to-end latency is final completion minus operation open, including queueing, execution and retry backoff. Per-attempt queue/execution times exclude backoff. Outcome totals cover all its attempts. Rates use logical-operation denominators unless a task explicitly asks for attempt metrics. Percentages are in percent (0–100); rate differences are percentage points.\n* Telemetry is sampled independently. A requested window mean is the ordinary arithmetic mean of samples in that window. An upstream p95 sample is a percentile observation, not an operation-weighted mean. Changes describe applied configuration, not a causal experiment. Tenant tier, operation class, release, region and pool are distinct dimensions.\n\nReturn only the JSON requested in the task: `answer`, `evidence_sql` (a list of executable, read-only SQLite SELECT/WITH statements supporting the answer), and `caveats` (a list of short strings). No placeholders, SQL parameters, temporary tables or external files in evidence. State uncertainty; observational association alone does not prove causation.\nattempt_events      incident_windows    releases            telemetry_samples \nchange_events       logical_operations  route_assignments   telemetry_signals \nchange_kinds        operation_classes   service_routes      tenant_tiers      \nfailure_codes       policy_profiles     services            tenants           \nfeed_registry       regions             subsystems          worker_pools      \n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004892319091595709, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.28354448603931814,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.004892319091595709,
+              "exit_code": 0
+            }
+          ],
+          "command": "cat README.md; sqlite3 ../data/current.db '.tables'"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_4d7a6edd90c24a3492935e548df09546",
+          "name": "bash",
+          "arguments": {
+            "command": "sqlite3 ../data/current.db '.schema'"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 1867,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 26,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1893,
+        "attribution": {
+          "items": {
+            "at_0a3041fbfe966663016af099436d5087d080110c53184ec1dd": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+              "input_tokens": 32,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af099436d5087d0aafc80a8fe5e63c0": {
+              "input_tokens": 660,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 660,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 26
+            },
+            "msg_0a3041fbfe966663016af099436d5087d0ad776d289c403846": {
+              "input_tokens": 916,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 916,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0a3041fbfe966663016af099436d5087d0b110013cbf07c5c1": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0a3041fbfe966663016af099436c9487d0a431938e4e0076cf",
+      "elapsed_s": 1.4356472570216283,
+      "token_accounting": {
+        "input_tokens": 1867,
+        "input_uncached_tokens": 1867,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 26,
+        "reasoning_tokens": 0,
+        "total_tokens": 1893
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0a3041fbfe966663016af099436c9487d0a431938e4e0076cf",
+        "object": "response",
+        "created_at": 1794152771,
+        "completed_at": 1794152772,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0",
+            "call_id": "call_4d7a6edd90c24a3492935e548df09546",
+            "name": "bash",
+            "arguments": "{\"command\":\"sqlite3 ../data/current.db '.schema'\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "7492da9a-a466-4077-88b7-2161cc98dc30",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 1867,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 26,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1893,
+          "attribution": {
+            "items": {
+              "at_0a3041fbfe966663016af099436d5087d080110c53184ec1dd": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+                "input_tokens": 32,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af099436d5087d0aafc80a8fe5e63c0": {
+                "input_tokens": 660,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 660,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 26
+              },
+              "msg_0a3041fbfe966663016af099436d5087d0ad776d289c403846": {
+                "input_tokens": 916,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 916,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0a3041fbfe966663016af099436d5087d0b110013cbf07c5c1": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 9400,
+      "tool_results": [
+        {
+          "output": "CREATE TABLE subsystems(subsystem_id INTEGER PRIMARY KEY, subsystem_code TEXT NOT NULL UNIQUE);\nCREATE TABLE services(service_id INTEGER PRIMARY KEY, subsystem_id INTEGER NOT NULL REFERENCES subsystems, service_code TEXT NOT NULL UNIQUE);\nCREATE TABLE regions(region_id INTEGER PRIMARY KEY, region_code TEXT NOT NULL UNIQUE);\nCREATE TABLE tenant_tiers(tier_id INTEGER PRIMARY KEY, tier_code TEXT NOT NULL UNIQUE);\nCREATE TABLE tenants(tenant_id INTEGER PRIMARY KEY, tenant_key TEXT NOT NULL UNIQUE, tier_id INTEGER NOT NULL REFERENCES tenant_tiers);\nCREATE TABLE worker_pools(pool_id INTEGER PRIMARY KEY, region_id INTEGER NOT NULL REFERENCES regions, pool_code TEXT NOT NULL UNIQUE);\nCREATE TABLE policy_profiles(profile_id INTEGER PRIMARY KEY, profile_code TEXT NOT NULL UNIQUE, deadline_ms INTEGER NOT NULL CHECK(deadline_ms>0), max_attempts INTEGER NOT NULL CHECK(max_attempts>=1));\nCREATE TABLE failure_codes(code_id INTEGER PRIMARY KEY, code TEXT NOT NULL UNIQUE, is_success INTEGER NOT NULL CHECK(is_success IN (0,1)), description TEXT NOT NULL);\nCREATE TABLE releases(release_id INTEGER PRIMARY KEY, service_id INTEGER NOT NULL REFERENCES services, build_code TEXT NOT NULL UNIQUE);\nCREATE TABLE change_kinds(kind_id INTEGER PRIMARY KEY, kind_code TEXT NOT NULL UNIQUE);\nCREATE TABLE change_events(change_id INTEGER PRIMARY KEY, effective_at_ms INTEGER NOT NULL, kind_id INTEGER NOT NULL REFERENCES change_kinds, service_id INTEGER NOT NULL REFERENCES services, pool_id INTEGER REFERENCES worker_pools, before_json TEXT NOT NULL CHECK(json_valid(before_json)), after_json TEXT NOT NULL CHECK(json_valid(after_json)), change_note TEXT NOT NULL);\nCREATE TABLE service_routes(route_id INTEGER PRIMARY KEY, service_id INTEGER NOT NULL REFERENCES services, route_key TEXT NOT NULL UNIQUE);\nCREATE TABLE route_assignments(assignment_id INTEGER PRIMARY KEY, route_id INTEGER NOT NULL REFERENCES service_routes, effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER NOT NULL, pool_id INTEGER NOT NULL REFERENCES worker_pools, profile_id INTEGER NOT NULL REFERENCES policy_profiles, release_id INTEGER NOT NULL REFERENCES releases, CHECK(effective_to_ms>effective_from_ms), UNIQUE(route_id,effective_from_ms));\nCREATE TABLE operation_classes(class_id INTEGER PRIMARY KEY, class_code TEXT NOT NULL UNIQUE, description TEXT NOT NULL);\nCREATE TABLE logical_operations(operation_id INTEGER PRIMARY KEY, tenant_id INTEGER NOT NULL REFERENCES tenants, route_id INTEGER NOT NULL REFERENCES service_routes, class_id INTEGER NOT NULL REFERENCES operation_classes, opened_at_ms INTEGER NOT NULL);\nCREATE TABLE attempt_events(attempt_id INTEGER PRIMARY KEY, operation_id INTEGER NOT NULL REFERENCES logical_operations, attempt_no INTEGER NOT NULL CHECK(attempt_no>=1), started_at_ms INTEGER NOT NULL, completed_at_ms INTEGER NOT NULL, code_id INTEGER NOT NULL REFERENCES failure_codes, queue_ms INTEGER NOT NULL CHECK(queue_ms>=0), execution_ms INTEGER NOT NULL CHECK(execution_ms>=0), CHECK(completed_at_ms-started_at_ms=queue_ms+execution_ms), UNIQUE(operation_id,attempt_no));\nCREATE TABLE telemetry_signals(signal_id INTEGER PRIMARY KEY, signal_code TEXT NOT NULL UNIQUE, unit TEXT NOT NULL, description TEXT NOT NULL);\nCREATE TABLE telemetry_samples(sample_id INTEGER PRIMARY KEY, pool_id INTEGER NOT NULL REFERENCES worker_pools, signal_id INTEGER NOT NULL REFERENCES telemetry_signals, measured_at_ms INTEGER NOT NULL, value REAL NOT NULL, UNIQUE(pool_id,signal_id,measured_at_ms));\nCREATE TABLE incident_windows(incident_id INTEGER PRIMARY KEY, incident_key TEXT NOT NULL UNIQUE, subsystem_id INTEGER NOT NULL REFERENCES subsystems, start_ms INTEGER NOT NULL, end_ms INTEGER NOT NULL, report_summary TEXT NOT NULL, CHECK(end_ms>start_ms));\nCREATE TABLE feed_registry(version INTEGER PRIMARY KEY, event_table TEXT NOT NULL UNIQUE, event_grain TEXT NOT NULL CHECK(event_grain IN ('attempt','operation')), effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER, lifecycle TEXT NOT NULL CHECK(lifecycle IN ('active','historical')), operation_key_column TEXT NOT NULL, attribution_basis TEXT NOT NULL, CHECK(effective_to_ms IS NULL OR effective_to_ms>effective_from_ms));\nCREATE INDEX ops_open ON logical_operations(opened_at_ms,route_id);\nCREATE INDEX attempts_operation ON attempt_events(operation_id,attempt_no DESC);\nCREATE INDEX assignments_effective ON route_assignments(route_id,effective_from_ms,effective_to_ms);\nCREATE INDEX samples_window ON telemetry_samples(measured_at_ms,pool_id,signal_id);\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.0038436040049418807, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.3154211840592325,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.0038436040049418807,
+              "exit_code": 0
+            }
+          ],
+          "command": "sqlite3 ../data/current.db '.schema'"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_4a032a5f82bc40349fd4a7d3905e4a99",
+          "name": "bash",
+          "arguments": {
+            "command": "sqlite3 -header -column ../data/current.db \"select * from feed_registry; select * from incident_windows;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2823,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 41,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2864,
+        "attribution": {
+          "items": {
+            "at_0a3041fbfe966663016af099452cb087d09034542997cc4b06": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+              "input_tokens": 32,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af099452cb087d0baeddc57c4133f8d": {
+              "input_tokens": 928,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af099452cb087d0be40f9b4d65c0d9c": {
+              "input_tokens": 660,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 660,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af09945f2d487d0b83ca2d11bfb1624": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 41
+            },
+            "msg_0a3041fbfe966663016af099452cb087d091d62800d1542a82": {
+              "input_tokens": 916,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 916,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0a3041fbfe966663016af099452cb087d0b6392719eab50bc4": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0a3041fbfe966663016af099452c1487d0829cfa3e2520a51e",
+      "elapsed_s": 1.7417560799513012,
+      "token_accounting": {
+        "input_tokens": 2823,
+        "input_uncached_tokens": 2823,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 41,
+        "reasoning_tokens": 0,
+        "total_tokens": 2864
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0a3041fbfe966663016af099452c1487d0829cfa3e2520a51e",
+        "object": "response",
+        "created_at": 1794152773,
+        "completed_at": 1794152774,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0a3041fbfe966663016af09945f2d487d0b83ca2d11bfb1624",
+            "call_id": "call_4a032a5f82bc40349fd4a7d3905e4a99",
+            "name": "bash",
+            "arguments": "{\"command\":\"sqlite3 -header -column ../data/current.db \\\"select * from feed_registry; select * from incident_windows;\\\"\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "7ad47289-11ca-419a-bd4b-c2522a6dc2a3",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 2823,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 41,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2864,
+          "attribution": {
+            "items": {
+              "at_0a3041fbfe966663016af099452cb087d09034542997cc4b06": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+                "input_tokens": 32,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af099452cb087d0baeddc57c4133f8d": {
+                "input_tokens": 928,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af099452cb087d0be40f9b4d65c0d9c": {
+                "input_tokens": 660,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 660,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af09945f2d487d0b83ca2d11bfb1624": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 41
+              },
+              "msg_0a3041fbfe966663016af099452cb087d091d62800d1542a82": {
+                "input_tokens": 916,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 916,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0a3041fbfe966663016af099452cb087d0b6392719eab50bc4": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 14466,
+      "tool_results": [
+        {
+          "output": "version  event_table     event_grain  effective_from_ms  effective_to_ms  lifecycle  operation_key_column  attribution_basis                                   \n-------  --------------  -----------  -----------------  ---------------  ---------  --------------------  ----------------------------------------------------\n1        attempt_events  attempt      1777593600000                       active     operation_id          Routing decision effective at logical operation open\nincident_id  incident_key  subsystem_id  start_ms       end_ms         report_summary           \n-----------  ------------  ------------  -------------  -------------  -------------------------\n1            I-early       1             1777719600000  1777723200000  Search deadline alarm    \n2            I-later       2             1778151600000  1778155200000  Settlement deadline alarm\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.00377987592946738, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.24065286701079458,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.00377987592946738,
+              "exit_code": 0
+            }
+          ],
+          "command": "sqlite3 -header -column ../data/current.db \"select * from feed_registry; select * from incident_windows;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_79872c8da3bc43f7bcbb73e5b0853a26",
+          "name": "bash",
+          "arguments": {
+            "command": "python3 - <<'PY'\nimport sqlite3,datetime\nc=sqlite3.connect('../data/current.db');\nfor t in ['services','subsystems','worker_pools','policy_profiles','change_kinds','telemetry_signals']:\n print(t,c.execute('select * from '+t).fetchall())\nprint(datetime.datetime.fromtimestamp(1778119200,datetime.timezone.utc))\nPY"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 3074,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 105,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3179,
+        "attribution": {
+          "items": {
+            "at_0a3041fbfe966663016af0994745f087d0abb40305f931ab14": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+              "input_tokens": 32,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af09945f2d487d0b83ca2d11bfb1624": {
+              "input_tokens": 43,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994745f087d0aa0ffeda01156395": {
+              "input_tokens": 928,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0994745f087d0ac7cf1eb22acfdec": {
+              "input_tokens": 660,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 660,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0994745f087d0b44e4f0f3d9ad589": {
+              "input_tokens": 208,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 208,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af09947fbc087d09f10d8c630dd0512": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 105
+            },
+            "msg_0a3041fbfe966663016af0994745f087d0a574a35137a2e1ef": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0a3041fbfe966663016af0994745f087d0a5754b24bb5d078a": {
+              "input_tokens": 916,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 916,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0a3041fbfe966663016af09947452c87d0a80bdee3471e9dcd",
+      "elapsed_s": 3.065700080944225,
+      "token_accounting": {
+        "input_tokens": 3074,
+        "input_uncached_tokens": 3074,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 105,
+        "reasoning_tokens": 0,
+        "total_tokens": 3179
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0a3041fbfe966663016af09947452c87d0a80bdee3471e9dcd",
+        "object": "response",
+        "created_at": 1794152775,
+        "completed_at": 1794152777,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0a3041fbfe966663016af09947fbc087d09f10d8c630dd0512",
+            "call_id": "call_79872c8da3bc43f7bcbb73e5b0853a26",
+            "name": "bash",
+            "arguments": "{\"command\":\"python3 - <<'PY'\\nimport sqlite3,datetime\\nc=sqlite3.connect('../data/current.db');\\nfor t in ['services','subsystems','worker_pools','policy_profiles','change_kinds','telemetry_signals']:\\n print(t,c.execute('select * from '+t).fetchall())\\nprint(datetime.datetime.fromtimestamp(1778119200,datetime.timezone.utc))\\nPY\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "f17db05c-9f9f-443e-b7a2-5879ad9a868b",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 3074,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 105,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 3179,
+          "attribution": {
+            "items": {
+              "at_0a3041fbfe966663016af0994745f087d0abb40305f931ab14": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+                "input_tokens": 32,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af09945f2d487d0b83ca2d11bfb1624": {
+                "input_tokens": 43,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994745f087d0aa0ffeda01156395": {
+                "input_tokens": 928,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0994745f087d0ac7cf1eb22acfdec": {
+                "input_tokens": 660,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 660,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0994745f087d0b44e4f0f3d9ad589": {
+                "input_tokens": 208,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 208,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af09947fbc087d09f10d8c630dd0512": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 105
+              },
+              "msg_0a3041fbfe966663016af0994745f087d0a574a35137a2e1ef": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0a3041fbfe966663016af0994745f087d0a5754b24bb5d078a": {
+                "input_tokens": 916,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 916,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 16086,
+      "tool_results": [
+        {
+          "output": "services [(1, 1, 'parcel-index'), (2, 2, 'ledger-sync')]\nsubsystems [(1, 'search'), (2, 'settlement')]\nworker_pools [(1, 1, 'idx-north'), (2, 2, 'idx-south'), (3, 1, 'sync-north'), (4, 2, 'sync-south')]\npolicy_profiles [(1, 'balanced-250', 250, 3), (2, 'fast-80', 80, 3)]\nchange_kinds [(1, 'deadline_policy'), (2, 'worker_limit'), (3, 'release_exposure'), (4, 'feed_migration')]\ntelemetry_signals [(1, 'upstream_latency_p95', 'ms', 'Upstream execution p95; sampled independently of client deadlines'), (2, 'queue_depth', 'operations', 'Pending operations at the pool'), (3, 'available_workers', 'workers', 'Observed available worker slots'), (4, 'cpu_utilization', 'fraction', 'Pool CPU utilization')]\n2026-05-07 02:00:00+00:00\n",
+          "exit_code": 0,
+          "wall_seconds": 0.08529969793744385,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "python3 - <<'PY'\nimport sqlite3,datetime\nc=sqlite3.connect('../data/current.db');\nfor t in ['services','subsystems','worker_pools','policy_profiles','change_kinds','telemetry_signals']:\n print(t,c.execute('select * from '+t).fetchall())\nprint(datetime.datetime.fromtimestamp(1778119200,datetime.timezone.utc))\nPY"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_2dc0b2f3c1fc4462a8fac04c35c752fa",
+          "name": "bash",
+          "arguments": {
+            "command": "python3 - <<'PY'\nimport datetime\nfor h in [10,11,12]:print(int(datetime.datetime(2026,5,7,h,tzinfo=datetime.timezone.utc).timestamp()*1000))\nPY\nsqlite3 -header -column ../data/current.db \"select * from change_events where service_id=2;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 3438,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 102,
+        "output_tokens_details": {
+          "reasoning_tokens": 10
+        },
+        "total_tokens": 3540,
+        "attribution": {
+          "items": {
+            "at_0a3041fbfe966663016af0994a8e5c87d0aa76d64e205b72bc": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+              "input_tokens": 32,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af09945f2d487d0b83ca2d11bfb1624": {
+              "input_tokens": 43,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af09947fbc087d09f10d8c630dd0512": {
+              "input_tokens": 107,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994a8e5c87d082a39ad89703fb37": {
+              "input_tokens": 928,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0994a8e5c87d09d579142ee3eb7a6": {
+              "input_tokens": 257,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 257,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0994a8e5c87d0aac01fbba1d3881b": {
+              "input_tokens": 208,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 208,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0994a8e5c87d0b9b533b07ab9e72d": {
+              "input_tokens": 660,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 660,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0994b74e487d0ab7ac5a7d659b685": {
+              "input_tokens": 0,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 92
+            },
+            "msg_0a3041fbfe966663016af0994a8e5c87d0871a9bbe922082b4": {
+              "input_tokens": 916,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 916,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0a3041fbfe966663016af0994a8e5c87d099be7f0f989572fb": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "rs_0a3041fbfe966663016af0994b3fa487d0a1d15840cdb30e5b": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 10
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0a3041fbfe966663016af0994a8db487d0962f83992676a031",
+      "elapsed_s": 2.94769239006564,
+      "token_accounting": {
+        "input_tokens": 3438,
+        "input_uncached_tokens": 3438,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 102,
+        "reasoning_tokens": 10,
+        "total_tokens": 3540
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0a3041fbfe966663016af0994a8db487d0962f83992676a031",
+        "object": "response",
+        "created_at": 1794152778,
+        "completed_at": 1794152780,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "reasoning",
+            "id": "rs_0a3041fbfe966663016af0994b3fa487d0a1d15840cdb30e5b",
+            "summary": [],
+            "content": [],
+            "encrypted_content": {
+              "omitted": true,
+              "sha256": "e5ad573786235d6ce403769963980b5cf9e3115d720213b75803b1ce72fa6fa2",
+              "length": 1828
+            }
+          },
+          {
+            "type": "function_call",
+            "id": "fc_0a3041fbfe966663016af0994b74e487d0ab7ac5a7d659b685",
+            "call_id": "call_2dc0b2f3c1fc4462a8fac04c35c752fa",
+            "name": "bash",
+            "arguments": "{\"command\":\"python3 - <<'PY'\\nimport datetime\\nfor h in [10,11,12]:print(int(datetime.datetime(2026,5,7,h,tzinfo=datetime.timezone.utc).timestamp()*1000))\\nPY\\nsqlite3 -header -column ../data/current.db \\\"select * from change_events where service_id=2;\\\"\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "fbcc89ca-21da-45f2-8370-29fd311c3af0",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 3438,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 102,
+          "output_tokens_details": {
+            "reasoning_tokens": 10
+          },
+          "total_tokens": 3540,
+          "attribution": {
+            "items": {
+              "at_0a3041fbfe966663016af0994a8e5c87d0aa76d64e205b72bc": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+                "input_tokens": 32,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af09945f2d487d0b83ca2d11bfb1624": {
+                "input_tokens": 43,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af09947fbc087d09f10d8c630dd0512": {
+                "input_tokens": 107,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994a8e5c87d082a39ad89703fb37": {
+                "input_tokens": 928,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0994a8e5c87d09d579142ee3eb7a6": {
+                "input_tokens": 257,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 257,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0994a8e5c87d0aac01fbba1d3881b": {
+                "input_tokens": 208,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 208,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0994a8e5c87d0b9b533b07ab9e72d": {
+                "input_tokens": 660,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 660,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0994b74e487d0ab7ac5a7d659b685": {
+                "input_tokens": 0,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 92
+              },
+              "msg_0a3041fbfe966663016af0994a8e5c87d0871a9bbe922082b4": {
+                "input_tokens": 916,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 916,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0a3041fbfe966663016af0994a8e5c87d099be7f0f989572fb": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "rs_0a3041fbfe966663016af0994b3fa487d0a1d15840cdb30e5b": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 10
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 19371,
+      "tool_results": [
+        {
+          "output": "1778148000000\n1778151600000\n1778155200000\nchange_id  effective_at_ms  kind_id  service_id  pool_id  before_json           after_json           change_note                   \n---------  ---------------  -------  ----------  -------  --------------------  -------------------  ------------------------------\n5          1778151600000    2        2           4        {\"worker_limit\": 16}  {\"worker_limit\": 4}  Apply worker concurrency limit\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.0035693859681487083, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.2748565280344337,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.0035693859681487083,
+              "exit_code": 0
+            }
+          ],
+          "command": "python3 - <<'PY'\nimport datetime\nfor h in [10,11,12]:print(int(datetime.datetime(2026,5,7,h,tzinfo=datetime.timezone.utc).timestamp()*1000))\nPY\nsqlite3 -header -column ../data/current.db \"select * from change_events where service_id=2;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_8c9f957f9a4443a6877ea3b85ba8031a",
+          "name": "bash",
+          "arguments": {
+            "command": "sqlite3 -header -column ../data/current.db \"select pool_id,signal_id,count(*),avg(value) from telemetry_samples where measured_at_ms>=1778148000000 and measured_at_ms<1778155200000 group by 1,2;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 3690,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 71,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 3761,
+        "attribution": {
+          "items": {
+            "at_0a3041fbfe966663016af0994db85c87d0be9729ab1d3acbb3": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+              "input_tokens": 32,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af09945f2d487d0b83ca2d11bfb1624": {
+              "input_tokens": 43,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af09947fbc087d09f10d8c630dd0512": {
+              "input_tokens": 107,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994b74e487d0ab7ac5a7d659b685": {
+              "input_tokens": 92,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994db86087d098e97f1a1a1edf10": {
+              "input_tokens": 208,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 208,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0994db86087d09bab9e745d15589b": {
+              "input_tokens": 148,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 148,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0994db86087d0a614df88336794c1": {
+              "input_tokens": 257,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 257,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0994db86087d0aad3a854baeae472": {
+              "input_tokens": 928,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0994db86087d0bf918c908615ae69": {
+              "input_tokens": 660,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 660,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0994e975487d0a9c00ce668c40331": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 71
+            },
+            "msg_0a3041fbfe966663016af0994db85c87d0830c1e800acfc699": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0a3041fbfe966663016af0994db86087d08b28c7d95f32c5e3": {
+              "input_tokens": 916,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 916,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "rs_0a3041fbfe966663016af0994b3fa487d0a1d15840cdb30e5b": {
+              "input_tokens": 12,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0a3041fbfe966663016af0994db79887d09d39f503557ecf07",
+      "elapsed_s": 2.459254326997325,
+      "token_accounting": {
+        "input_tokens": 3690,
+        "input_uncached_tokens": 3690,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 71,
+        "reasoning_tokens": 0,
+        "total_tokens": 3761
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0a3041fbfe966663016af0994db79887d09d39f503557ecf07",
+        "object": "response",
+        "created_at": 1794152781,
+        "completed_at": 1794152783,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0a3041fbfe966663016af0994e975487d0a9c00ce668c40331",
+            "call_id": "call_8c9f957f9a4443a6877ea3b85ba8031a",
+            "name": "bash",
+            "arguments": "{\"command\":\"sqlite3 -header -column ../data/current.db \\\"select pool_id,signal_id,count(*),avg(value) from telemetry_samples where measured_at_ms>=1778148000000 and measured_at_ms<1778155200000 group by 1,2;\\\"\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "7b0722b0-25bb-4be9-9590-051a037ba361",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 3690,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 71,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 3761,
+          "attribution": {
+            "items": {
+              "at_0a3041fbfe966663016af0994db85c87d0be9729ab1d3acbb3": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+                "input_tokens": 32,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af09945f2d487d0b83ca2d11bfb1624": {
+                "input_tokens": 43,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af09947fbc087d09f10d8c630dd0512": {
+                "input_tokens": 107,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994b74e487d0ab7ac5a7d659b685": {
+                "input_tokens": 92,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994db86087d098e97f1a1a1edf10": {
+                "input_tokens": 208,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 208,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0994db86087d09bab9e745d15589b": {
+                "input_tokens": 148,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 148,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0994db86087d0a614df88336794c1": {
+                "input_tokens": 257,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 257,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0994db86087d0aad3a854baeae472": {
+                "input_tokens": 928,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0994db86087d0bf918c908615ae69": {
+                "input_tokens": 660,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 660,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0994e975487d0a9c00ce668c40331": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 71
+              },
+              "msg_0a3041fbfe966663016af0994db85c87d0830c1e800acfc699": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0a3041fbfe966663016af0994db86087d08b28c7d95f32c5e3": {
+                "input_tokens": 916,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 916,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "rs_0a3041fbfe966663016af0994b3fa487d0a1d15840cdb30e5b": {
+                "input_tokens": 12,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 20443,
+      "tool_results": [
+        {
+          "output": "pool_id  signal_id  count(*)  avg(value)\n-------  ---------  --------  ----------\n3        1          24        118.0     \n3        2          24        4.0       \n3        3          24        16.0      \n3        4          24        0.42      \n4        1          24        118.0     \n4        2          24        92.0      \n4        3          24        10.0      \n4        4          24        0.42      \n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004161839024163783, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.21769340604078025,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.004161839024163783,
+              "exit_code": 0
+            }
+          ],
+          "command": "sqlite3 -header -column ../data/current.db \"select pool_id,signal_id,count(*),avg(value) from telemetry_samples where measured_at_ms>=1778148000000 and measured_at_ms<1778155200000 group by 1,2;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_482539a7e5f54979bbacaa62aefe14f1",
+          "name": "bash",
+          "arguments": {
+            "command": "cat > /tmp/q.py <<'PY'\nimport sqlite3\nc=sqlite3.connect('../data/current.db'); c.row_factory=sqlite3.Row\nfor x in c.execute('''with o as(select l.operation_id,l.opened_at_ms,a.pool_id,r.profile_id from logical_operations l join service_routes s on s.route_id=l.route_id join route_assignments r on r.route_id=l.route_id and l.opened_at_ms>=r.effective_from_ms and l.opened_at_ms<r.effective_to_ms join (select route_id from service_routes where service_id=2) s2 on s2.route_id=l.route_id join attempt_events e on e.operation_id=l.operation_id join (select operation_id,max(attempt_no) n from attempt_events group by operation_id) z on z.operation_id=e.operation_id and z.n=e.attempt_no join worker_pools a on a.pool_id=r.pool_id where l.opened_at_ms>=1778148000000 and l.opened_at_ms<1778155200000 group by l.operation_id), a as(select o.*,count(e.attempt_id) attempts,sum(case when f.is_success=0 then 1 else 0 end) fails,max(case when e.attempt_no=(select max(attempt_no) from attempt_events where operation_id=o.operation_id) and f.is_success=0 then 1 else 0 end) terminal, max(case when e.attempt_no=(select max(attempt_no) from attempt_events where operation_id=o.operation_id) and f.is_success=0 then e.queue_ms end) q,max(case when e.attempt_no=(select max(attempt_no) from attempt_events where operation_id=o.operation_id) and f.is_success=0 then e.execution_ms end) ex from o join attempt_events e using(operation_id) join failure_codes f using(code_id) group by o.operation_id) select case when opened_at_ms<1778151600000 then 'reference' else 'incident' end period,pool_code,count(*) ops,sum(terminal),avg(terminal)*100,sum(attempts),sum(fails),sum(fails)*100.0/sum(attempts),sum(attempts>1),min(deadline_ms),max(deadline_ms),avg(case when terminal then q end),avg(case when terminal then ex end) from a join worker_pools w using(pool_id) join policy_profiles p using(profile_id) group by 1,2'''): print(tuple(x))\nPY\npython3 /tmp/q.py"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 3933,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 537,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 4470,
+        "attribution": {
+          "items": {
+            "at_0a3041fbfe966663016af099506cac87d097f8a5e44a967946": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+              "input_tokens": 32,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af09945f2d487d0b83ca2d11bfb1624": {
+              "input_tokens": 43,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af09947fbc087d09f10d8c630dd0512": {
+              "input_tokens": 107,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994b74e487d0ab7ac5a7d659b685": {
+              "input_tokens": 92,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994e975487d0a9c00ce668c40331": {
+              "input_tokens": 73,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af099506cb087d094bc25a507d9f9d7": {
+              "input_tokens": 208,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 208,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af099506cb087d0959db11846732377": {
+              "input_tokens": 660,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 660,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af099506cb087d096f5d2d99c8a1faf": {
+              "input_tokens": 928,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af099506cb087d0b0be8951adc5fd14": {
+              "input_tokens": 170,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 170,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af099506cb087d0b6403d3179f9203a": {
+              "input_tokens": 257,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 257,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af099506cb087d0bcee6907ac10e9d3": {
+              "input_tokens": 148,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 148,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af09950f59487d0a4ebbfdd2eebf705": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 537
+            },
+            "msg_0a3041fbfe966663016af099506cb087d08ed5b2ca5998d9f3": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0a3041fbfe966663016af099506cb087d0a28e60d61bdf48e2": {
+              "input_tokens": 916,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 916,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "rs_0a3041fbfe966663016af0994b3fa487d0a1d15840cdb30e5b": {
+              "input_tokens": 12,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0a3041fbfe966663016af099506c1087d081bfe40b9da540e8",
+      "elapsed_s": 10.512044494971633,
+      "token_accounting": {
+        "input_tokens": 3933,
+        "input_uncached_tokens": 3933,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 537,
+        "reasoning_tokens": 0,
+        "total_tokens": 4470
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0a3041fbfe966663016af099506c1087d081bfe40b9da540e8",
+        "object": "response",
+        "created_at": 1794152784,
+        "completed_at": 1794152794,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0a3041fbfe966663016af09950f59487d0a4ebbfdd2eebf705",
+            "call_id": "call_482539a7e5f54979bbacaa62aefe14f1",
+            "name": "bash",
+            "arguments": "{\"command\":\"cat > /tmp/q.py <<'PY'\\nimport sqlite3\\nc=sqlite3.connect('../data/current.db'); c.row_factory=sqlite3.Row\\nfor x in c.execute('''with o as(select l.operation_id,l.opened_at_ms,a.pool_id,r.profile_id from logical_operations l join service_routes s on s.route_id=l.route_id join route_assignments r on r.route_id=l.route_id and l.opened_at_ms>=r.effective_from_ms and l.opened_at_ms<r.effective_to_ms join (select route_id from service_routes where service_id=2) s2 on s2.route_id=l.route_id join attempt_events e on e.operation_id=l.operation_id join (select operation_id,max(attempt_no) n from attempt_events group by operation_id) z on z.operation_id=e.operation_id and z.n=e.attempt_no join worker_pools a on a.pool_id=r.pool_id where l.opened_at_ms>=1778148000000 and l.opened_at_ms<1778155200000 group by l.operation_id), a as(select o.*,count(e.attempt_id) attempts,sum(case when f.is_success=0 then 1 else 0 end) fails,max(case when e.attempt_no=(select max(attempt_no) from attempt_events where operation_id=o.operation_id) and f.is_success=0 then 1 else 0 end) terminal, max(case when e.attempt_no=(select max(attempt_no) from attempt_events where operation_id=o.operation_id) and f.is_success=0 then e.queue_ms end) q,max(case when e.attempt_no=(select max(attempt_no) from attempt_events where operation_id=o.operation_id) and f.is_success=0 then e.execution_ms end) ex from o join attempt_events e using(operation_id) join failure_codes f using(code_id) group by o.operation_id) select case when opened_at_ms<1778151600000 then 'reference' else 'incident' end period,pool_code,count(*) ops,sum(terminal),avg(terminal)*100,sum(attempts),sum(fails),sum(fails)*100.0/sum(attempts),sum(attempts>1),min(deadline_ms),max(deadline_ms),avg(case when terminal then q end),avg(case when terminal then ex end) from a join worker_pools w using(pool_id) join policy_profiles p using(profile_id) group by 1,2'''): print(tuple(x))\\nPY\\npython3 /tmp/q.py\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "36fc2202-d151-46de-8433-281c8cd2839d",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 3933,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 537,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 4470,
+          "attribution": {
+            "items": {
+              "at_0a3041fbfe966663016af099506cac87d097f8a5e44a967946": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+                "input_tokens": 32,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af09945f2d487d0b83ca2d11bfb1624": {
+                "input_tokens": 43,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af09947fbc087d09f10d8c630dd0512": {
+                "input_tokens": 107,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994b74e487d0ab7ac5a7d659b685": {
+                "input_tokens": 92,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994e975487d0a9c00ce668c40331": {
+                "input_tokens": 73,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af099506cb087d094bc25a507d9f9d7": {
+                "input_tokens": 208,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 208,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af099506cb087d0959db11846732377": {
+                "input_tokens": 660,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 660,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af099506cb087d096f5d2d99c8a1faf": {
+                "input_tokens": 928,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af099506cb087d0b0be8951adc5fd14": {
+                "input_tokens": 170,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 170,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af099506cb087d0b6403d3179f9203a": {
+                "input_tokens": 257,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 257,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af099506cb087d0bcee6907ac10e9d3": {
+                "input_tokens": 148,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 148,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af09950f59487d0a4ebbfdd2eebf705": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 537
+              },
+              "msg_0a3041fbfe966663016af099506cb087d08ed5b2ca5998d9f3": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0a3041fbfe966663016af099506cb087d0a28e60d61bdf48e2": {
+                "input_tokens": 916,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 916,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "rs_0a3041fbfe966663016af0994b3fa487d0a1d15840cdb30e5b": {
+                "input_tokens": 12,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 23240,
+      "tool_results": [
+        {
+          "output": "('incident', 'sync-north', 1000, 25, 2.5, 1150, 175, 15.217391304347826, 125, 250, 250, 5.0, 245.0)\n('incident', 'sync-south', 1000, 175, 17.5, 1550, 725, 46.774193548387096, 375, 250, 250, 235.0, 15.0)\n('reference', 'sync-north', 1000, 25, 2.5, 1150, 175, 15.217391304347826, 125, 250, 250, 5.0, 245.0)\n('reference', 'sync-south', 1000, 25, 2.5, 1150, 175, 15.217391304347826, 125, 250, 250, 5.0, 245.0)\n",
+          "exit_code": 0,
+          "wall_seconds": 0.19574061292223632,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "cat > /tmp/q.py <<'PY'\nimport sqlite3\nc=sqlite3.connect('../data/current.db'); c.row_factory=sqlite3.Row\nfor x in c.execute('''with o as(select l.operation_id,l.opened_at_ms,a.pool_id,r.profile_id from logical_operations l join service_routes s on s.route_id=l.route_id join route_assignments r on r.route_id=l.route_id and l.opened_at_ms>=r.effective_from_ms and l.opened_at_ms<r.effective_to_ms join (select route_id from service_routes where service_id=2) s2 on s2.route_id=l.route_id join attempt_events e on e.operation_id=l.operation_id join (select operation_id,max(attempt_no) n from attempt_events group by operation_id) z on z.operation_id=e.operation_id and z.n=e.attempt_no join worker_pools a on a.pool_id=r.pool_id where l.opened_at_ms>=1778148000000 and l.opened_at_ms<1778155200000 group by l.operation_id), a as(select o.*,count(e.attempt_id) attempts,sum(case when f.is_success=0 then 1 else 0 end) fails,max(case when e.attempt_no=(select max(attempt_no) from attempt_events where operation_id=o.operation_id) and f.is_success=0 then 1 else 0 end) terminal, max(case when e.attempt_no=(select max(attempt_no) from attempt_events where operation_id=o.operation_id) and f.is_success=0 then e.queue_ms end) q,max(case when e.attempt_no=(select max(attempt_no) from attempt_events where operation_id=o.operation_id) and f.is_success=0 then e.execution_ms end) ex from o join attempt_events e using(operation_id) join failure_codes f using(code_id) group by o.operation_id) select case when opened_at_ms<1778151600000 then 'reference' else 'incident' end period,pool_code,count(*) ops,sum(terminal),avg(terminal)*100,sum(attempts),sum(fails),sum(fails)*100.0/sum(attempts),sum(attempts>1),min(deadline_ms),max(deadline_ms),avg(case when terminal then q end),avg(case when terminal then ex end) from a join worker_pools w using(pool_id) join policy_profiles p using(profile_id) group by 1,2'''): print(tuple(x))\nPY\npython3 /tmp/q.py"
+        }
+      ]
+    },
+    {
+      "tool_calls": [],
+      "final_text": "{\n  \"answer\": {\n    \"pool_metrics\": [\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"operations\": 1000,\n        \"terminal_failures\": 25,\n        \"terminal_failure_pct\": 2.5,\n        \"attempts\": 1150,\n        \"failed_attempts\": 175,\n        \"attempt_failure_pct\": 15.217391304347826,\n        \"retried_operations\": 125,\n        \"min_deadline_ms\": 250,\n        \"max_deadline_ms\": 250,\n        \"failed_terminal_queue_mean_ms\": 5,\n        \"failed_terminal_execution_mean_ms\": 245\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"operations\": 1000,\n        \"terminal_failures\": 25,\n        \"terminal_failure_pct\": 2.5,\n        \"attempts\": 1150,\n        \"failed_attempts\": 175,\n        \"attempt_failure_pct\": 15.217391304347826,\n        \"retried_operations\": 125,\n        \"min_deadline_ms\": 250,\n        \"max_deadline_ms\": 250,\n        \"failed_terminal_queue_mean_ms\": 5,\n        \"failed_terminal_execution_mean_ms\": 245\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"operations\": 1000,\n        \"terminal_failures\": 25,\n        \"terminal_failure_pct\": 2.5,\n        \"attempts\": 1150,\n        \"failed_attempts\": 175,\n        \"attempt_failure_pct\": 15.217391304347826,\n        \"retried_operations\": 125,\n        \"min_deadline_ms\": 250,\n        \"max_deadline_ms\": 250,\n        \"failed_terminal_queue_mean_ms\": 5,\n        \"failed_terminal_execution_mean_ms\": 245\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"operations\": 1000,\n        \"terminal_failures\": 175,\n        \"terminal_failure_pct\": 17.5,\n        \"attempts\": 1550,\n        \"failed_attempts\": 725,\n        \"attempt_failure_pct\": 46.774193548387096,\n        \"retried_operations\": 375,\n        \"min_deadline_ms\": 250,\n        \"max_deadline_ms\": 250,\n        \"failed_terminal_queue_mean_ms\": 235,\n        \"failed_terminal_execution_mean_ms\": 15\n      }\n    ],\n    \"telemetry\": [\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"upstream_latency_p95\",\n        \"mean_value\": 118,\n        \"unit\": \"ms\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"queue_depth\",\n        \"mean_value\": 4,\n        \"unit\": \"operations\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"available_workers\",\n        \"mean_value\": 16,\n        \"unit\": \"workers\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"cpu_utilization\",\n        \"mean_value\": 0.42,\n        \"unit\": \"fraction\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"upstream_latency_p95\",\n        \"mean_value\": 118,\n        \"unit\": \"ms\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"queue_depth\",\n        \"mean_value\": 92,\n        \"unit\": \"operations\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"available_workers\",\n        \"mean_value\": 10,\n        \"unit\": \"workers\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"cpu_utilization\",\n        \"mean_value\": 0.42,\n        \"unit\": \"fraction\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"upstream_latency_p95\",\n        \"mean_value\": 118,\n        \"unit\": \"ms\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"queue_depth\",\n        \"mean_value\": 4,\n        \"unit\": \"operations\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"available_workers\",\n        \"mean_value\": 16,\n        \"unit\": \"workers\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"cpu_utilization\",\n        \"mean_value\": 0.42,\n        \"unit\": \"fraction\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"upstream_latency_p95\",\n        \"mean_value\": 118,\n        \"unit\": \"ms\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"queue_depth\",\n        \"mean_value\": 92,\n        \"unit\": \"operations\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"available_workers\",\n        \"mean_value\": 10,\n        \"unit\": \"workers\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"cpu_utilization\",\n        \"mean_value\": 0.42,\n        \"unit\": \"fraction\"\n      }\n    ],\n    \"changes\": [\n      {\n        \"kind_code\": \"worker_limit\",\n        \"pool_code\": \"sync-south\",\n        \"effective_at_ms\": 1778151600000,\n        \"before_json\": \"{\\\"worker_limit\\\": 16}\",\n        \"after_json\": \"{\\\"worker_limit\\\": 4}\"\n      }\n    ],\n    \"assessment\": \"The strongest supported proximal explanation is worker/queue pressure on sync-south, coincident with an applied worker_limit reduction from 16 to 4 at the incident-window boundary. Its terminal-failure rate rose from 2.5% to 17.5%, an increase of 15.0 percentage points; sync-north was unchanged. The incident's failed terminal attempts averaged 235 ms queued and 15 ms executing, versus 5 ms queued and 245 ms executing in the reference, consistent with queueing consuming the fixed 250 ms deadline. The recorded telemetry also shows much higher queue depth on south than north (92 versus 4) and fewer available workers (10 versus 16), although those are period means and do not show a before/after change. A deadline-policy change is not supported: applied deadlines were 250 ms in both pools and periods, and the only recorded applied change is a worker-limit change. This is observational evidence, not proof that the worker-limit change caused the failures; other unmeasured or confounding changes could contribute, and telemetry is independently sampled rather than linked to individual operations.\"\n  },\n  \"evidence_sql\": [\n    \"WITH ops AS (SELECT l.operation_id,l.opened_at_ms,r.pool_id,r.profile_id FROM logical_operations l JOIN service_routes sr ON sr.route_id=l.route_id JOIN services s ON s.service_id=sr.service_id JOIN route_assignments r ON r.route_id=l.route_id AND l.opened_at_ms>=r.effective_from_ms AND l.opened_at_ms<r.effective_to_ms WHERE s.service_code='ledger-sync' AND l.opened_at_ms>=1778148000000 AND l.opened_at_ms<1778155200000), per_op AS (SELECT o.operation_id,o.opened_at_ms,o.pool_id,o.profile_id,count(*) AS attempts,sum(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) AS failed_attempts,max(CASE WHEN a.attempt_no=(SELECT max(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=o.operation_id) AND f.is_success=0 THEN 1 ELSE 0 END) AS terminal_failure,max(CASE WHEN a.attempt_no=(SELECT max(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=o.operation_id) AND f.is_success=0 THEN a.queue_ms END) AS terminal_queue_ms,max(CASE WHEN a.attempt_no=(SELECT max(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=o.operation_id) AND f.is_success=0 THEN a.execution_ms END) AS terminal_execution_ms FROM ops o JOIN attempt_events a ON a.operation_id=o.operation_id JOIN failure_codes f ON f.code_id=a.code_id GROUP BY o.operation_id) SELECT CASE WHEN opened_at_ms<1778151600000 THEN 'reference' ELSE 'incident' END AS period,w.pool_code,count(*) AS operations,sum(terminal_failure) AS terminal_failures,100.0*sum(terminal_failure)/count(*) AS terminal_failure_pct,sum(attempts) AS attempts,sum(failed_attempts) AS failed_attempts,100.0*sum(failed_attempts)/sum(attempts) AS attempt_failure_pct,sum(CASE WHEN attempts>1 THEN 1 ELSE 0 END) AS retried_operations,min(p.deadline_ms) AS min_deadline_ms,max(p.deadline_ms) AS max_deadline_ms,avg(CASE WHEN terminal_failure=1 THEN terminal_queue_ms END) AS failed_terminal_queue_mean_ms,avg(CASE WHEN terminal_failure=1 THEN terminal_execution_ms END) AS failed_terminal_execution_mean_ms FROM per_op JOIN worker_pools w ON w.pool_id=per_op.pool_id JOIN policy_profiles p ON p.profile_id=per_op.profile_id GROUP BY period,w.pool_code ORDER BY period,w.pool_code\",\n    \"SELECT CASE WHEN t.measured_at_ms<1778151600000 THEN 'reference' ELSE 'incident' END AS period,w.pool_code,s.signal_code,avg(t.value) AS mean_value,s.unit FROM telemetry_samples t JOIN worker_pools w ON w.pool_id=t.pool_id JOIN telemetry_signals s ON s.signal_id=t.signal_id WHERE t.measured_at_ms>=1778148000000 AND t.measured_at_ms<1778155200000 AND w.pool_code IN ('sync-north','sync-south') GROUP BY period,w.pool_code,s.signal_code,s.unit ORDER BY period,w.pool_code,s.signal_code\",\n    \"SELECT k.kind_code,w.pool_code,c.effective_at_ms,c.before_json,c.after_json FROM change_events c JOIN change_kinds k ON k.kind_id=c.kind_id JOIN services s ON s.service_id=c.service_id LEFT JOIN worker_pools w ON w.pool_id=c.pool_id WHERE s.service_code='ledger-sync' AND c.effective_at_ms>=1778148000000 AND c.effective_at_ms<1778155200000 ORDER BY c.effective_at_ms\"\n  ],\n  \"caveats\": [\n    \"Telemetry means use sample time, while pool metrics use logical-operation open time; samples are independently collected.\",\n    \"The simultaneous worker-limit change and failure increase are observational and do not establish causation.\"\n  ]\n}",
+      "usage": {
+        "input_tokens": 4707,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 2443,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 7150,
+        "attribution": {
+          "items": {
+            "at_0a3041fbfe966663016af0995b44b487d09e5dbcd0c8d10d88": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+              "input_tokens": 32,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af09945f2d487d0b83ca2d11bfb1624": {
+              "input_tokens": 43,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af09947fbc087d09f10d8c630dd0512": {
+              "input_tokens": 107,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994b74e487d0ab7ac5a7d659b685": {
+              "input_tokens": 92,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0994e975487d0a9c00ce668c40331": {
+              "input_tokens": 73,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af09950f59487d0a4ebbfdd2eebf705": {
+              "input_tokens": 539,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0a3041fbfe966663016af0995b44b487d087d3ea44e4ab43dc": {
+              "input_tokens": 208,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 208,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0995b44b487d087f357a6b4fb265b": {
+              "input_tokens": 660,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 660,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0995b44b487d094d4becad260d0cd": {
+              "input_tokens": 928,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0995b44b487d09c12f288dda5a529": {
+              "input_tokens": 148,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 148,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0995b44b487d0b03be9e5f2ce2007": {
+              "input_tokens": 170,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 170,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0995b44b487d0b21a26e33c99cecb": {
+              "input_tokens": 235,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 235,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0a3041fbfe966663016af0995b44b487d0b7e7fcf6cb5c1e80": {
+              "input_tokens": 257,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 257,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0a3041fbfe966663016af0995b44b487d09066577a43cf8abe": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0a3041fbfe966663016af0995b44b487d099018bfd0da2056a": {
+              "input_tokens": 916,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 916,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0a3041fbfe966663016af0995bbdb487d0b7a7adfb3cf4fd5a": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 2443,
+              "content": [
+                {
+                  "input_tokens": 2,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 2443
+                }
+              ]
+            },
+            "rs_0a3041fbfe966663016af0994b3fa487d0a1d15840cdb30e5b": {
+              "input_tokens": 12,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0a3041fbfe966663016af0995b440887d08a95ef42a1acf9bf",
+      "elapsed_s": 45.04669518896844,
+      "token_accounting": {
+        "input_tokens": 4707,
+        "input_uncached_tokens": 4707,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 2443,
+        "reasoning_tokens": 0,
+        "total_tokens": 7150
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0a3041fbfe966663016af0995b440887d08a95ef42a1acf9bf",
+        "object": "response",
+        "created_at": 1794152795,
+        "completed_at": 1794152839,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "message",
+            "id": "msg_0a3041fbfe966663016af0995bbdb487d0b7a7adfb3cf4fd5a",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\n  \"answer\": {\n    \"pool_metrics\": [\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"operations\": 1000,\n        \"terminal_failures\": 25,\n        \"terminal_failure_pct\": 2.5,\n        \"attempts\": 1150,\n        \"failed_attempts\": 175,\n        \"attempt_failure_pct\": 15.217391304347826,\n        \"retried_operations\": 125,\n        \"min_deadline_ms\": 250,\n        \"max_deadline_ms\": 250,\n        \"failed_terminal_queue_mean_ms\": 5,\n        \"failed_terminal_execution_mean_ms\": 245\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"operations\": 1000,\n        \"terminal_failures\": 25,\n        \"terminal_failure_pct\": 2.5,\n        \"attempts\": 1150,\n        \"failed_attempts\": 175,\n        \"attempt_failure_pct\": 15.217391304347826,\n        \"retried_operations\": 125,\n        \"min_deadline_ms\": 250,\n        \"max_deadline_ms\": 250,\n        \"failed_terminal_queue_mean_ms\": 5,\n        \"failed_terminal_execution_mean_ms\": 245\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"operations\": 1000,\n        \"terminal_failures\": 25,\n        \"terminal_failure_pct\": 2.5,\n        \"attempts\": 1150,\n        \"failed_attempts\": 175,\n        \"attempt_failure_pct\": 15.217391304347826,\n        \"retried_operations\": 125,\n        \"min_deadline_ms\": 250,\n        \"max_deadline_ms\": 250,\n        \"failed_terminal_queue_mean_ms\": 5,\n        \"failed_terminal_execution_mean_ms\": 245\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"operations\": 1000,\n        \"terminal_failures\": 175,\n        \"terminal_failure_pct\": 17.5,\n        \"attempts\": 1550,\n        \"failed_attempts\": 725,\n        \"attempt_failure_pct\": 46.774193548387096,\n        \"retried_operations\": 375,\n        \"min_deadline_ms\": 250,\n        \"max_deadline_ms\": 250,\n        \"failed_terminal_queue_mean_ms\": 235,\n        \"failed_terminal_execution_mean_ms\": 15\n      }\n    ],\n    \"telemetry\": [\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"upstream_latency_p95\",\n        \"mean_value\": 118,\n        \"unit\": \"ms\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"queue_depth\",\n        \"mean_value\": 4,\n        \"unit\": \"operations\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"available_workers\",\n        \"mean_value\": 16,\n        \"unit\": \"workers\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"cpu_utilization\",\n        \"mean_value\": 0.42,\n        \"unit\": \"fraction\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"upstream_latency_p95\",\n        \"mean_value\": 118,\n        \"unit\": \"ms\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"queue_depth\",\n        \"mean_value\": 92,\n        \"unit\": \"operations\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"available_workers\",\n        \"mean_value\": 10,\n        \"unit\": \"workers\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"cpu_utilization\",\n        \"mean_value\": 0.42,\n        \"unit\": \"fraction\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"upstream_latency_p95\",\n        \"mean_value\": 118,\n        \"unit\": \"ms\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"queue_depth\",\n        \"mean_value\": 4,\n        \"unit\": \"operations\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"available_workers\",\n        \"mean_value\": 16,\n        \"unit\": \"workers\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"cpu_utilization\",\n        \"mean_value\": 0.42,\n        \"unit\": \"fraction\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"upstream_latency_p95\",\n        \"mean_value\": 118,\n        \"unit\": \"ms\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"queue_depth\",\n        \"mean_value\": 92,\n        \"unit\": \"operations\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"available_workers\",\n        \"mean_value\": 10,\n        \"unit\": \"workers\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"cpu_utilization\",\n        \"mean_value\": 0.42,\n        \"unit\": \"fraction\"\n      }\n    ],\n    \"changes\": [\n      {\n        \"kind_code\": \"worker_limit\",\n        \"pool_code\": \"sync-south\",\n        \"effective_at_ms\": 1778151600000,\n        \"before_json\": \"{\\\"worker_limit\\\": 16}\",\n        \"after_json\": \"{\\\"worker_limit\\\": 4}\"\n      }\n    ],\n    \"assessment\": \"The strongest supported proximal explanation is worker/queue pressure on sync-south, coincident with an applied worker_limit reduction from 16 to 4 at the incident-window boundary. Its terminal-failure rate rose from 2.5% to 17.5%, an increase of 15.0 percentage points; sync-north was unchanged. The incident's failed terminal attempts averaged 235 ms queued and 15 ms executing, versus 5 ms queued and 245 ms executing in the reference, consistent with queueing consuming the fixed 250 ms deadline. The recorded telemetry also shows much higher queue depth on south than north (92 versus 4) and fewer available workers (10 versus 16), although those are period means and do not show a before/after change. A deadline-policy change is not supported: applied deadlines were 250 ms in both pools and periods, and the only recorded applied change is a worker-limit change. This is observational evidence, not proof that the worker-limit change caused the failures; other unmeasured or confounding changes could contribute, and telemetry is independently sampled rather than linked to individual operations.\"\n  },\n  \"evidence_sql\": [\n    \"WITH ops AS (SELECT l.operation_id,l.opened_at_ms,r.pool_id,r.profile_id FROM logical_operations l JOIN service_routes sr ON sr.route_id=l.route_id JOIN services s ON s.service_id=sr.service_id JOIN route_assignments r ON r.route_id=l.route_id AND l.opened_at_ms>=r.effective_from_ms AND l.opened_at_ms<r.effective_to_ms WHERE s.service_code='ledger-sync' AND l.opened_at_ms>=1778148000000 AND l.opened_at_ms<1778155200000), per_op AS (SELECT o.operation_id,o.opened_at_ms,o.pool_id,o.profile_id,count(*) AS attempts,sum(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) AS failed_attempts,max(CASE WHEN a.attempt_no=(SELECT max(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=o.operation_id) AND f.is_success=0 THEN 1 ELSE 0 END) AS terminal_failure,max(CASE WHEN a.attempt_no=(SELECT max(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=o.operation_id) AND f.is_success=0 THEN a.queue_ms END) AS terminal_queue_ms,max(CASE WHEN a.attempt_no=(SELECT max(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=o.operation_id) AND f.is_success=0 THEN a.execution_ms END) AS terminal_execution_ms FROM ops o JOIN attempt_events a ON a.operation_id=o.operation_id JOIN failure_codes f ON f.code_id=a.code_id GROUP BY o.operation_id) SELECT CASE WHEN opened_at_ms<1778151600000 THEN 'reference' ELSE 'incident' END AS period,w.pool_code,count(*) AS operations,sum(terminal_failure) AS terminal_failures,100.0*sum(terminal_failure)/count(*) AS terminal_failure_pct,sum(attempts) AS attempts,sum(failed_attempts) AS failed_attempts,100.0*sum(failed_attempts)/sum(attempts) AS attempt_failure_pct,sum(CASE WHEN attempts>1 THEN 1 ELSE 0 END) AS retried_operations,min(p.deadline_ms) AS min_deadline_ms,max(p.deadline_ms) AS max_deadline_ms,avg(CASE WHEN terminal_failure=1 THEN terminal_queue_ms END) AS failed_terminal_queue_mean_ms,avg(CASE WHEN terminal_failure=1 THEN terminal_execution_ms END) AS failed_terminal_execution_mean_ms FROM per_op JOIN worker_pools w ON w.pool_id=per_op.pool_id JOIN policy_profiles p ON p.profile_id=per_op.profile_id GROUP BY period,w.pool_code ORDER BY period,w.pool_code\",\n    \"SELECT CASE WHEN t.measured_at_ms<1778151600000 THEN 'reference' ELSE 'incident' END AS period,w.pool_code,s.signal_code,avg(t.value) AS mean_value,s.unit FROM telemetry_samples t JOIN worker_pools w ON w.pool_id=t.pool_id JOIN telemetry_signals s ON s.signal_id=t.signal_id WHERE t.measured_at_ms>=1778148000000 AND t.measured_at_ms<1778155200000 AND w.pool_code IN ('sync-north','sync-south') GROUP BY period,w.pool_code,s.signal_code,s.unit ORDER BY period,w.pool_code,s.signal_code\",\n    \"SELECT k.kind_code,w.pool_code,c.effective_at_ms,c.before_json,c.after_json FROM change_events c JOIN change_kinds k ON k.kind_id=c.kind_id JOIN services s ON s.service_id=c.service_id LEFT JOIN worker_pools w ON w.pool_id=c.pool_id WHERE s.service_code='ledger-sync' AND c.effective_at_ms>=1778148000000 AND c.effective_at_ms<1778155200000 ORDER BY c.effective_at_ms\"\n  ],\n  \"caveats\": [\n    \"Telemetry means use sample time, while pool metrics use logical-operation open time; samples are independently collected.\",\n    \"The simultaneous worker-limit change and failure increase are observational and do not establish causation.\"\n  ]\n}",
+                "annotations": [],
+                "logprobs": []
+              }
+            ],
+            "phase": "final_answer"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "84e260ae-0ea7-4a08-8267-008c40818c70",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 4707,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 2443,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 7150,
+          "attribution": {
+            "items": {
+              "at_0a3041fbfe966663016af0995b44b487d09e5dbcd0c8d10d88": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994248bc87d09ec14f0a22d9a407": {
+                "input_tokens": 32,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af099441dcc87d09ffcc4a52b8d67b0": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af09945f2d487d0b83ca2d11bfb1624": {
+                "input_tokens": 43,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af09947fbc087d09f10d8c630dd0512": {
+                "input_tokens": 107,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994b74e487d0ab7ac5a7d659b685": {
+                "input_tokens": 92,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0994e975487d0a9c00ce668c40331": {
+                "input_tokens": 73,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af09950f59487d0a4ebbfdd2eebf705": {
+                "input_tokens": 539,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0a3041fbfe966663016af0995b44b487d087d3ea44e4ab43dc": {
+                "input_tokens": 208,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 208,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0995b44b487d087f357a6b4fb265b": {
+                "input_tokens": 660,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 660,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0995b44b487d094d4becad260d0cd": {
+                "input_tokens": 928,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0995b44b487d09c12f288dda5a529": {
+                "input_tokens": 148,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 148,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0995b44b487d0b03be9e5f2ce2007": {
+                "input_tokens": 170,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 170,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0995b44b487d0b21a26e33c99cecb": {
+                "input_tokens": 235,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 235,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0a3041fbfe966663016af0995b44b487d0b7e7fcf6cb5c1e80": {
+                "input_tokens": 257,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 257,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0a3041fbfe966663016af0995b44b487d09066577a43cf8abe": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0a3041fbfe966663016af0995b44b487d099018bfd0da2056a": {
+                "input_tokens": 916,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 916,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0a3041fbfe966663016af0995bbdb487d0b7a7adfb3cf4fd5a": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 2443,
+                "content": [
+                  {
+                    "input_tokens": 2,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 2443
+                  }
+                ]
+              },
+              "rs_0a3041fbfe966663016af0994b3fa487d0a1d15840cdb30e5b": {
+                "input_tokens": 12,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 34165,
+      "tool_results": []
+    }
+  ],
+  "status": "completed",
+  "final_text": "{\n  \"answer\": {\n    \"pool_metrics\": [\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"operations\": 1000,\n        \"terminal_failures\": 25,\n        \"terminal_failure_pct\": 2.5,\n        \"attempts\": 1150,\n        \"failed_attempts\": 175,\n        \"attempt_failure_pct\": 15.217391304347826,\n        \"retried_operations\": 125,\n        \"min_deadline_ms\": 250,\n        \"max_deadline_ms\": 250,\n        \"failed_terminal_queue_mean_ms\": 5,\n        \"failed_terminal_execution_mean_ms\": 245\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"operations\": 1000,\n        \"terminal_failures\": 25,\n        \"terminal_failure_pct\": 2.5,\n        \"attempts\": 1150,\n        \"failed_attempts\": 175,\n        \"attempt_failure_pct\": 15.217391304347826,\n        \"retried_operations\": 125,\n        \"min_deadline_ms\": 250,\n        \"max_deadline_ms\": 250,\n        \"failed_terminal_queue_mean_ms\": 5,\n        \"failed_terminal_execution_mean_ms\": 245\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"operations\": 1000,\n        \"terminal_failures\": 25,\n        \"terminal_failure_pct\": 2.5,\n        \"attempts\": 1150,\n        \"failed_attempts\": 175,\n        \"attempt_failure_pct\": 15.217391304347826,\n        \"retried_operations\": 125,\n        \"min_deadline_ms\": 250,\n        \"max_deadline_ms\": 250,\n        \"failed_terminal_queue_mean_ms\": 5,\n        \"failed_terminal_execution_mean_ms\": 245\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"operations\": 1000,\n        \"terminal_failures\": 175,\n        \"terminal_failure_pct\": 17.5,\n        \"attempts\": 1550,\n        \"failed_attempts\": 725,\n        \"attempt_failure_pct\": 46.774193548387096,\n        \"retried_operations\": 375,\n        \"min_deadline_ms\": 250,\n        \"max_deadline_ms\": 250,\n        \"failed_terminal_queue_mean_ms\": 235,\n        \"failed_terminal_execution_mean_ms\": 15\n      }\n    ],\n    \"telemetry\": [\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"upstream_latency_p95\",\n        \"mean_value\": 118,\n        \"unit\": \"ms\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"queue_depth\",\n        \"mean_value\": 4,\n        \"unit\": \"operations\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"available_workers\",\n        \"mean_value\": 16,\n        \"unit\": \"workers\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"cpu_utilization\",\n        \"mean_value\": 0.42,\n        \"unit\": \"fraction\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"upstream_latency_p95\",\n        \"mean_value\": 118,\n        \"unit\": \"ms\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"queue_depth\",\n        \"mean_value\": 92,\n        \"unit\": \"operations\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"available_workers\",\n        \"mean_value\": 10,\n        \"unit\": \"workers\"\n      },\n      {\n        \"period\": \"reference\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"cpu_utilization\",\n        \"mean_value\": 0.42,\n        \"unit\": \"fraction\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"upstream_latency_p95\",\n        \"mean_value\": 118,\n        \"unit\": \"ms\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"queue_depth\",\n        \"mean_value\": 4,\n        \"unit\": \"operations\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"available_workers\",\n        \"mean_value\": 16,\n        \"unit\": \"workers\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-north\",\n        \"signal_code\": \"cpu_utilization\",\n        \"mean_value\": 0.42,\n        \"unit\": \"fraction\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"upstream_latency_p95\",\n        \"mean_value\": 118,\n        \"unit\": \"ms\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"queue_depth\",\n        \"mean_value\": 92,\n        \"unit\": \"operations\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"available_workers\",\n        \"mean_value\": 10,\n        \"unit\": \"workers\"\n      },\n      {\n        \"period\": \"incident\",\n        \"pool_code\": \"sync-south\",\n        \"signal_code\": \"cpu_utilization\",\n        \"mean_value\": 0.42,\n        \"unit\": \"fraction\"\n      }\n    ],\n    \"changes\": [\n      {\n        \"kind_code\": \"worker_limit\",\n        \"pool_code\": \"sync-south\",\n        \"effective_at_ms\": 1778151600000,\n        \"before_json\": \"{\\\"worker_limit\\\": 16}\",\n        \"after_json\": \"{\\\"worker_limit\\\": 4}\"\n      }\n    ],\n    \"assessment\": \"The strongest supported proximal explanation is worker/queue pressure on sync-south, coincident with an applied worker_limit reduction from 16 to 4 at the incident-window boundary. Its terminal-failure rate rose from 2.5% to 17.5%, an increase of 15.0 percentage points; sync-north was unchanged. The incident's failed terminal attempts averaged 235 ms queued and 15 ms executing, versus 5 ms queued and 245 ms executing in the reference, consistent with queueing consuming the fixed 250 ms deadline. The recorded telemetry also shows much higher queue depth on south than north (92 versus 4) and fewer available workers (10 versus 16), although those are period means and do not show a before/after change. A deadline-policy change is not supported: applied deadlines were 250 ms in both pools and periods, and the only recorded applied change is a worker-limit change. This is observational evidence, not proof that the worker-limit change caused the failures; other unmeasured or confounding changes could contribute, and telemetry is independently sampled rather than linked to individual operations.\"\n  },\n  \"evidence_sql\": [\n    \"WITH ops AS (SELECT l.operation_id,l.opened_at_ms,r.pool_id,r.profile_id FROM logical_operations l JOIN service_routes sr ON sr.route_id=l.route_id JOIN services s ON s.service_id=sr.service_id JOIN route_assignments r ON r.route_id=l.route_id AND l.opened_at_ms>=r.effective_from_ms AND l.opened_at_ms<r.effective_to_ms WHERE s.service_code='ledger-sync' AND l.opened_at_ms>=1778148000000 AND l.opened_at_ms<1778155200000), per_op AS (SELECT o.operation_id,o.opened_at_ms,o.pool_id,o.profile_id,count(*) AS attempts,sum(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) AS failed_attempts,max(CASE WHEN a.attempt_no=(SELECT max(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=o.operation_id) AND f.is_success=0 THEN 1 ELSE 0 END) AS terminal_failure,max(CASE WHEN a.attempt_no=(SELECT max(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=o.operation_id) AND f.is_success=0 THEN a.queue_ms END) AS terminal_queue_ms,max(CASE WHEN a.attempt_no=(SELECT max(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=o.operation_id) AND f.is_success=0 THEN a.execution_ms END) AS terminal_execution_ms FROM ops o JOIN attempt_events a ON a.operation_id=o.operation_id JOIN failure_codes f ON f.code_id=a.code_id GROUP BY o.operation_id) SELECT CASE WHEN opened_at_ms<1778151600000 THEN 'reference' ELSE 'incident' END AS period,w.pool_code,count(*) AS operations,sum(terminal_failure) AS terminal_failures,100.0*sum(terminal_failure)/count(*) AS terminal_failure_pct,sum(attempts) AS attempts,sum(failed_attempts) AS failed_attempts,100.0*sum(failed_attempts)/sum(attempts) AS attempt_failure_pct,sum(CASE WHEN attempts>1 THEN 1 ELSE 0 END) AS retried_operations,min(p.deadline_ms) AS min_deadline_ms,max(p.deadline_ms) AS max_deadline_ms,avg(CASE WHEN terminal_failure=1 THEN terminal_queue_ms END) AS failed_terminal_queue_mean_ms,avg(CASE WHEN terminal_failure=1 THEN terminal_execution_ms END) AS failed_terminal_execution_mean_ms FROM per_op JOIN worker_pools w ON w.pool_id=per_op.pool_id JOIN policy_profiles p ON p.profile_id=per_op.profile_id GROUP BY period,w.pool_code ORDER BY period,w.pool_code\",\n    \"SELECT CASE WHEN t.measured_at_ms<1778151600000 THEN 'reference' ELSE 'incident' END AS period,w.pool_code,s.signal_code,avg(t.value) AS mean_value,s.unit FROM telemetry_samples t JOIN worker_pools w ON w.pool_id=t.pool_id JOIN telemetry_signals s ON s.signal_id=t.signal_id WHERE t.measured_at_ms>=1778148000000 AND t.measured_at_ms<1778155200000 AND w.pool_code IN ('sync-north','sync-south') GROUP BY period,w.pool_code,s.signal_code,s.unit ORDER BY period,w.pool_code,s.signal_code\",\n    \"SELECT k.kind_code,w.pool_code,c.effective_at_ms,c.before_json,c.after_json FROM change_events c JOIN change_kinds k ON k.kind_id=c.kind_id JOIN services s ON s.service_id=c.service_id LEFT JOIN worker_pools w ON w.pool_id=c.pool_id WHERE s.service_code='ledger-sync' AND c.effective_at_ms>=1778148000000 AND c.effective_at_ms<1778155200000 ORDER BY c.effective_at_ms\"\n  ],\n  \"caveats\": [\n    \"Telemetry means use sample time, while pool metrics use logical-operation open time; samples are independently collected.\",\n    \"The simultaneous worker-limit change and failure increase are observational and do not establish causation.\"\n  ]\n}",
+  "memory_before": {},
+  "elapsed_s": 70.51694248698186,
+  "memory_after": {},
+  "db_hash_after": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+  "db_unchanged": true
+}

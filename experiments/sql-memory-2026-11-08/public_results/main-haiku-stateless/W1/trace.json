@@ -1,0 +1,913 @@
+{
+  "task_id": "W1",
+  "db_sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+  "snapshot": "pre.db",
+  "prompt": "Use only the supplied current.db and README. All windows below are UTC and half-open, selected by logical-operation open time. A terminal-failure percentage has logical operations as its denominator; attempt-failure percentage has attempts as its denominator. Return only JSON matching the provided schema. Percentages use 0–100, differences use percentage points. evidence_sql must contain executable read-only SQLite queries with literal bounds, not pseudocode. Arrays may be in any order; include every requested group. A zero numerator is not missing data. No web or network access is needed.\n\nFor 2026-05-01 10:00–11:00, report total logical operations, attempts, failed attempts, terminal failures, and retried operations across all services. Then report those same five counts for each service, plus its terminal-failure percentage and the number of distinct serving physical pools represented in the window. Explain briefly in caveats why attempts and terminal failures are not interchangeable. This is a counting calibration, not an incident attribution exercise.\n\nRequired JSON response schema:\n{\"$schema\": \"https://json-schema.org/draft/2020-12/schema\", \"additionalProperties\": false, \"properties\": {\"answer\": {\"additionalProperties\": false, \"properties\": {\"services\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"attempts\": {\"type\": \"integer\"}, \"failed_attempts\": {\"type\": \"integer\"}, \"operations\": {\"type\": \"integer\"}, \"physical_pools\": {\"type\": \"integer\"}, \"retried_operations\": {\"type\": \"integer\"}, \"service_code\": {\"type\": \"string\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"service_code\", \"operations\", \"attempts\", \"failed_attempts\", \"terminal_failures\", \"retried_operations\", \"terminal_failure_pct\", \"physical_pools\"], \"type\": \"object\"}, \"maxItems\": 2, \"minItems\": 2, \"type\": \"array\"}, \"totals\": {\"additionalProperties\": false, \"properties\": {\"attempts\": {\"type\": \"integer\"}, \"failed_attempts\": {\"type\": \"integer\"}, \"operations\": {\"type\": \"integer\"}, \"retried_operations\": {\"type\": \"integer\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"operations\", \"attempts\", \"failed_attempts\", \"terminal_failures\", \"retried_operations\"], \"type\": \"object\"}}, \"required\": [\"totals\", \"services\"], \"type\": \"object\"}, \"caveats\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}, \"evidence_sql\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}}, \"required\": [\"answer\", \"evidence_sql\", \"caveats\"], \"type\": \"object\"}",
+  "turns": [
+    {
+      "tool_calls": [
+        {
+          "id": "toolu_01MxoHZ7djUFUAP96s2oduYx",
+          "name": "bash",
+          "arguments": {
+            "command": "cd ..; cat README.md; sqlite3 data/current.db \".schema\"; sqlite3 data/current.db \"select name from sqlite_master where type='table'\" | while read t; do echo \"$t: $(sqlite3 data/current.db \"select count(*) from $t\")\"; done"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 1489,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 1489,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 156,
+        "output_tokens_details": {
+          "thinking_tokens": 17
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.000264525,
+      "response_id": "msg_011Cgqipi9sSTzw9BcK9rqkL",
+      "elapsed_s": 1.0424974169582129,
+      "token_accounting": {
+        "input_tokens": 1493,
+        "input_uncached_tokens": 4,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 1489,
+        "cache_creation_5m_input_tokens": 1489,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 156,
+        "reasoning_tokens": 0,
+        "total_tokens": 1649
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011Cgqipi9sSTzw9BcK9rqkL",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": {
+              "omitted": true,
+              "sha256": "0da3bea33ebcb1760cbdf42ef2092fa1b0ed852e58351d390019f4597773d8e8",
+              "length": 880
+            }
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01MxoHZ7djUFUAP96s2oduYx",
+            "name": "bash",
+            "input": {
+              "command": "cd ..; cat README.md; sqlite3 data/current.db \".schema\"; sqlite3 data/current.db \"select name from sqlite_master where type='table'\" | while read t; do echo \"$t: $(sqlite3 data/current.db \"select count(*) from $t\")\"; done"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 4,
+          "cache_creation_input_tokens": 1489,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 1489,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 156,
+          "output_tokens_details": {
+            "thinking_tokens": 17
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 4139,
+      "tool_results": [
+        {
+          "output": "CREATE TABLE subsystems(subsystem_id INTEGER PRIMARY KEY, subsystem_code TEXT NOT NULL UNIQUE);\nCREATE TABLE services(service_id INTEGER PRIMARY KEY, subsystem_id INTEGER NOT NULL REFERENCES subsystems, service_code TEXT NOT NULL UNIQUE);\nCREATE TABLE regions(region_id INTEGER PRIMARY KEY, region_code TEXT NOT NULL UNIQUE);\nCREATE TABLE tenant_tiers(tier_id INTEGER PRIMARY KEY, tier_code TEXT NOT NULL UNIQUE);\nCREATE TABLE tenants(tenant_id INTEGER PRIMARY KEY, tenant_key TEXT NOT NULL UNIQUE, tier_id INTEGER NOT NULL REFERENCES tenant_tiers);\nCREATE TABLE worker_pools(pool_id INTEGER PRIMARY KEY, region_id INTEGER NOT NULL REFERENCES regions, pool_code TEXT NOT NULL UNIQUE);\nCREATE TABLE policy_profiles(profile_id INTEGER PRIMARY KEY, profile_code TEXT NOT NULL UNIQUE, deadline_ms INTEGER NOT NULL CHECK(deadline_ms>0), max_attempts INTEGER NOT NULL CHECK(max_attempts>=1));\nCREATE TABLE failure_codes(code_id INTEGER PRIMARY KEY, code TEXT NOT NULL UNIQUE, is_success INTEGER NOT NULL CHECK(is_success IN (0,1)), description TEXT NOT NULL);\nCREATE TABLE releases(release_id INTEGER PRIMARY KEY, service_id INTEGER NOT NULL REFERENCES services, build_code TEXT NOT NULL UNIQUE);\nCREATE TABLE change_kinds(kind_id INTEGER PRIMARY KEY, kind_code TEXT NOT NULL UNIQUE);\nCREATE TABLE change_events(change_id INTEGER PRIMARY KEY, effective_at_ms INTEGER NOT NULL, kind_id INTEGER NOT NULL REFERENCES change_kinds, service_id INTEGER NOT NULL REFERENCES services, pool_id INTEGER REFERENCES worker_pools, before_json TEXT NOT NULL CHECK(json_valid(before_json)), after_json TEXT NOT NULL CHECK(json_valid(after_json)), change_note TEXT NOT NULL);\nCREATE TABLE service_routes(route_id INTEGER PRIMARY KEY, service_id INTEGER NOT NULL REFERENCES services, route_key TEXT NOT NULL UNIQUE);\nCREATE TABLE route_assignments(assignment_id INTEGER PRIMARY KEY, route_id INTEGER NOT NULL REFERENCES service_routes, effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER NOT NULL, pool_id INTEGER NOT NULL REFERENCES worker_pools, profile_id INTEGER NOT NULL REFERENCES policy_profiles, release_id INTEGER NOT NULL REFERENCES releases, CHECK(effective_to_ms>effective_from_ms), UNIQUE(route_id,effective_from_ms));\nCREATE TABLE operation_classes(class_id INTEGER PRIMARY KEY, class_code TEXT NOT NULL UNIQUE, description TEXT NOT NULL);\nCREATE TABLE logical_operations(operation_id INTEGER PRIMARY KEY, tenant_id INTEGER NOT NULL REFERENCES tenants, route_id INTEGER NOT NULL REFERENCES service_routes, class_id INTEGER NOT NULL REFERENCES operation_classes, opened_at_ms INTEGER NOT NULL);\nCREATE TABLE attempt_events(attempt_id INTEGER PRIMARY KEY, operation_id INTEGER NOT NULL REFERENCES logical_operations, attempt_no INTEGER NOT NULL CHECK(attempt_no>=1), started_at_ms INTEGER NOT NULL, completed_at_ms INTEGER NOT NULL, code_id INTEGER NOT NULL REFERENCES failure_codes, queue_ms INTEGER NOT NULL CHECK(queue_ms>=0), execution_ms INTEGER NOT NULL CHECK(execution_ms>=0), CHECK(completed_at_ms-started_at_ms=queue_ms+execution_ms), UNIQUE(operation_id,attempt_no));\nCREATE TABLE telemetry_signals(signal_id INTEGER PRIMARY KEY, signal_code TEXT NOT NULL UNIQUE, unit TEXT NOT NULL, description TEXT NOT NULL);\nCREATE TABLE telemetry_samples(sample_id INTEGER PRIMARY KEY, pool_id INTEGER NOT NULL REFERENCES worker_pools, signal_id INTEGER NOT NULL REFERENCES telemetry_signals, measured_at_ms INTEGER NOT NULL, value REAL NOT NULL, UNIQUE(pool_id,signal_id,measured_at_ms));\nCREATE TABLE incident_windows(incident_id INTEGER PRIMARY KEY, incident_key TEXT NOT NULL UNIQUE, subsystem_id INTEGER NOT NULL REFERENCES subsystems, start_ms INTEGER NOT NULL, end_ms INTEGER NOT NULL, report_summary TEXT NOT NULL, CHECK(end_ms>start_ms));\nCREATE TABLE feed_registry(version INTEGER PRIMARY KEY, event_table TEXT NOT NULL UNIQUE, event_grain TEXT NOT NULL CHECK(event_grain IN ('attempt','operation')), effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER, lifecycle TEXT NOT NULL CHECK(lifecycle IN ('active','historical')), operation_key_column TEXT NOT NULL, attribution_basis TEXT NOT NULL, CHECK(effective_to_ms IS NULL OR effective_to_ms>effective_from_ms));\nCREATE INDEX ops_open ON logical_operations(opened_at_ms,route_id);\nCREATE INDEX attempts_operation ON attempt_events(operation_id,attempt_no DESC);\nCREATE INDEX assignments_effective ON route_assignments(route_id,effective_from_ms,effective_to_ms);\nCREATE INDEX samples_window ON telemetry_samples(measured_at_ms,pool_id,signal_id);\nsubsystems: 2\nservices: 2\nregions: 2\ntenant_tiers: 2\ntenants: 40\nworker_pools: 4\npolicy_profiles: 2\nfailure_codes: 2\nreleases: 3\nchange_kinds: 4\nchange_events: 5\nservice_routes: 8\nroute_assignments: 12\noperation_classes: 2\nlogical_operations: 32500\nattempt_events: 40480\ntelemetry_signals: 4\ntelemetry_samples: 576\nincident_windows: 2\nfeed_registry: 1\n\nSTDERR:\ncat: README.md: No such file or directory\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004031311953440309, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004024054040201008, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004003324080258608, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.003913516993634403, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.0038811370031908154, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.0036065890453755856, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.007874033995904028, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004417916992679238, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.003945495933294296, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.003929581958800554, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004247253993526101, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004858221975155175, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.005290693021379411, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.0036224350333213806, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.0035741740139201283, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.003897511982358992, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004604825051501393, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004341616993770003, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.003856866038404405, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.003264941042289138, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.006289668031968176, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.0032439730130136013, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 5.842906192992814,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.004031311953440309,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.004024054040201008,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.004003324080258608,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.003913516993634403,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.0038811370031908154,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.0036065890453755856,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.007874033995904028,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.004417916992679238,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.003945495933294296,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.003929581958800554,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.004247253993526101,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.004858221975155175,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.005290693021379411,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.0036224350333213806,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.0035741740139201283,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.003897511982358992,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.004604825051501393,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.004341616993770003,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.003856866038404405,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.003264941042289138,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.006289668031968176,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.0032439730130136013,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd ..; cat README.md; sqlite3 data/current.db \".schema\"; sqlite3 data/current.db \"select name from sqlite_master where type='table'\" | while read t; do echo \"$t: $(sqlite3 data/current.db \"select count(*) from $t\")\"; done"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "toolu_01QD2GLsqerSwAwAns2RgD2R",
+          "name": "bash",
+          "arguments": {
+            "command": "pwd; ls -la; ls -la data; find / -name README.md -not -path \"*/proc/*\" 2>/dev/null | head"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 3746,
+        "cache_read_input_tokens": 1489,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 3746,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 134,
+        "output_tokens_details": {
+          "thinking_tokens": 44
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.0005503400000000001,
+      "response_id": "msg_011CgqiqDNHScEJPwziiv1Dz",
+      "elapsed_s": 0.950559999095276,
+      "token_accounting": {
+        "input_tokens": 5237,
+        "input_uncached_tokens": 2,
+        "cache_read_input_tokens": 1489,
+        "cache_creation_input_tokens": 3746,
+        "cache_creation_5m_input_tokens": 3746,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 134,
+        "reasoning_tokens": 0,
+        "total_tokens": 5371
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgqiqDNHScEJPwziiv1Dz",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": {
+              "omitted": true,
+              "sha256": "6c8efc30bcd2f2f578fd9e77ab7597a7af494ddb67450ef5f9832fb53a978a9f",
+              "length": 1060
+            }
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01QD2GLsqerSwAwAns2RgD2R",
+            "name": "bash",
+            "input": {
+              "command": "pwd; ls -la; ls -la data; find / -name README.md -not -path \"*/proc/*\" 2>/dev/null | head"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 3746,
+          "cache_read_input_tokens": 1489,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 3746,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 134,
+          "output_tokens_details": {
+            "thinking_tokens": 44
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 12373,
+      "tool_results": [
+        {
+          "output": "/work\ntotal 12\ndrwx------  2 22003 22003 4096 Nov  8 15:46 .\ndrwxr-x--- 13 root  22003 4096 Nov  8 15:46 ..\n-r--r--r--  1 root  root  3038 Nov  8 15:46 README.md\n/work/README.md\n\nSTDERR:\nls: cannot access 'data': No such file or directory\n",
+          "exit_code": 0,
+          "wall_seconds": 0.020512674003839493,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "pwd; ls -la; ls -la data; find / -name README.md -not -path \"*/proc/*\" 2>/dev/null | head"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "toolu_01VgzKNN3G1iK5ZohHn66igT",
+          "name": "bash",
+          "arguments": {
+            "command": "cd /work; cat README.md; ls -la ..; find / -name current.db 2>/dev/null"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 276,
+        "cache_read_input_tokens": 5235,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 276,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 78,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.00012605,
+      "response_id": "msg_011CgqiqHaXz8g6HrvZgZHWS",
+      "elapsed_s": 0.6194946368923411,
+      "token_accounting": {
+        "input_tokens": 5513,
+        "input_uncached_tokens": 2,
+        "cache_read_input_tokens": 5235,
+        "cache_creation_input_tokens": 276,
+        "cache_creation_5m_input_tokens": 276,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 78,
+        "reasoning_tokens": 0,
+        "total_tokens": 5591
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgqiqHaXz8g6HrvZgZHWS",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_01VgzKNN3G1iK5ZohHn66igT",
+            "name": "bash",
+            "input": {
+              "command": "cd /work; cat README.md; ls -la ..; find / -name current.db 2>/dev/null"
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 276,
+          "cache_read_input_tokens": 5235,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 276,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 78,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 12997,
+      "tool_results": [
+        {
+          "output": "# Operations analytics data contract\n\nYou receive `current.db` (SQLite), this README and one task. Inspect the database schema, foreign keys and registry yourself. No network or external data is needed. The database is read-only input; use a read-only connection. All observations are synthetic, internally consistent and complete for the requested windows. Do not interpret absent windows as zero traffic. No hidden business definitions depend on an earlier task.\n\n* Times ending `_ms` are integer Unix milliseconds in UTC. Window membership uses the **logical operation open time**, with inclusive lower and exclusive upper bounds. Effective intervals are also half-open; a NULL end means no known end.\n* One logical operation is one business request. Retries are attempts, not extra incidents or requests. A terminal failure means the final attempt/outcome has a failure code whose `is_success` is 0; an earlier failed attempt followed by success is not a terminal failure. All included operations are finished and attempt ordinals are complete. An operation with more than one attempt is a retried operation, including ultimately failed operations.\n* `feed_registry` is authoritative about event sources, grains, applicable operation-open intervals and serving attribution. The active entry describes current instrumentation; historical entries remain authoritative for their historical intervals. Do not assume the highest version covers all history or that a still-queryable table is current. Historical values are retained without rewriting them into a new meaning.\n* Routing identifiers are routing intent, not necessarily unique physical pools. For routing-time instrumentation, select the assignment effective when the operation opens. For execution-time instrumentation, recorded execution attribution is authoritative. Multiple aliases or execution identities may belong to the same physical pool. Never count each identity as an independent pool.\n* End-to-end latency is final completion minus operation open, including queueing, execution and retry backoff. Per-attempt queue/execution times exclude backoff. Outcome totals cover all its attempts. Rates use logical-operation denominators unless a task explicitly asks for attempt metrics. Percentages are in percent (0–100); rate differences are percentage points.\n* Telemetry is sampled independently. A requested window mean is the ordinary arithmetic mean of samples in that window. An upstream p95 sample is a percentile observation, not an operation-weighted mean. Changes describe applied configuration, not a causal experiment. Tenant tier, operation class, release, region and pool are distinct dimensions.\n\nReturn only the JSON requested in the task: `answer`, `evidence_sql` (a list of executable, read-only SQLite SELECT/WITH statements supporting the answer), and `caveats` (a list of short strings). No placeholders, SQL parameters, temporary tables or external files in evidence. State uncertainty; observational association alone does not prove causation.\ntotal 52\ndrwxr-x--- 13 root  22003 4096 Nov  8 15:46 .\ndrwxr-x--- 13 root  22003 4096 Nov  8 15:46 ..\ndrwxr-xr-x  2 root  root  4096 Nov  8 15:41 bin\ndrwxr-xr-x  2 root  root  4096 Nov  8 15:46 data\ndrwxr-xr-x  3 root  root  4096 Nov  8 15:46 dev\ndrwxr-xr-x  2 root  root  4096 Nov  8 15:41 etc\ndrwxr-xr-x  3 root  root  4096 Nov  8 15:41 lib\ndrwxr-xr-x  2 root  root  4096 Nov  8 15:41 lib64\ndrwxr-xr-x  3 root  root  4096 Nov  8 15:41 opt\ndrwx------  2 22003 22003 4096 Nov  8 15:46 tmp\ndrwxr-xr-x  4 root  root  4096 Nov  8 15:41 usr\ndrwxr-xr-x  3 root  root  4096 Nov  8 15:46 var\ndrwx------  2 22003 22003 4096 Nov  8 15:46 work\n/data/current.db\n",
+          "exit_code": 0,
+          "wall_seconds": 0.023385704960674047,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "cd /work; cat README.md; ls -la ..; find / -name current.db 2>/dev/null"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "toolu_01Q2te2Doo2svAowpwRXMq2J",
+          "name": "bash",
+          "arguments": {
+            "command": "cd /data; sqlite3 -header current.db \"select * from feed_registry; select * from services; select * from worker_pools; select * from failure_codes; select * from operation_classes; select * from service_routes; select * from route_assignments; select * from policy_profiles; select * from releases; select * from change_events;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1436,
+        "cache_read_input_tokens": 5511,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 1436,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 178,
+        "output_tokens_details": {
+          "thinking_tokens": 33
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.00032381,
+      "response_id": "msg_011CgqiqLSvqAYsSQ2nkxBwG",
+      "elapsed_s": 0.9570298620965332,
+      "token_accounting": {
+        "input_tokens": 6949,
+        "input_uncached_tokens": 2,
+        "cache_read_input_tokens": 5511,
+        "cache_creation_input_tokens": 1436,
+        "cache_creation_5m_input_tokens": 1436,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 178,
+        "reasoning_tokens": 0,
+        "total_tokens": 7127
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgqiqLSvqAYsSQ2nkxBwG",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": {
+              "omitted": true,
+              "sha256": "44b3eeaf4344a75c4b9206b6eb887ed582e738d15d826e827d1b11e34306b845",
+              "length": 1060
+            }
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01Q2te2Doo2svAowpwRXMq2J",
+            "name": "bash",
+            "input": {
+              "command": "cd /data; sqlite3 -header current.db \"select * from feed_registry; select * from services; select * from worker_pools; select * from failure_codes; select * from operation_classes; select * from service_routes; select * from route_assignments; select * from policy_profiles; select * from releases; select * from change_events;\""
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 1436,
+          "cache_read_input_tokens": 5511,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 1436,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 178,
+          "output_tokens_details": {
+            "thinking_tokens": 33
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 18466,
+      "tool_results": [
+        {
+          "output": "version|event_table|event_grain|effective_from_ms|effective_to_ms|lifecycle|operation_key_column|attribution_basis\n1|attempt_events|attempt|1777593600000||active|operation_id|Routing decision effective at logical operation open\nservice_id|subsystem_id|service_code\n1|1|parcel-index\n2|2|ledger-sync\npool_id|region_id|pool_code\n1|1|idx-north\n2|2|idx-south\n3|1|sync-north\n4|2|sync-south\ncode_id|code|is_success|description\n1|OK|1|Completed successfully\n2|DEADLINE|0|Attempt or operation deadline exhausted\nclass_id|class_code|description\n1|small|Small logical payload\n2|large|Large logical payload\nroute_id|service_id|route_key\n1|1|idx-primary-n\n2|1|idx-primary-s\n3|2|sync-primary-n\n4|2|sync-primary-s\n5|1|idx-canary-n\n6|1|idx-canary-s\n7|1|idx-alias-n\n8|2|sync-alias-s\nassignment_id|route_id|effective_from_ms|effective_to_ms|pool_id|profile_id|release_id\n1|1|1777593600000|1777719600000|1|1|1\n2|1|1777719600000|1777723200000|1|2|1\n3|1|1777723200000|1780272000000|1|1|1\n4|2|1777593600000|1780272000000|2|1|1\n5|3|1777593600000|1780272000000|3|1|3\n6|4|1777593600000|1780272000000|4|1|3\n7|5|1777593600000|1780272000000|1|1|2\n8|6|1777593600000|1780272000000|2|1|2\n9|7|1777593600000|1777719600000|1|1|1\n10|7|1777719600000|1777723200000|1|2|1\n11|7|1777723200000|1780272000000|1|1|1\n12|8|1777593600000|1780272000000|4|1|3\nprofile_id|profile_code|deadline_ms|max_attempts\n1|balanced-250|250|3\n2|fast-80|80|3\nrelease_id|service_id|build_code\n1|1|idx-r18\n2|1|idx-r19\n3|2|sync-r42\nchange_id|effective_at_ms|kind_id|service_id|pool_id|before_json|after_json|change_note\n1|1777719600000|1|1|1|{\"deadline_ms\": 250}|{\"deadline_ms\": 80}|Apply latency budget profile\n2|1777723200000|1|1|1|{\"deadline_ms\": 80}|{\"deadline_ms\": 250}|Restore latency budget profile\n3|1777852800000|3|1||{\"candidate\": \"inactive\"}|{\"candidate\": \"idx-r19\"}|Enable candidate traffic\n4|1777939200000|3|1||{\"allocation\": \"initial\"}|{\"allocation\": \"expanded\"}|Increase candidate allocation\n5|1778151600000|2|2|4|{\"worker_limit\": 16}|{\"worker_limit\": 4}|Apply worker concurrency limit\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.007968274061568081, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.4021831309655681,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.007968274061568081,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd /data; sqlite3 -header current.db \"select * from feed_registry; select * from services; select * from worker_pools; select * from failure_codes; select * from operation_classes; select * from service_routes; select * from route_assignments; select * from policy_profiles; select * from releases; select * from change_events;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "toolu_01HiNiPGHwJ3urinE99aEyA5",
+          "name": "bash",
+          "arguments": {
+            "command": "cd /data; sqlite3 -header current.db \"\nselect min(opened_at_ms),max(opened_at_ms),count(*) from logical_operations;\nselect count(*) ops_in_window, count(distinct operation_id) from logical_operations where opened_at_ms>=1777629600000 and opened_at_ms<1777633200000;\nselect count(*) from logical_operations o where not exists(select 1 from attempt_events a where a.operation_id=o.operation_id);\nselect count(*) from logical_operations o where not exists(select 1 from service_routes r where r.route_id=o.route_id);\nselect count(*) from attempt_events a where not exists (select 1 from logical_operations o where o.operation_id=a.operation_id);\nselect o.operation_id, count(*) n, max(attempt_no), group_concat(attempt_no) from logical_operations o join attempt_events a using(operation_id) group by 1 having max(attempt_no)<>count(*) limit 5;\nselect a.code_id, f.code, count(*) from attempt_events a join failure_codes f using(code_id) group by 1;\nselect count(*) from attempt_events a where started_at_ms<0 or completed_at_ms<started_at_ms;\nselect count(*) from (select operation_id from attempt_events a join failure_codes f using(code_id) where f.is_success=1 group by operation_id);\n\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 1281,
+        "cache_read_input_tokens": 6947,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 1281,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 796,
+        "output_tokens_details": {
+          "thinking_tokens": 300
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.000627795,
+      "response_id": "msg_011CgqiqSW4rBU2ugCtXawDq",
+      "elapsed_s": 3.4721799270482734,
+      "token_accounting": {
+        "input_tokens": 8230,
+        "input_uncached_tokens": 2,
+        "cache_read_input_tokens": 6947,
+        "cache_creation_input_tokens": 1281,
+        "cache_creation_5m_input_tokens": 1281,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 796,
+        "reasoning_tokens": 0,
+        "total_tokens": 9026
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgqiqSW4rBU2ugCtXawDq",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": {
+              "omitted": true,
+              "sha256": "fea9a0874838c164550ef9db882ab1394ce456a8b5568b9f5319450ef0955f86",
+              "length": 2012
+            }
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01HiNiPGHwJ3urinE99aEyA5",
+            "name": "bash",
+            "input": {
+              "command": "cd /data; sqlite3 -header current.db \"\nselect min(opened_at_ms),max(opened_at_ms),count(*) from logical_operations;\nselect count(*) ops_in_window, count(distinct operation_id) from logical_operations where opened_at_ms>=1777629600000 and opened_at_ms<1777633200000;\nselect count(*) from logical_operations o where not exists(select 1 from attempt_events a where a.operation_id=o.operation_id);\nselect count(*) from logical_operations o where not exists(select 1 from service_routes r where r.route_id=o.route_id);\nselect count(*) from attempt_events a where not exists (select 1 from logical_operations o where o.operation_id=a.operation_id);\nselect o.operation_id, count(*) n, max(attempt_no), group_concat(attempt_no) from logical_operations o join attempt_events a using(operation_id) group by 1 having max(attempt_no)<>count(*) limit 5;\nselect a.code_id, f.code, count(*) from attempt_events a join failure_codes f using(code_id) group by 1;\nselect count(*) from attempt_events a where started_at_ms<0 or completed_at_ms<started_at_ms;\nselect count(*) from (select operation_id from attempt_events a join failure_codes f using(code_id) where f.is_success=1 group by operation_id);\n\""
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 1281,
+          "cache_read_input_tokens": 6947,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 1281,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 796,
+          "output_tokens_details": {
+            "thinking_tokens": 300
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 24242,
+      "tool_results": [
+        {
+          "output": "min(opened_at_ms)|max(opened_at_ms)|count(*)\n1777629600000|1778155190804|32500\nops_in_window|count(distinct operation_id)\n4000|4000\ncount(*)\n0\ncount(*)\n0\ncount(*)\n0\ncode_id|code|count(*)\n1|OK|30235\n2|DEADLINE|10245\ncount(*)\n0\ncount(*)\n30235\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.14284708304330707, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.3667517099529505,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.14284708304330707,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd /data; sqlite3 -header current.db \"\nselect min(opened_at_ms),max(opened_at_ms),count(*) from logical_operations;\nselect count(*) ops_in_window, count(distinct operation_id) from logical_operations where opened_at_ms>=1777629600000 and opened_at_ms<1777633200000;\nselect count(*) from logical_operations o where not exists(select 1 from attempt_events a where a.operation_id=o.operation_id);\nselect count(*) from logical_operations o where not exists(select 1 from service_routes r where r.route_id=o.route_id);\nselect count(*) from attempt_events a where not exists (select 1 from logical_operations o where o.operation_id=a.operation_id);\nselect o.operation_id, count(*) n, max(attempt_no), group_concat(attempt_no) from logical_operations o join attempt_events a using(operation_id) group by 1 having max(attempt_no)<>count(*) limit 5;\nselect a.code_id, f.code, count(*) from attempt_events a join failure_codes f using(code_id) group by 1;\nselect count(*) from attempt_events a where started_at_ms<0 or completed_at_ms<started_at_ms;\nselect count(*) from (select operation_id from attempt_events a join failure_codes f using(code_id) where f.is_success=1 group by operation_id);\n\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "toolu_01Cmw7nor3VBqAfJTcisyhoB",
+          "name": "bash",
+          "arguments": {
+            "command": "cd /data; sqlite3 -header current.db \"\nwith w as (select o.* from logical_operations o where o.opened_at_ms>=1777629600000 and o.opened_at_ms<1777633200000),\natt as (select a.*, row_number() over (partition by a.operation_id order by a.attempt_no desc) rn from attempt_events a where a.operation_id in (select operation_id from w)),\nops as (select w.operation_id, w.route_id, sr.service_id, (select count(*) from attempt_events a where a.operation_id=w.operation_id) n_att,\n (select count(*) from attempt_events a join failure_codes f using(code_id) where a.operation_id=w.operation_id and f.is_success=0) n_fail,\n (select f.is_success from attempt_events a join failure_codes f using(code_id) where a.operation_id=w.operation_id order by attempt_no desc limit 1) final_ok\n from w join service_routes sr using(route_id))\nselect service_id, count(*) operations, sum(n_att) attempts, sum(n_fail) failed_attempts, sum(final_ok=0) terminal_failures, sum(n_att>1) retried_operations, round(100.0*sum(final_ok=0)/count(*),4) pct from ops group by rollup(service_id);\nselect count(*) from w join service_routes sr using(route_id) where not exists(select 1 from route_assignments ra where ra.route_id=w.route_id and w.opened_at_ms>=ra.effective_from_ms and w.opened_at_ms<ra.effective_to_ms);\n\" "
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 991,
+        "cache_read_input_tokens": 8228,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 991,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 793,
+        "output_tokens_details": {
+          "thinking_tokens": 218
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.000602855,
+      "response_id": "msg_011Cgqiqj1ExAZqCAGkj4ajN",
+      "elapsed_s": 3.5209835240384564,
+      "token_accounting": {
+        "input_tokens": 9221,
+        "input_uncached_tokens": 2,
+        "cache_read_input_tokens": 8228,
+        "cache_creation_input_tokens": 991,
+        "cache_creation_5m_input_tokens": 991,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 793,
+        "reasoning_tokens": 0,
+        "total_tokens": 10014
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011Cgqiqj1ExAZqCAGkj4ajN",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": {
+              "omitted": true,
+              "sha256": "4fccae539cd38f0c4e653c79662bdaf6ca7f73da31c7974afd8784fd9d316139",
+              "length": 1772
+            }
+          },
+          {
+            "type": "tool_use",
+            "id": "toolu_01Cmw7nor3VBqAfJTcisyhoB",
+            "name": "bash",
+            "input": {
+              "command": "cd /data; sqlite3 -header current.db \"\nwith w as (select o.* from logical_operations o where o.opened_at_ms>=1777629600000 and o.opened_at_ms<1777633200000),\natt as (select a.*, row_number() over (partition by a.operation_id order by a.attempt_no desc) rn from attempt_events a where a.operation_id in (select operation_id from w)),\nops as (select w.operation_id, w.route_id, sr.service_id, (select count(*) from attempt_events a where a.operation_id=w.operation_id) n_att,\n (select count(*) from attempt_events a join failure_codes f using(code_id) where a.operation_id=w.operation_id and f.is_success=0) n_fail,\n (select f.is_success from attempt_events a join failure_codes f using(code_id) where a.operation_id=w.operation_id order by attempt_no desc limit 1) final_ok\n from w join service_routes sr using(route_id))\nselect service_id, count(*) operations, sum(n_att) attempts, sum(n_fail) failed_attempts, sum(final_ok=0) terminal_failures, sum(n_att>1) retried_operations, round(100.0*sum(final_ok=0)/count(*),4) pct from ops group by rollup(service_id);\nselect count(*) from w join service_routes sr using(route_id) where not exists(select 1 from route_assignments ra where ra.route_id=w.route_id and w.opened_at_ms>=ra.effective_from_ms and w.opened_at_ms<ra.effective_to_ms);\n\" "
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 991,
+          "cache_read_input_tokens": 8228,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 991,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 793,
+          "output_tokens_details": {
+            "thinking_tokens": 218
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 28020,
+      "tool_results": [
+        {
+          "output": "\nSTDERR:\nError: in prepare, no such function: rollup\n  sum(final_ok=0)/count(*),4) pct from ops group by rollup(service_id); select c\n                                      error here ---^\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.005619239993393421, \"exit_code\": 1}\n",
+          "exit_code": 1,
+          "wall_seconds": 0.2817755389260128,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.005619239993393421,
+              "exit_code": 1
+            }
+          ],
+          "command": "cd /data; sqlite3 -header current.db \"\nwith w as (select o.* from logical_operations o where o.opened_at_ms>=1777629600000 and o.opened_at_ms<1777633200000),\natt as (select a.*, row_number() over (partition by a.operation_id order by a.attempt_no desc) rn from attempt_events a where a.operation_id in (select operation_id from w)),\nops as (select w.operation_id, w.route_id, sr.service_id, (select count(*) from attempt_events a where a.operation_id=w.operation_id) n_att,\n (select count(*) from attempt_events a join failure_codes f using(code_id) where a.operation_id=w.operation_id and f.is_success=0) n_fail,\n (select f.is_success from attempt_events a join failure_codes f using(code_id) where a.operation_id=w.operation_id order by attempt_no desc limit 1) final_ok\n from w join service_routes sr using(route_id))\nselect service_id, count(*) operations, sum(n_att) attempts, sum(n_fail) failed_attempts, sum(final_ok=0) terminal_failures, sum(n_att>1) retried_operations, round(100.0*sum(final_ok=0)/count(*),4) pct from ops group by rollup(service_id);\nselect count(*) from w join service_routes sr using(route_id) where not exists(select 1 from route_assignments ra where ra.route_id=w.route_id and w.opened_at_ms>=ra.effective_from_ms and w.opened_at_ms<ra.effective_to_ms);\n\" "
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "toolu_015WLy1jxmeSLokkeyc2bb6V",
+          "name": "bash",
+          "arguments": {
+            "command": "cd /data; sqlite3 -header current.db \"\nwith w as (select o.* from logical_operations o where o.opened_at_ms>=1777629600000 and o.opened_at_ms<1777633200000),\nops as (select w.operation_id, w.route_id, sr.service_id, (select count(*) from attempt_events a where a.operation_id=w.operation_id) n_att,\n (select count(*) from attempt_events a join failure_codes f using(code_id) where a.operation_id=w.operation_id and f.is_success=0) n_fail,\n (select f.is_success from attempt_events a join failure_codes f using(code_id) where a.operation_id=w.operation_id order by attempt_no desc limit 1) final_ok\n from w join service_routes sr using(route_id))\nselect service_id, count(*) operations, sum(n_att) attempts, sum(n_fail) failed_attempts, sum(final_ok=0) terminal_failures, sum(n_att>1) retried_operations, round(100.0*sum(final_ok=0)/count(*),4) pct from ops group by service_id\nunion all select 'ALL', count(*), sum(n_att), sum(n_fail), sum(final_ok=0), sum(n_att>1), round(100.0*sum(final_ok=0)/count(*),4) from ops;\nselect count(*) from logical_operations w join service_routes sr using(route_id) where opened_at_ms>=1777629600000 and opened_at_ms<1777633200000 and not exists(select 1 from route_assignments ra where ra.route_id=w.route_id and w.opened_at_ms>=ra.effective_from_ms and w.opened_at_ms<ra.effective_to_ms);\nselect sr.service_id, ra.pool_id, count(*) from logical_operations w join service_routes sr using(route_id) join route_assignments ra on ra.route_id=w.route_id and w.opened_at_ms>=ra.effective_from_ms and w.opened_at_ms<ra.effective_to_ms where opened_at_ms>=1777629600000 and opened_at_ms<1777633200000 group by 1,2;\n\" "
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 917,
+        "cache_read_input_tokens": 9219,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 917,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 760,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.000587015,
+      "response_id": "msg_011Cgqir1YfYNAtJpQQBeAU7",
+      "elapsed_s": 2.4883007070748135,
+      "token_accounting": {
+        "input_tokens": 10138,
+        "input_uncached_tokens": 2,
+        "cache_read_input_tokens": 9219,
+        "cache_creation_input_tokens": 917,
+        "cache_creation_5m_input_tokens": 917,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 760,
+        "reasoning_tokens": 0,
+        "total_tokens": 10898
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011Cgqir1YfYNAtJpQQBeAU7",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "tool_use",
+            "id": "toolu_015WLy1jxmeSLokkeyc2bb6V",
+            "name": "bash",
+            "input": {
+              "command": "cd /data; sqlite3 -header current.db \"\nwith w as (select o.* from logical_operations o where o.opened_at_ms>=1777629600000 and o.opened_at_ms<1777633200000),\nops as (select w.operation_id, w.route_id, sr.service_id, (select count(*) from attempt_events a where a.operation_id=w.operation_id) n_att,\n (select count(*) from attempt_events a join failure_codes f using(code_id) where a.operation_id=w.operation_id and f.is_success=0) n_fail,\n (select f.is_success from attempt_events a join failure_codes f using(code_id) where a.operation_id=w.operation_id order by attempt_no desc limit 1) final_ok\n from w join service_routes sr using(route_id))\nselect service_id, count(*) operations, sum(n_att) attempts, sum(n_fail) failed_attempts, sum(final_ok=0) terminal_failures, sum(n_att>1) retried_operations, round(100.0*sum(final_ok=0)/count(*),4) pct from ops group by service_id\nunion all select 'ALL', count(*), sum(n_att), sum(n_fail), sum(final_ok=0), sum(n_att>1), round(100.0*sum(final_ok=0)/count(*),4) from ops;\nselect count(*) from logical_operations w join service_routes sr using(route_id) where opened_at_ms>=1777629600000 and opened_at_ms<1777633200000 and not exists(select 1 from route_assignments ra where ra.route_id=w.route_id and w.opened_at_ms>=ra.effective_from_ms and w.opened_at_ms<ra.effective_to_ms);\nselect sr.service_id, ra.pool_id, count(*) from logical_operations w join service_routes sr using(route_id) join route_assignments ra on ra.route_id=w.route_id and w.opened_at_ms>=ra.effective_from_ms and w.opened_at_ms<ra.effective_to_ms where opened_at_ms>=1777629600000 and opened_at_ms<1777633200000 group by 1,2;\n\" "
+            },
+            "caller": {
+              "type": "direct"
+            }
+          }
+        ],
+        "container": null,
+        "stop_reason": "tool_use",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 917,
+          "cache_read_input_tokens": 9219,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 917,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 760,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 30253,
+      "tool_results": [
+        {
+          "output": "service_id|operations|attempts|failed_attempts|terminal_failures|retried_operations|pct\n1|2000|2300|350|50|250|2.5\n2|2000|2300|350|50|250|2.5\nALL|4000|4600|700|100|500|2.5\ncount(*)\n0\nservice_id|pool_id|count(*)\n1|1|1000\n1|2|1000\n2|3|1000\n2|4|1000\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.03995277895592153, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.33440804900601506,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.03995277895592153,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd /data; sqlite3 -header current.db \"\nwith w as (select o.* from logical_operations o where o.opened_at_ms>=1777629600000 and o.opened_at_ms<1777633200000),\nops as (select w.operation_id, w.route_id, sr.service_id, (select count(*) from attempt_events a where a.operation_id=w.operation_id) n_att,\n (select count(*) from attempt_events a join failure_codes f using(code_id) where a.operation_id=w.operation_id and f.is_success=0) n_fail,\n (select f.is_success from attempt_events a join failure_codes f using(code_id) where a.operation_id=w.operation_id order by attempt_no desc limit 1) final_ok\n from w join service_routes sr using(route_id))\nselect service_id, count(*) operations, sum(n_att) attempts, sum(n_fail) failed_attempts, sum(final_ok=0) terminal_failures, sum(n_att>1) retried_operations, round(100.0*sum(final_ok=0)/count(*),4) pct from ops group by service_id\nunion all select 'ALL', count(*), sum(n_att), sum(n_fail), sum(final_ok=0), sum(n_att>1), round(100.0*sum(final_ok=0)/count(*),4) from ops;\nselect count(*) from logical_operations w join service_routes sr using(route_id) where opened_at_ms>=1777629600000 and opened_at_ms<1777633200000 and not exists(select 1 from route_assignments ra where ra.route_id=w.route_id and w.opened_at_ms>=ra.effective_from_ms and w.opened_at_ms<ra.effective_to_ms);\nselect sr.service_id, ra.pool_id, count(*) from logical_operations w join service_routes sr using(route_id) join route_assignments ra on ra.route_id=w.route_id and w.opened_at_ms>=ra.effective_from_ms and w.opened_at_ms<ra.effective_to_ms where opened_at_ms>=1777629600000 and opened_at_ms<1777633200000 group by 1,2;\n\" "
+        }
+      ]
+    },
+    {
+      "tool_calls": [],
+      "final_text": "```json\n{\n  \"answer\": {\n    \"totals\": {\n      \"operations\": 4000,\n      \"attempts\": 4600,\n      \"failed_attempts\": 700,\n      \"terminal_failures\": 100,\n      \"retried_operations\": 500\n    },\n    \"services\": [\n      {\n        \"service_code\": \"parcel-index\",\n        \"operations\": 2000,\n        \"attempts\": 2300,\n        \"failed_attempts\": 350,\n        \"terminal_failures\": 50,\n        \"retried_operations\": 250,\n        \"terminal_failure_pct\": 2.5,\n        \"physical_pools\": 2\n      },\n      {\n        \"service_code\": \"ledger-sync\",\n        \"operations\": 2000,\n        \"attempts\": 2300,\n        \"failed_attempts\": 350,\n        \"terminal_failures\": 50,\n        \"retried_operations\": 250,\n        \"terminal_failure_pct\": 2.5,\n        \"physical_pools\": 2\n      }\n    ]\n  },\n  \"evidence_sql\": [\n    \"WITH w AS (SELECT o.* FROM logical_operations o WHERE o.opened_at_ms >= 1777629600000 AND o.opened_at_ms < 1777633200000), ops AS (SELECT w.operation_id, sr.service_id, (SELECT COUNT(*) FROM attempt_events a WHERE a.operation_id = w.operation_id) AS n_att, (SELECT COUNT(*) FROM attempt_events a JOIN failure_codes f USING(code_id) WHERE a.operation_id = w.operation_id AND f.is_success = 0) AS n_fail, (SELECT f.is_success FROM attempt_events a JOIN failure_codes f USING(code_id) WHERE a.operation_id = w.operation_id ORDER BY a.attempt_no DESC LIMIT 1) AS final_ok FROM w JOIN service_routes sr USING(route_id)) SELECT service_id, COUNT(*) AS operations, SUM(n_att) AS attempts, SUM(n_fail) AS failed_attempts, SUM(final_ok = 0) AS terminal_failures, SUM(n_att > 1) AS retried_operations, ROUND(100.0 * SUM(final_ok = 0) / COUNT(*), 4) AS terminal_failure_pct FROM ops GROUP BY service_id UNION ALL SELECT 'ALL', COUNT(*), SUM(n_att), SUM(n_fail), SUM(final_ok = 0), SUM(n_att > 1), ROUND(100.0 * SUM(final_ok = 0) / COUNT(*), 4) FROM ops;\",\n    \"SELECT sr.service_id, ra.pool_id, COUNT(*) AS operations FROM logical_operations w JOIN service_routes sr USING(route_id) JOIN route_assignments ra ON ra.route_id = w.route_id AND w.opened_at_ms >= ra.effective_from_ms AND w.opened_at_ms < ra.effective_to_ms WHERE w.opened_at_ms >= 1777629600000 AND w.opened_at_ms < 1777633200000 GROUP BY sr.service_id, ra.pool_id;\",\n    \"SELECT COUNT(*) AS ops_without_assignment FROM logical_operations w JOIN service_routes sr USING(route_id) WHERE w.opened_at_ms >= 1777629600000 AND w.opened_at_ms < 1777633200000 AND NOT EXISTS (SELECT 1 FROM route_assignments ra WHERE ra.route_id = w.route_id AND w.opened_at_ms >= ra.effective_from_ms AND w.opened_at_ms < ra.effective_to_ms);\",\n    \"SELECT COUNT(*) AS ops_missing_attempts FROM logical_operations o WHERE NOT EXISTS (SELECT 1 FROM attempt_events a WHERE a.operation_id = o.operation_id);\"\n  ],\n  \"caveats\": [\n    \"Window is 2026-05-01 10:00 (inclusive) to 11:00 UTC (exclusive) by logical_operations.opened_at_ms (epoch ms 1777629600000 to 1777633200000); 4,000 operations were in scope.\",\n    \"Attempts and terminal failures are not interchangeable: attempts count every try (4,600), failed attempts count every non-success try (700), while terminal failures count only operations whose final attempt has is_success=0 (100). Earlier failed attempts followed by success are not terminal failures.\",\n    \"Terminal-failure percentage uses logical operations as the denominator (100 / 4,000 = 2.5%). Retried operations are operations with more than one attempt, including ultimately failed ones (500 total).\",\n    \"Pool attribution uses the routing assignment effective at operation open (feed_registry v1, attempt_events, routing-time attribution). Each service maps to two distinct physical pools in the window (parcel-index: idx-north, idx-south; ledger-sync: sync-north, sync-south). Routing intent was not counted as a physical pool.\",\n    \"Counts are descriptive and calibration-only; the observed equal split between services (2,000 operations each) should not be read as attribution of any incident. No causal conclusions are drawn.\"\n  ]\n}\n```",
+      "usage": {
+        "input_tokens": 2,
+        "cache_creation_input_tokens": 961,
+        "cache_read_input_tokens": 10136,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 961,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 2423,
+        "output_tokens_details": {
+          "thinking_tokens": 633
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      },
+      "cost_usd": 0.001433185,
+      "response_id": "msg_011CgqirDn7Zd1ArYS9SURTZ",
+      "elapsed_s": 8.89023817598354,
+      "token_accounting": {
+        "input_tokens": 11099,
+        "input_uncached_tokens": 2,
+        "cache_read_input_tokens": 10136,
+        "cache_creation_input_tokens": 961,
+        "cache_creation_5m_input_tokens": 961,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 2423,
+        "reasoning_tokens": 0,
+        "total_tokens": 13522
+      },
+      "cost_source": "configured_rates",
+      "native_response": {
+        "model": "claude-haiku-5-5",
+        "id": "msg_011CgqirDn7Zd1ArYS9SURTZ",
+        "type": "message",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": {
+              "omitted": true,
+              "sha256": "189eb3696e2c60254415539775b6c7de41ab60e723d43a8d97a60b6a230b8530",
+              "length": 3048
+            }
+          },
+          {
+            "type": "text",
+            "text": "```json\n{\n  \"answer\": {\n    \"totals\": {\n      \"operations\": 4000,\n      \"attempts\": 4600,\n      \"failed_attempts\": 700,\n      \"terminal_failures\": 100,\n      \"retried_operations\": 500\n    },\n    \"services\": [\n      {\n        \"service_code\": \"parcel-index\",\n        \"operations\": 2000,\n        \"attempts\": 2300,\n        \"failed_attempts\": 350,\n        \"terminal_failures\": 50,\n        \"retried_operations\": 250,\n        \"terminal_failure_pct\": 2.5,\n        \"physical_pools\": 2\n      },\n      {\n        \"service_code\": \"ledger-sync\",\n        \"operations\": 2000,\n        \"attempts\": 2300,\n        \"failed_attempts\": 350,\n        \"terminal_failures\": 50,\n        \"retried_operations\": 250,\n        \"terminal_failure_pct\": 2.5,\n        \"physical_pools\": 2\n      }\n    ]\n  },\n  \"evidence_sql\": [\n    \"WITH w AS (SELECT o.* FROM logical_operations o WHERE o.opened_at_ms >= 1777629600000 AND o.opened_at_ms < 1777633200000), ops AS (SELECT w.operation_id, sr.service_id, (SELECT COUNT(*) FROM attempt_events a WHERE a.operation_id = w.operation_id) AS n_att, (SELECT COUNT(*) FROM attempt_events a JOIN failure_codes f USING(code_id) WHERE a.operation_id = w.operation_id AND f.is_success = 0) AS n_fail, (SELECT f.is_success FROM attempt_events a JOIN failure_codes f USING(code_id) WHERE a.operation_id = w.operation_id ORDER BY a.attempt_no DESC LIMIT 1) AS final_ok FROM w JOIN service_routes sr USING(route_id)) SELECT service_id, COUNT(*) AS operations, SUM(n_att) AS attempts, SUM(n_fail) AS failed_attempts, SUM(final_ok = 0) AS terminal_failures, SUM(n_att > 1) AS retried_operations, ROUND(100.0 * SUM(final_ok = 0) / COUNT(*), 4) AS terminal_failure_pct FROM ops GROUP BY service_id UNION ALL SELECT 'ALL', COUNT(*), SUM(n_att), SUM(n_fail), SUM(final_ok = 0), SUM(n_att > 1), ROUND(100.0 * SUM(final_ok = 0) / COUNT(*), 4) FROM ops;\",\n    \"SELECT sr.service_id, ra.pool_id, COUNT(*) AS operations FROM logical_operations w JOIN service_routes sr USING(route_id) JOIN route_assignments ra ON ra.route_id = w.route_id AND w.opened_at_ms >= ra.effective_from_ms AND w.opened_at_ms < ra.effective_to_ms WHERE w.opened_at_ms >= 1777629600000 AND w.opened_at_ms < 1777633200000 GROUP BY sr.service_id, ra.pool_id;\",\n    \"SELECT COUNT(*) AS ops_without_assignment FROM logical_operations w JOIN service_routes sr USING(route_id) WHERE w.opened_at_ms >= 1777629600000 AND w.opened_at_ms < 1777633200000 AND NOT EXISTS (SELECT 1 FROM route_assignments ra WHERE ra.route_id = w.route_id AND w.opened_at_ms >= ra.effective_from_ms AND w.opened_at_ms < ra.effective_to_ms);\",\n    \"SELECT COUNT(*) AS ops_missing_attempts FROM logical_operations o WHERE NOT EXISTS (SELECT 1 FROM attempt_events a WHERE a.operation_id = o.operation_id);\"\n  ],\n  \"caveats\": [\n    \"Window is 2026-05-01 10:00 (inclusive) to 11:00 UTC (exclusive) by logical_operations.opened_at_ms (epoch ms 1777629600000 to 1777633200000); 4,000 operations were in scope.\",\n    \"Attempts and terminal failures are not interchangeable: attempts count every try (4,600), failed attempts count every non-success try (700), while terminal failures count only operations whose final attempt has is_success=0 (100). Earlier failed attempts followed by success are not terminal failures.\",\n    \"Terminal-failure percentage uses logical operations as the denominator (100 / 4,000 = 2.5%). Retried operations are operations with more than one attempt, including ultimately failed ones (500 total).\",\n    \"Pool attribution uses the routing assignment effective at operation open (feed_registry v1, attempt_events, routing-time attribution). Each service maps to two distinct physical pools in the window (parcel-index: idx-north, idx-south; ledger-sync: sync-north, sync-south). Routing intent was not counted as a physical pool.\",\n    \"Counts are descriptive and calibration-only; the observed equal split between services (2,000 operations each) should not be read as attribution of any incident. No causal conclusions are drawn.\"\n  ]\n}\n```"
+          }
+        ],
+        "container": null,
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "stop_details": null,
+        "usage": {
+          "input_tokens": 2,
+          "cache_creation_input_tokens": 961,
+          "cache_read_input_tokens": 10136,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 961,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 2423,
+          "output_tokens_details": {
+            "thinking_tokens": 633
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "diagnostics": null
+      },
+      "state_chars": 38015,
+      "tool_results": []
+    }
+  ],
+  "status": "completed",
+  "final_text": "```json\n{\n  \"answer\": {\n    \"totals\": {\n      \"operations\": 4000,\n      \"attempts\": 4600,\n      \"failed_attempts\": 700,\n      \"terminal_failures\": 100,\n      \"retried_operations\": 500\n    },\n    \"services\": [\n      {\n        \"service_code\": \"parcel-index\",\n        \"operations\": 2000,\n        \"attempts\": 2300,\n        \"failed_attempts\": 350,\n        \"terminal_failures\": 50,\n        \"retried_operations\": 250,\n        \"terminal_failure_pct\": 2.5,\n        \"physical_pools\": 2\n      },\n      {\n        \"service_code\": \"ledger-sync\",\n        \"operations\": 2000,\n        \"attempts\": 2300,\n        \"failed_attempts\": 350,\n        \"terminal_failures\": 50,\n        \"retried_operations\": 250,\n        \"terminal_failure_pct\": 2.5,\n        \"physical_pools\": 2\n      }\n    ]\n  },\n  \"evidence_sql\": [\n    \"WITH w AS (SELECT o.* FROM logical_operations o WHERE o.opened_at_ms >= 1777629600000 AND o.opened_at_ms < 1777633200000), ops AS (SELECT w.operation_id, sr.service_id, (SELECT COUNT(*) FROM attempt_events a WHERE a.operation_id = w.operation_id) AS n_att, (SELECT COUNT(*) FROM attempt_events a JOIN failure_codes f USING(code_id) WHERE a.operation_id = w.operation_id AND f.is_success = 0) AS n_fail, (SELECT f.is_success FROM attempt_events a JOIN failure_codes f USING(code_id) WHERE a.operation_id = w.operation_id ORDER BY a.attempt_no DESC LIMIT 1) AS final_ok FROM w JOIN service_routes sr USING(route_id)) SELECT service_id, COUNT(*) AS operations, SUM(n_att) AS attempts, SUM(n_fail) AS failed_attempts, SUM(final_ok = 0) AS terminal_failures, SUM(n_att > 1) AS retried_operations, ROUND(100.0 * SUM(final_ok = 0) / COUNT(*), 4) AS terminal_failure_pct FROM ops GROUP BY service_id UNION ALL SELECT 'ALL', COUNT(*), SUM(n_att), SUM(n_fail), SUM(final_ok = 0), SUM(n_att > 1), ROUND(100.0 * SUM(final_ok = 0) / COUNT(*), 4) FROM ops;\",\n    \"SELECT sr.service_id, ra.pool_id, COUNT(*) AS operations FROM logical_operations w JOIN service_routes sr USING(route_id) JOIN route_assignments ra ON ra.route_id = w.route_id AND w.opened_at_ms >= ra.effective_from_ms AND w.opened_at_ms < ra.effective_to_ms WHERE w.opened_at_ms >= 1777629600000 AND w.opened_at_ms < 1777633200000 GROUP BY sr.service_id, ra.pool_id;\",\n    \"SELECT COUNT(*) AS ops_without_assignment FROM logical_operations w JOIN service_routes sr USING(route_id) WHERE w.opened_at_ms >= 1777629600000 AND w.opened_at_ms < 1777633200000 AND NOT EXISTS (SELECT 1 FROM route_assignments ra WHERE ra.route_id = w.route_id AND w.opened_at_ms >= ra.effective_from_ms AND w.opened_at_ms < ra.effective_to_ms);\",\n    \"SELECT COUNT(*) AS ops_missing_attempts FROM logical_operations o WHERE NOT EXISTS (SELECT 1 FROM attempt_events a WHERE a.operation_id = o.operation_id);\"\n  ],\n  \"caveats\": [\n    \"Window is 2026-05-01 10:00 (inclusive) to 11:00 UTC (exclusive) by logical_operations.opened_at_ms (epoch ms 1777629600000 to 1777633200000); 4,000 operations were in scope.\",\n    \"Attempts and terminal failures are not interchangeable: attempts count every try (4,600), failed attempts count every non-success try (700), while terminal failures count only operations whose final attempt has is_success=0 (100). Earlier failed attempts followed by success are not terminal failures.\",\n    \"Terminal-failure percentage uses logical operations as the denominator (100 / 4,000 = 2.5%). Retried operations are operations with more than one attempt, including ultimately failed ones (500 total).\",\n    \"Pool attribution uses the routing assignment effective at operation open (feed_registry v1, attempt_events, routing-time attribution). Each service maps to two distinct physical pools in the window (parcel-index: idx-north, idx-south; ledger-sync: sync-north, sync-south). Routing intent was not counted as a physical pool.\",\n    \"Counts are descriptive and calibration-only; the observed equal split between services (2,000 operations each) should not be read as attribution of any incident. No causal conclusions are drawn.\"\n  ]\n}\n```",
+  "memory_before": {},
+  "elapsed_s": 29.51689237507526,
+  "memory_after": {},
+  "db_hash_after": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+  "db_unchanged": true
+}

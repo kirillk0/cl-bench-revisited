@@ -1,0 +1,123 @@
+{
+  "task": "T3",
+  "schema_valid": true,
+  "schema_errors": [],
+  "metric_fraction": 0.5,
+  "suggested_metric_points_out_of_70": 35.0,
+  "section_results": {
+    "largest_increase": {
+      "correct": 4,
+      "total": 4,
+      "fraction": 1.0,
+      "failed_paths": []
+    },
+    "pool_metrics": {
+      "correct": 0,
+      "total": 33,
+      "fraction": 0.0,
+      "failed_paths": [
+        "pool_metrics[period=incident,pool_code=sync-north].mean_latency_ms",
+        "pool_metrics[period=incident,pool_code=sync-north].operations",
+        "pool_metrics[period=incident,pool_code=sync-north].period",
+        "pool_metrics[period=incident,pool_code=sync-north].pool_code",
+        "pool_metrics[period=incident,pool_code=sync-north].retried_operations",
+        "pool_metrics[period=incident,pool_code=sync-north].retry_pct",
+        "pool_metrics[period=incident,pool_code=sync-north].terminal_failure_pct",
+        "pool_metrics[period=incident,pool_code=sync-north].terminal_failures",
+        "pool_metrics[period=incident,pool_code=sync-south].mean_latency_ms",
+        "pool_metrics[period=incident,pool_code=sync-south].operations",
+        "pool_metrics[period=incident,pool_code=sync-south].period",
+        "pool_metrics[period=incident,pool_code=sync-south].pool_code",
+        "pool_metrics[period=incident,pool_code=sync-south].retried_operations",
+        "pool_metrics[period=incident,pool_code=sync-south].retry_pct",
+        "pool_metrics[period=incident,pool_code=sync-south].terminal_failure_pct",
+        "pool_metrics[period=incident,pool_code=sync-south].terminal_failures",
+        "pool_metrics[period=reference,pool_code=sync-north].mean_latency_ms",
+        "pool_metrics[period=reference,pool_code=sync-north].operations",
+        "pool_metrics[period=reference,pool_code=sync-north].period",
+        "pool_metrics[period=reference,pool_code=sync-north].pool_code",
+        "pool_metrics[period=reference,pool_code=sync-north].retried_operations",
+        "pool_metrics[period=reference,pool_code=sync-north].retry_pct",
+        "pool_metrics[period=reference,pool_code=sync-north].terminal_failure_pct",
+        "pool_metrics[period=reference,pool_code=sync-north].terminal_failures",
+        "pool_metrics[period=reference,pool_code=sync-south].mean_latency_ms",
+        "pool_metrics[period=reference,pool_code=sync-south].operations",
+        "pool_metrics[period=reference,pool_code=sync-south].period",
+        "pool_metrics[period=reference,pool_code=sync-south].pool_code",
+        "pool_metrics[period=reference,pool_code=sync-south].retried_operations",
+        "pool_metrics[period=reference,pool_code=sync-south].retry_pct",
+        "pool_metrics[period=reference,pool_code=sync-south].terminal_failure_pct",
+        "pool_metrics[period=reference,pool_code=sync-south].terminal_failures",
+        "pool_metrics.unexpected_rows"
+      ]
+    },
+    "source": {
+      "correct": 4,
+      "total": 4,
+      "fraction": 1.0,
+      "failed_paths": []
+    },
+    "totals": {
+      "correct": 0,
+      "total": 9,
+      "fraction": 0.0,
+      "failed_paths": [
+        "totals[period=incident].operations",
+        "totals[period=incident].period",
+        "totals[period=incident].terminal_failure_pct",
+        "totals[period=incident].terminal_failures",
+        "totals[period=reference].operations",
+        "totals[period=reference].period",
+        "totals[period=reference].terminal_failure_pct",
+        "totals[period=reference].terminal_failures",
+        "totals.unexpected_rows"
+      ]
+    }
+  },
+  "evidence_execution_checks": [
+    {
+      "index": 0,
+      "read_only_executable_with_table_reads": true,
+      "rows": 2
+    },
+    {
+      "index": 1,
+      "read_only_executable_with_table_reads": true,
+      "rows": 8
+    },
+    {
+      "index": 2,
+      "read_only_executable_with_table_reads": true,
+      "rows": 4
+    },
+    {
+      "index": 3,
+      "read_only_executable_with_table_reads": true,
+      "rows": 2
+    },
+    {
+      "index": 4,
+      "read_only_executable_with_table_reads": true,
+      "rows": 4
+    }
+  ],
+  "human_review_required": {
+    "evidence_points_out_of_10": "Queries must actually support the reported values and attribution. Executing successfully or SELECTing constants is not sufficient.",
+    "verdict_points_out_of_20": [
+      {
+        "criterion": "Uses registry v2 current operation-grain outcomes; old attempt feed is historical, not empty current business activity.",
+        "id": "source"
+      },
+      {
+        "criterion": "Aggregates actual execution cells to physical pools and does not use stale intended-route assignment as actual service attribution.",
+        "id": "attribution"
+      },
+      {
+        "criterion": "Identifies sync-south +15 pp and does not infer a proven root cause from these aggregate metrics.",
+        "id": "restraint"
+      }
+    ]
+  },
+  "overall_score": null,
+  "note": "No automatic preferred-opinion score. Review factual criteria, uncertainty and evidence support; invalid schema prevents full credit but does not erase diagnostics."
+}

@@ -1,0 +1,3708 @@
+{
+  "task_id": "W2",
+  "db_sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+  "snapshot": "pre.db",
+  "prompt": "Use only the supplied current.db and README. All windows below are UTC and half-open, selected by logical-operation open time. A terminal-failure percentage has logical operations as its denominator; attempt-failure percentage has attempts as its denominator. Return only JSON matching the provided schema. Percentages use 0–100, differences use percentage points. evidence_sql must contain executable read-only SQLite queries with literal bounds, not pseudocode. Arrays may be in any order; include every requested group. A zero numerator is not missing data. No web or network access is needed.\n\nInvestigate parcel-index on 2026-05-02, comparing reference 10:00–11:00 with incident 11:00–12:00. For every period and serving physical pool, report operations, terminal failures and their percentage, attempts, failed attempts and their percentage, retried operations, and minimum/maximum applied deadline_ms. Report ordinary window means of every recorded telemetry signal for those pools, and applied changes during 10:00–12:00 (kind, pool, effective time, before/after JSON strings). In assessment, identify the most strongly supported proximal explanation, the affected pool and the terminal-failure increase in percentage points; contrast it with at least one plausible alternative. Distinguish evidence from causal proof. Attribute configuration at the time the operation entered the system, not from today's configuration.\n\nRequired JSON response schema:\n{\"$schema\": \"https://json-schema.org/draft/2020-12/schema\", \"additionalProperties\": false, \"properties\": {\"answer\": {\"additionalProperties\": false, \"properties\": {\"assessment\": {\"type\": \"string\"}, \"changes\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"after_json\": {\"type\": \"string\"}, \"before_json\": {\"type\": \"string\"}, \"effective_at_ms\": {\"type\": \"integer\"}, \"kind_code\": {\"type\": \"string\"}, \"pool_code\": {\"type\": \"string\"}}, \"required\": [\"kind_code\", \"pool_code\", \"effective_at_ms\", \"before_json\", \"after_json\"], \"type\": \"object\"}, \"maxItems\": 1, \"minItems\": 1, \"type\": \"array\"}, \"pool_metrics\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"attempt_failure_pct\": {\"type\": \"number\"}, \"attempts\": {\"type\": \"integer\"}, \"failed_attempts\": {\"type\": \"integer\"}, \"max_deadline_ms\": {\"type\": \"integer\"}, \"min_deadline_ms\": {\"type\": \"integer\"}, \"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"pool_code\": {\"type\": \"string\"}, \"retried_operations\": {\"type\": \"integer\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"period\", \"pool_code\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\", \"attempts\", \"failed_attempts\", \"attempt_failure_pct\", \"retried_operations\", \"min_deadline_ms\", \"max_deadline_ms\"], \"type\": \"object\"}, \"maxItems\": 4, \"minItems\": 4, \"type\": \"array\"}, \"telemetry\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"mean_value\": {\"type\": \"number\"}, \"period\": {\"type\": \"string\"}, \"pool_code\": {\"type\": \"string\"}, \"signal_code\": {\"type\": \"string\"}, \"unit\": {\"type\": \"string\"}}, \"required\": [\"period\", \"pool_code\", \"signal_code\", \"mean_value\", \"unit\"], \"type\": \"object\"}, \"maxItems\": 16, \"minItems\": 16, \"type\": \"array\"}}, \"required\": [\"pool_metrics\", \"telemetry\", \"changes\", \"assessment\"], \"type\": \"object\"}, \"caveats\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}, \"evidence_sql\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}}, \"required\": [\"answer\", \"evidence_sql\", \"caveats\"], \"type\": \"object\"}",
+  "turns": [
+    {
+      "tool_calls": [
+        {
+          "id": "call_d99902c88e684620a25beeaf83199bec",
+          "name": "bash",
+          "arguments": {
+            "command": "sqlite3 ../data/current.db '.schema' >/dev/null; sqlite3 -header -column ../data/current.db \"select * from feed_registry; select * from telemetry_signals; select * from change_kinds; select change_id,effective_at_ms,k.kind_code,s.service_code,p.pool_code,before_json,after_json from change_events c join change_kinds k using(kind_id) join services s using(service_id) left join worker_pools p using(pool_id) where effective_at_ms>=1777716000000 and effective_at_ms<1777723200000;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 5161,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 135,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 5296,
+        "attribution": {
+          "items": {
+            "at_0cc0b23c87bf1e25016af098a9fed487d0acf6f9a59bd01caf": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+              "input_tokens": 36,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+              "input_tokens": 45,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+              "input_tokens": 87,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+              "input_tokens": 366,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098a9fed487d08955dea791efe88e": {
+              "input_tokens": 740,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 740,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098a9fed487d09919c4d76646c016": {
+              "input_tokens": 138,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 138,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098a9fed487d0ae3f55103ebab75f": {
+              "input_tokens": 928,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098a9fed487d0b06b555909608f07": {
+              "input_tokens": 142,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 142,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098a9fed487d0b61f50e14a402185": {
+              "input_tokens": 27,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 27,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098aa962087d09d4f1cae79aa314a": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 135
+            },
+            "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+              "input_tokens": 872,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 872,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098a9fed487d0859729a508dcc059": {
+              "input_tokens": 882,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 882,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098a9fed487d0a38717a7c8de53e2": {
+              "input_tokens": 611,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098a9fed487d0bb0cd0531a50250e": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0cc0b23c87bf1e25016af098a9fe2c87d0893718d58401537f",
+      "elapsed_s": 3.853009025915526,
+      "token_accounting": {
+        "input_tokens": 5161,
+        "input_uncached_tokens": 5161,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 135,
+        "reasoning_tokens": 0,
+        "total_tokens": 5296
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0cc0b23c87bf1e25016af098a9fe2c87d0893718d58401537f",
+        "object": "response",
+        "created_at": 1794152618,
+        "completed_at": 1794152621,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0cc0b23c87bf1e25016af098aa962087d09d4f1cae79aa314a",
+            "call_id": "call_d99902c88e684620a25beeaf83199bec",
+            "name": "bash",
+            "arguments": "{\"command\":\"sqlite3 ../data/current.db '.schema' >/dev/null; sqlite3 -header -column ../data/current.db \\\"select * from feed_registry; select * from telemetry_signals; select * from change_kinds; select change_id,effective_at_ms,k.kind_code,s.service_code,p.pool_code,before_json,after_json from change_events c join change_kinds k using(kind_id) join services s using(service_id) left join worker_pools p using(pool_id) where effective_at_ms>=1777716000000 and effective_at_ms<1777723200000;\\\"\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "c3fdd916-13b1-4460-a949-0aeb7ad251a2",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 5161,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 135,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 5296,
+          "attribution": {
+            "items": {
+              "at_0cc0b23c87bf1e25016af098a9fed487d0acf6f9a59bd01caf": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+                "input_tokens": 36,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+                "input_tokens": 45,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+                "input_tokens": 87,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+                "input_tokens": 366,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098a9fed487d08955dea791efe88e": {
+                "input_tokens": 740,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 740,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098a9fed487d09919c4d76646c016": {
+                "input_tokens": 138,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 138,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098a9fed487d0ae3f55103ebab75f": {
+                "input_tokens": 928,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098a9fed487d0b06b555909608f07": {
+                "input_tokens": 142,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 142,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098a9fed487d0b61f50e14a402185": {
+                "input_tokens": 27,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 27,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098aa962087d09d4f1cae79aa314a": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 135
+              },
+              "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+                "input_tokens": 872,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 872,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098a9fed487d0859729a508dcc059": {
+                "input_tokens": 882,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 882,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098a9fed487d0a38717a7c8de53e2": {
+                "input_tokens": 611,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098a9fed487d0bb0cd0531a50250e": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 25190,
+      "tool_results": [
+        {
+          "output": "version  event_table     event_grain  effective_from_ms  effective_to_ms  lifecycle  operation_key_column  attribution_basis                                   \n-------  --------------  -----------  -----------------  ---------------  ---------  --------------------  ----------------------------------------------------\n1        attempt_events  attempt      1777593600000                       active     operation_id          Routing decision effective at logical operation open\nsignal_id  signal_code           unit        description                                                      \n---------  --------------------  ----------  -----------------------------------------------------------------\n1          upstream_latency_p95  ms          Upstream execution p95; sampled independently of client deadlines\n2          queue_depth           operations  Pending operations at the pool                                   \n3          available_workers     workers     Observed available worker slots                                  \n4          cpu_utilization       fraction    Pool CPU utilization                                             \nkind_id  kind_code       \n-------  ----------------\n1        deadline_policy \n2        worker_limit    \n3        release_exposure\n4        feed_migration  \nchange_id  effective_at_ms  kind_code        service_code  pool_code  before_json           after_json         \n---------  ---------------  ---------------  ------------  ---------  --------------------  -------------------\n1          1777719600000    deadline_policy  parcel-index  idx-north  {\"deadline_ms\": 250}  {\"deadline_ms\": 80}\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.003948200028389692, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004004476009868085, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.5414699200773612,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.003948200028389692,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.004004476009868085,
+              "exit_code": 0
+            }
+          ],
+          "command": "sqlite3 ../data/current.db '.schema' >/dev/null; sqlite3 -header -column ../data/current.db \"select * from feed_registry; select * from telemetry_signals; select * from change_kinds; select change_id,effective_at_ms,k.kind_code,s.service_code,p.pool_code,before_json,after_json from change_events c join change_kinds k using(kind_id) join services s using(service_id) left join worker_pools p using(pool_id) where effective_at_ms>=1777716000000 and effective_at_ms<1777723200000;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_feb371967b4c4940826031fe3612a059",
+          "name": "bash",
+          "arguments": {
+            "command": "cat > /tmp/q.sql <<'SQL'\nWITH ops AS (SELECT o.operation_id,o.route_id,o.opened_at_ms, CASE WHEN o.opened_at_ms<1777723200000 THEN 'reference' ELSE 'incident' END period,a.pool_id,pp.deadline_ms FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN policy_profiles pp ON pp.profile_id=a.profile_id WHERE s.service_code='parcel-index' AND o.opened_at_ms>=1777716000000 AND o.opened_at_ms<1777723200000), po AS (SELECT ops.*,count(attempt_id) attempts,sum(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) failed_attempts,max(attempt_no) maxno,max(CASE WHEN attempt_no=(select max(attempt_no) from attempt_events x where x.operation_id=ops.operation_id) THEN f.is_success END) final_success FROM ops LEFT JOIN attempt_events USING(operation_id) LEFT JOIN failure_codes f USING(code_id) GROUP BY ops.operation_id) SELECT period,pool_code,count(*) operations,sum(final_success=0) terminal_failures,100.0*sum(final_success=0)/count(*) terminal_pct,sum(attempts) attempts,sum(failed_attempts) failed_attempts,100.0*sum(failed_attempts)/sum(attempts) attempt_pct,sum(maxno>1) retried,min(deadline_ms),max(deadline_ms) FROM po JOIN worker_pools USING(pool_id) GROUP BY period,pool_id;\nSQL\nsqlite3 -header -column ../data/current.db < /tmp/q.sql"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 5636,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 396,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 6032,
+        "attribution": {
+          "items": {
+            "at_0cc0b23c87bf1e25016af098ae6c1c87d0931c1bb3346cc2ce": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+              "input_tokens": 36,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+              "input_tokens": 45,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+              "input_tokens": 87,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+              "input_tokens": 366,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098aa962087d09d4f1cae79aa314a": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098ae6c2087d092d84ea1fce8c292": {
+              "input_tokens": 142,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 142,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098ae6c2087d098f348dcf6e2c029": {
+              "input_tokens": 27,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 27,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098ae6c2087d09950435fa670971d": {
+              "input_tokens": 928,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098ae6c2087d0a8502ead511c8600": {
+              "input_tokens": 740,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 740,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098ae6c2087d0b258da6139b2fbcc": {
+              "input_tokens": 138,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 138,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098ae6c2087d0b90e797712d9aea6": {
+              "input_tokens": 338,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 338,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098af257c87d0a57f78473426b619": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 396
+            },
+            "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+              "input_tokens": 872,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 872,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098ae6c1c87d0a6e42fde7e8560ae": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098ae6c2087d09768de64e26c6e0a": {
+              "input_tokens": 882,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 882,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098ae6c2087d09e2765b179686a40": {
+              "input_tokens": 611,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0cc0b23c87bf1e25016af098ae6b8087d09ec6c8b094ba693d",
+      "elapsed_s": 8.134640170959756,
+      "token_accounting": {
+        "input_tokens": 5636,
+        "input_uncached_tokens": 5636,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 396,
+        "reasoning_tokens": 0,
+        "total_tokens": 6032
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0cc0b23c87bf1e25016af098ae6b8087d09ec6c8b094ba693d",
+        "object": "response",
+        "created_at": 1794152622,
+        "completed_at": 1794152630,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0cc0b23c87bf1e25016af098af257c87d0a57f78473426b619",
+            "call_id": "call_feb371967b4c4940826031fe3612a059",
+            "name": "bash",
+            "arguments": "{\"command\":\"cat > /tmp/q.sql <<'SQL'\\nWITH ops AS (SELECT o.operation_id,o.route_id,o.opened_at_ms, CASE WHEN o.opened_at_ms<1777723200000 THEN 'reference' ELSE 'incident' END period,a.pool_id,pp.deadline_ms FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN policy_profiles pp ON pp.profile_id=a.profile_id WHERE s.service_code='parcel-index' AND o.opened_at_ms>=1777716000000 AND o.opened_at_ms<1777723200000), po AS (SELECT ops.*,count(attempt_id) attempts,sum(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) failed_attempts,max(attempt_no) maxno,max(CASE WHEN attempt_no=(select max(attempt_no) from attempt_events x where x.operation_id=ops.operation_id) THEN f.is_success END) final_success FROM ops LEFT JOIN attempt_events USING(operation_id) LEFT JOIN failure_codes f USING(code_id) GROUP BY ops.operation_id) SELECT period,pool_code,count(*) operations,sum(final_success=0) terminal_failures,100.0*sum(final_success=0)/count(*) terminal_pct,sum(attempts) attempts,sum(failed_attempts) failed_attempts,100.0*sum(failed_attempts)/sum(attempts) attempt_pct,sum(maxno>1) retried,min(deadline_ms),max(deadline_ms) FROM po JOIN worker_pools USING(pool_id) GROUP BY period,pool_id;\\nSQL\\nsqlite3 -header -column ../data/current.db < /tmp/q.sql\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "be2fbd6b-b4a7-4b2a-95ba-b3a2df6cf74d",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 5636,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 396,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 6032,
+          "attribution": {
+            "items": {
+              "at_0cc0b23c87bf1e25016af098ae6c1c87d0931c1bb3346cc2ce": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+                "input_tokens": 36,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+                "input_tokens": 45,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+                "input_tokens": 87,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+                "input_tokens": 366,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098aa962087d09d4f1cae79aa314a": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098ae6c2087d092d84ea1fce8c292": {
+                "input_tokens": 142,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 142,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098ae6c2087d098f348dcf6e2c029": {
+                "input_tokens": 27,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 27,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098ae6c2087d09950435fa670971d": {
+                "input_tokens": 928,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098ae6c2087d0a8502ead511c8600": {
+                "input_tokens": 740,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 740,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098ae6c2087d0b258da6139b2fbcc": {
+                "input_tokens": 138,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 138,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098ae6c2087d0b90e797712d9aea6": {
+                "input_tokens": 338,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 338,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098af257c87d0a57f78473426b619": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 396
+              },
+              "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+                "input_tokens": 872,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 872,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098ae6c1c87d0a6e42fde7e8560ae": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098ae6c2087d09768de64e26c6e0a": {
+                "input_tokens": 882,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 882,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098ae6c2087d09e2765b179686a40": {
+                "input_tokens": 611,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 28784,
+      "tool_results": [
+        {
+          "output": "period     pool_code  operations  terminal_failures  terminal_pct  attempts  failed_attempts  attempt_pct       retried  min(deadline_ms)  max(deadline_ms)\n---------  ---------  ----------  -----------------  ------------  --------  ---------------  ----------------  -------  ----------------  ----------------\nreference  idx-north  2000        235                11.75         2770      1005             36.2815884476534  535      80                250             \nreference  idx-south  2000        50                 2.5           2300      350              15.2173913043478  250      250               250             \n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.0446853939210996, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.2993788339663297,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.0446853939210996,
+              "exit_code": 0
+            }
+          ],
+          "command": "cat > /tmp/q.sql <<'SQL'\nWITH ops AS (SELECT o.operation_id,o.route_id,o.opened_at_ms, CASE WHEN o.opened_at_ms<1777723200000 THEN 'reference' ELSE 'incident' END period,a.pool_id,pp.deadline_ms FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN policy_profiles pp ON pp.profile_id=a.profile_id WHERE s.service_code='parcel-index' AND o.opened_at_ms>=1777716000000 AND o.opened_at_ms<1777723200000), po AS (SELECT ops.*,count(attempt_id) attempts,sum(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) failed_attempts,max(attempt_no) maxno,max(CASE WHEN attempt_no=(select max(attempt_no) from attempt_events x where x.operation_id=ops.operation_id) THEN f.is_success END) final_success FROM ops LEFT JOIN attempt_events USING(operation_id) LEFT JOIN failure_codes f USING(code_id) GROUP BY ops.operation_id) SELECT period,pool_code,count(*) operations,sum(final_success=0) terminal_failures,100.0*sum(final_success=0)/count(*) terminal_pct,sum(attempts) attempts,sum(failed_attempts) failed_attempts,100.0*sum(failed_attempts)/sum(attempts) attempt_pct,sum(maxno>1) retried,min(deadline_ms),max(deadline_ms) FROM po JOIN worker_pools USING(pool_id) GROUP BY period,pool_id;\nSQL\nsqlite3 -header -column ../data/current.db < /tmp/q.sql"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_b6d6947eb4ba48928e31a7b833d376db",
+          "name": "bash",
+          "arguments": {
+            "command": "python3 - <<'PY'\nimport datetime\nfor h in [11,12]: print(h,int(datetime.datetime(2026,5,2,h,tzinfo=datetime.timezone.utc).timestamp()*1000))\nPY"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 6230,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 65,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 6295,
+        "attribution": {
+          "items": {
+            "at_0cc0b23c87bf1e25016af098b7714087d089e0023936814f0b": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+              "input_tokens": 36,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+              "input_tokens": 45,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+              "input_tokens": 87,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+              "input_tokens": 366,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098aa962087d09d4f1cae79aa314a": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098af257c87d0a57f78473426b619": {
+              "input_tokens": 398,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098b7714487d088b85c579fcfb590": {
+              "input_tokens": 740,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 740,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b7714487d08d49fc6cb34d15ab": {
+              "input_tokens": 196,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 196,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b7714487d091410c109ce5b2bb": {
+              "input_tokens": 338,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 338,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b7714487d0930b76c00be20e2a": {
+              "input_tokens": 138,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 138,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b7714487d098ddeda39433b24d": {
+              "input_tokens": 928,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b7714487d0a0b50bf9744eb0e2": {
+              "input_tokens": 27,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 27,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b7714487d0b16ee87aa94b5d70": {
+              "input_tokens": 142,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 142,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b8274087d08ca15994ee9bc518": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 65
+            },
+            "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+              "input_tokens": 872,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 872,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098b7714087d0a7ff36432890f84c": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098b7714487d092ed12a0abaf832e": {
+              "input_tokens": 611,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098b7714487d0bfa99cc094af9479": {
+              "input_tokens": 882,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 882,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0cc0b23c87bf1e25016af098b770a087d0b0fc77c60adff722",
+      "elapsed_s": 2.7109725889749825,
+      "token_accounting": {
+        "input_tokens": 6230,
+        "input_uncached_tokens": 6230,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 65,
+        "reasoning_tokens": 0,
+        "total_tokens": 6295
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0cc0b23c87bf1e25016af098b770a087d0b0fc77c60adff722",
+        "object": "response",
+        "created_at": 1794152631,
+        "completed_at": 1794152633,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0cc0b23c87bf1e25016af098b8274087d08ca15994ee9bc518",
+            "call_id": "call_b6d6947eb4ba48928e31a7b833d376db",
+            "name": "bash",
+            "arguments": "{\"command\":\"python3 - <<'PY'\\nimport datetime\\nfor h in [11,12]: print(h,int(datetime.datetime(2026,5,2,h,tzinfo=datetime.timezone.utc).timestamp()*1000))\\nPY\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "3d7316fe-2535-4371-8985-8868e2ab5f95",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 6230,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 65,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 6295,
+          "attribution": {
+            "items": {
+              "at_0cc0b23c87bf1e25016af098b7714087d089e0023936814f0b": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+                "input_tokens": 36,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+                "input_tokens": 45,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+                "input_tokens": 87,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+                "input_tokens": 366,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098aa962087d09d4f1cae79aa314a": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098af257c87d0a57f78473426b619": {
+                "input_tokens": 398,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098b7714487d088b85c579fcfb590": {
+                "input_tokens": 740,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 740,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b7714487d08d49fc6cb34d15ab": {
+                "input_tokens": 196,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 196,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b7714487d091410c109ce5b2bb": {
+                "input_tokens": 338,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 338,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b7714487d0930b76c00be20e2a": {
+                "input_tokens": 138,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 138,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b7714487d098ddeda39433b24d": {
+                "input_tokens": 928,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b7714487d0a0b50bf9744eb0e2": {
+                "input_tokens": 27,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 27,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b7714487d0b16ee87aa94b5d70": {
+                "input_tokens": 142,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 142,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b8274087d08ca15994ee9bc518": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 65
+              },
+              "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+                "input_tokens": 872,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 872,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098b7714087d0a7ff36432890f84c": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098b7714487d092ed12a0abaf832e": {
+                "input_tokens": 611,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098b7714487d0bfa99cc094af9479": {
+                "input_tokens": 882,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 882,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 29981,
+      "tool_results": [
+        {
+          "output": "11 1777719600000\n12 1777723200000\n",
+          "exit_code": 0,
+          "wall_seconds": 0.03100982599426061,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "python3 - <<'PY'\nimport datetime\nfor h in [11,12]: print(h,int(datetime.datetime(2026,5,2,h,tzinfo=datetime.timezone.utc).timestamp()*1000))\nPY"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_56d30e27653c4d2c87d01eaa906be5ea",
+          "name": "bash",
+          "arguments": {
+            "command": "sed 's/CASE WHEN o.opened_at_ms<1777723200000/CASE WHEN o.opened_at_ms<1777719600000/' /tmp/q.sql >/tmp/q2; sqlite3 -header -column ../data/current.db </tmp/q2; sqlite3 -header -column ../data/current.db <<'SQL'\nselect p.pool_code,t.signal_code,s.unit,avg(t.value) mean_value,case when t.measured_at_ms<1777719600000 then 'reference' else 'incident' end period from telemetry_samples t join worker_pools p using(pool_id) join telemetry_signals s using(signal_id) where t.measured_at_ms>=1777716000000 and t.measured_at_ms<1777723200000 and p.pool_code in ('idx-north','idx-south') group by p.pool_id,s.signal_id,period order by period,p.pool_code,s.signal_code;\nSQL"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 6328,
+        "input_tokens_details": {
+          "cached_tokens": 3200,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 210,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 6538,
+        "attribution": {
+          "items": {
+            "at_0cc0b23c87bf1e25016af098b9a0b887d080dbd9d3c74ccab3": {
+              "input_tokens": 120,
+              "cached_tokens": 120,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+              "input_tokens": 36,
+              "cached_tokens": 36,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+              "input_tokens": 28,
+              "cached_tokens": 28,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+              "input_tokens": 45,
+              "cached_tokens": 45,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+              "input_tokens": 87,
+              "cached_tokens": 87,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+              "input_tokens": 366,
+              "cached_tokens": 299,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098aa962087d09d4f1cae79aa314a": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098af257c87d0a57f78473426b619": {
+              "input_tokens": 398,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098b8274087d08ca15994ee9bc518": {
+              "input_tokens": 67,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098b9a0bc87d0846c49fec66ba73f": {
+              "input_tokens": 740,
+              "cached_tokens": 740,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 740,
+                  "cached_tokens": 740,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b9a0bc87d08729d33f63583c76": {
+              "input_tokens": 27,
+              "cached_tokens": 27,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 27,
+                  "cached_tokens": 27,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b9a0bc87d08e0c577b084470b3": {
+              "input_tokens": 138,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 138,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b9a0bc87d093a1b080a7b2df18": {
+              "input_tokens": 196,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 196,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b9a0bc87d0a4eb5ea2d1083ed7": {
+              "input_tokens": 31,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 31,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b9a0bc87d0ab39f245c6ef3abc": {
+              "input_tokens": 928,
+              "cached_tokens": 928,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 928,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b9a0bc87d0afc53a925625a628": {
+              "input_tokens": 338,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 338,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098b9a0bc87d0b691caa532b8720e": {
+              "input_tokens": 142,
+              "cached_tokens": 142,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 142,
+                  "cached_tokens": 142,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098ba58e887d09a9ba6e76e833f17": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 210
+            },
+            "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+              "input_tokens": 872,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 872,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098b9a0b887d087b46458bef77854": {
+              "input_tokens": 137,
+              "cached_tokens": 137,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 137,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098b9a0bc87d09f75fb853413a68c": {
+              "input_tokens": 882,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 882,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098b9a0bc87d0a26ac006dae1b88f": {
+              "input_tokens": 611,
+              "cached_tokens": 611,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 611,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0cc0b23c87bf1e25016af098b9a01487d08b95f16a45907cc7",
+      "elapsed_s": 4.861376557033509,
+      "token_accounting": {
+        "input_tokens": 6328,
+        "input_uncached_tokens": 3128,
+        "cache_read_input_tokens": 3200,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 210,
+        "reasoning_tokens": 0,
+        "total_tokens": 6538
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0cc0b23c87bf1e25016af098b9a01487d08b95f16a45907cc7",
+        "object": "response",
+        "created_at": 1794152633,
+        "completed_at": 1794152637,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0cc0b23c87bf1e25016af098ba58e887d09a9ba6e76e833f17",
+            "call_id": "call_56d30e27653c4d2c87d01eaa906be5ea",
+            "name": "bash",
+            "arguments": "{\"command\":\"sed 's/CASE WHEN o.opened_at_ms<1777723200000/CASE WHEN o.opened_at_ms<1777719600000/' /tmp/q.sql >/tmp/q2; sqlite3 -header -column ../data/current.db </tmp/q2; sqlite3 -header -column ../data/current.db <<'SQL'\\nselect p.pool_code,t.signal_code,s.unit,avg(t.value) mean_value,case when t.measured_at_ms<1777719600000 then 'reference' else 'incident' end period from telemetry_samples t join worker_pools p using(pool_id) join telemetry_signals s using(signal_id) where t.measured_at_ms>=1777716000000 and t.measured_at_ms<1777723200000 and p.pool_code in ('idx-north','idx-south') group by p.pool_id,s.signal_id,period order by period,p.pool_code,s.signal_code;\\nSQL\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "084c2bc4-a42a-4894-b121-b1ad4e538581",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 6328,
+          "input_tokens_details": {
+            "cached_tokens": 3200,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 210,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 6538,
+          "attribution": {
+            "items": {
+              "at_0cc0b23c87bf1e25016af098b9a0b887d080dbd9d3c74ccab3": {
+                "input_tokens": 120,
+                "cached_tokens": 120,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+                "input_tokens": 36,
+                "cached_tokens": 36,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+                "input_tokens": 28,
+                "cached_tokens": 28,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+                "input_tokens": 45,
+                "cached_tokens": 45,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+                "input_tokens": 87,
+                "cached_tokens": 87,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+                "input_tokens": 366,
+                "cached_tokens": 299,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098aa962087d09d4f1cae79aa314a": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098af257c87d0a57f78473426b619": {
+                "input_tokens": 398,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098b8274087d08ca15994ee9bc518": {
+                "input_tokens": 67,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098b9a0bc87d0846c49fec66ba73f": {
+                "input_tokens": 740,
+                "cached_tokens": 740,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 740,
+                    "cached_tokens": 740,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b9a0bc87d08729d33f63583c76": {
+                "input_tokens": 27,
+                "cached_tokens": 27,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 27,
+                    "cached_tokens": 27,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b9a0bc87d08e0c577b084470b3": {
+                "input_tokens": 138,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 138,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b9a0bc87d093a1b080a7b2df18": {
+                "input_tokens": 196,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 196,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b9a0bc87d0a4eb5ea2d1083ed7": {
+                "input_tokens": 31,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 31,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b9a0bc87d0ab39f245c6ef3abc": {
+                "input_tokens": 928,
+                "cached_tokens": 928,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 928,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b9a0bc87d0afc53a925625a628": {
+                "input_tokens": 338,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 338,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098b9a0bc87d0b691caa532b8720e": {
+                "input_tokens": 142,
+                "cached_tokens": 142,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 142,
+                    "cached_tokens": 142,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098ba58e887d09a9ba6e76e833f17": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 210
+              },
+              "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+                "input_tokens": 872,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 872,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098b9a0b887d087b46458bef77854": {
+                "input_tokens": 137,
+                "cached_tokens": 137,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 137,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098b9a0bc87d09f75fb853413a68c": {
+                "input_tokens": 882,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 882,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098b9a0bc87d0a26ac006dae1b88f": {
+                "input_tokens": 611,
+                "cached_tokens": 611,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 611,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 31017,
+      "tool_results": [
+        {
+          "output": "period     pool_code  operations  terminal_failures  terminal_pct  attempts  failed_attempts  attempt_pct       retried  min(deadline_ms)  max(deadline_ms)\n---------  ---------  ----------  -----------------  ------------  --------  ---------------  ----------------  -------  ----------------  ----------------\nincident   idx-north  1000        210                21.0          1620      830              51.2345679012346  410      80                80              \nincident   idx-south  1000        25                 2.5           1150      175              15.2173913043478  125      250               250             \nreference  idx-north  1000        25                 2.5           1150      175              15.2173913043478  125      250               250             \nreference  idx-south  1000        25                 2.5           1150      175              15.2173913043478  125      250               250             \n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.03661928605288267, \"exit_code\": 0}\nParse error near line 1: no such column: t.signal_code\n  select p.pool_code,t.signal_code,s.unit,avg(t.value) mean_value,case when t.me\n                     ^--- error here\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004804537049494684, \"exit_code\": 1}\n",
+          "exit_code": 1,
+          "wall_seconds": 0.5679914419306442,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.03661928605288267,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.004804537049494684,
+              "exit_code": 1
+            }
+          ],
+          "command": "sed 's/CASE WHEN o.opened_at_ms<1777723200000/CASE WHEN o.opened_at_ms<1777719600000/' /tmp/q.sql >/tmp/q2; sqlite3 -header -column ../data/current.db </tmp/q2; sqlite3 -header -column ../data/current.db <<'SQL'\nselect p.pool_code,t.signal_code,s.unit,avg(t.value) mean_value,case when t.measured_at_ms<1777719600000 then 'reference' else 'incident' end period from telemetry_samples t join worker_pools p using(pool_id) join telemetry_signals s using(signal_id) where t.measured_at_ms>=1777716000000 and t.measured_at_ms<1777723200000 and p.pool_code in ('idx-north','idx-south') group by p.pool_id,s.signal_id,period order by period,p.pool_code,s.signal_code;\nSQL"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_e427255674cf4fab96e40063ece8ffaf",
+          "name": "bash",
+          "arguments": {
+            "command": "sqlite3 -header -column ../data/current.db <<'SQL'\nselect p.pool_code,x.signal_code,x.unit,avg(t.value) mean_value,case when t.measured_at_ms<1777719600000 then 'reference' else 'incident' end period from telemetry_samples t join worker_pools p using(pool_id) join telemetry_signals x using(signal_id) where t.measured_at_ms>=1777716000000 and t.measured_at_ms<1777723200000 and p.pool_code in ('idx-north','idx-south') group by p.pool_id,x.signal_id,period order by period,p.pool_code,x.signal_code;\nSQL"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 6893,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 154,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 7047,
+        "attribution": {
+          "items": {
+            "at_0cc0b23c87bf1e25016af098bf246c87d085d70bf3dfe1e6b1": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+              "input_tokens": 36,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+              "input_tokens": 45,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+              "input_tokens": 87,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+              "input_tokens": 366,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098aa962087d09d4f1cae79aa314a": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098af257c87d0a57f78473426b619": {
+              "input_tokens": 398,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098b8274087d08ca15994ee9bc518": {
+              "input_tokens": 67,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098ba58e887d09a9ba6e76e833f17": {
+              "input_tokens": 212,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098bf246c87d08562a1f0de73c0f5": {
+              "input_tokens": 353,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 353,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098bf246c87d08e13b1d7ebc7555a": {
+              "input_tokens": 31,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 31,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098bf246c87d0920ed919ce16decf": {
+              "input_tokens": 338,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 338,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098bf246c87d0931aebd3907984bb": {
+              "input_tokens": 928,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098bf246c87d0a98bb6c4ed68984d": {
+              "input_tokens": 27,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 27,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098bf246c87d0af053e07c8819857": {
+              "input_tokens": 142,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 142,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098bf246c87d0bb9825857b3c9412": {
+              "input_tokens": 138,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 138,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098bf246c87d0bc620faa619f4f06": {
+              "input_tokens": 196,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 196,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098bf246c87d0bcb58a1e7da81b92": {
+              "input_tokens": 740,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 740,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098bfd80487d0baea0dde0b9a50f2": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 154
+            },
+            "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+              "input_tokens": 872,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 872,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098bf246c87d0a6458640388841c9": {
+              "input_tokens": 611,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098bf246c87d0a980513663353fce": {
+              "input_tokens": 882,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 882,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098bf246c87d0b89b8d7a9aa6e278": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0cc0b23c87bf1e25016af098bf23d887d0a4bf4546813bfbd0",
+      "elapsed_s": 3.790656583965756,
+      "token_accounting": {
+        "input_tokens": 6893,
+        "input_uncached_tokens": 6893,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 154,
+        "reasoning_tokens": 0,
+        "total_tokens": 7047
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0cc0b23c87bf1e25016af098bf23d887d0a4bf4546813bfbd0",
+        "object": "response",
+        "created_at": 1794152639,
+        "completed_at": 1794152642,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0cc0b23c87bf1e25016af098bfd80487d0baea0dde0b9a50f2",
+            "call_id": "call_e427255674cf4fab96e40063ece8ffaf",
+            "name": "bash",
+            "arguments": "{\"command\":\"sqlite3 -header -column ../data/current.db <<'SQL'\\nselect p.pool_code,x.signal_code,x.unit,avg(t.value) mean_value,case when t.measured_at_ms<1777719600000 then 'reference' else 'incident' end period from telemetry_samples t join worker_pools p using(pool_id) join telemetry_signals x using(signal_id) where t.measured_at_ms>=1777716000000 and t.measured_at_ms<1777723200000 and p.pool_code in ('idx-north','idx-south') group by p.pool_id,x.signal_id,period order by period,p.pool_code,x.signal_code;\\nSQL\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "2ec7700b-45e7-44f0-b1a4-2d079337e1c5",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 6893,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 154,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 7047,
+          "attribution": {
+            "items": {
+              "at_0cc0b23c87bf1e25016af098bf246c87d085d70bf3dfe1e6b1": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+                "input_tokens": 36,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+                "input_tokens": 45,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+                "input_tokens": 87,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+                "input_tokens": 366,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098aa962087d09d4f1cae79aa314a": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098af257c87d0a57f78473426b619": {
+                "input_tokens": 398,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098b8274087d08ca15994ee9bc518": {
+                "input_tokens": 67,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098ba58e887d09a9ba6e76e833f17": {
+                "input_tokens": 212,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098bf246c87d08562a1f0de73c0f5": {
+                "input_tokens": 353,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 353,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098bf246c87d08e13b1d7ebc7555a": {
+                "input_tokens": 31,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 31,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098bf246c87d0920ed919ce16decf": {
+                "input_tokens": 338,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 338,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098bf246c87d0931aebd3907984bb": {
+                "input_tokens": 928,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098bf246c87d0a98bb6c4ed68984d": {
+                "input_tokens": 27,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 27,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098bf246c87d0af053e07c8819857": {
+                "input_tokens": 142,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 142,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098bf246c87d0bb9825857b3c9412": {
+                "input_tokens": 138,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 138,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098bf246c87d0bc620faa619f4f06": {
+                "input_tokens": 196,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 196,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098bf246c87d0bcb58a1e7da81b92": {
+                "input_tokens": 740,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 740,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098bfd80487d0baea0dde0b9a50f2": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 154
+              },
+              "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+                "input_tokens": 872,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 872,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098bf246c87d0a6458640388841c9": {
+                "input_tokens": 611,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098bf246c87d0a980513663353fce": {
+                "input_tokens": 882,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 882,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098bf246c87d0b89b8d7a9aa6e278": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 33144,
+      "tool_results": [
+        {
+          "output": "pool_code  signal_code           unit        mean_value  period   \n---------  --------------------  ----------  ----------  ---------\nidx-north  available_workers     workers     16.0        incident \nidx-north  cpu_utilization       fraction    0.42        incident \nidx-north  queue_depth           operations  4.0         incident \nidx-north  upstream_latency_p95  ms          118.0       incident \nidx-south  available_workers     workers     16.0        incident \nidx-south  cpu_utilization       fraction    0.42        incident \nidx-south  queue_depth           operations  4.0         incident \nidx-south  upstream_latency_p95  ms          118.0       incident \nidx-north  available_workers     workers     16.0        reference\nidx-north  cpu_utilization       fraction    0.42        reference\nidx-north  queue_depth           operations  4.0         reference\nidx-north  upstream_latency_p95  ms          118.0       reference\nidx-south  available_workers     workers     16.0        reference\nidx-south  cpu_utilization       fraction    0.42        reference\nidx-south  queue_depth           operations  4.0         reference\nidx-south  upstream_latency_p95  ms          118.0       reference\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004295766935683787, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.30615156807471067,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.004295766935683787,
+              "exit_code": 0
+            }
+          ],
+          "command": "sqlite3 -header -column ../data/current.db <<'SQL'\nselect p.pool_code,x.signal_code,x.unit,avg(t.value) mean_value,case when t.measured_at_ms<1777719600000 then 'reference' else 'incident' end period from telemetry_samples t join worker_pools p using(pool_id) join telemetry_signals x using(signal_id) where t.measured_at_ms>=1777716000000 and t.measured_at_ms<1777723200000 and p.pool_code in ('idx-north','idx-south') group by p.pool_id,x.signal_id,period order by period,p.pool_code,x.signal_code;\nSQL"
+        }
+      ]
+    },
+    {
+      "tool_calls": [],
+      "final_text": "{\"answer\":{\"pool_metrics\":[{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"operations\":1000,\"terminal_failures\":25,\"terminal_failure_pct\":2.5,\"attempts\":1150,\"failed_attempts\":175,\"attempt_failure_pct\":15.217391304347826,\"retried_operations\":125,\"min_deadline_ms\":250,\"max_deadline_ms\":250},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"operations\":1000,\"terminal_failures\":25,\"terminal_failure_pct\":2.5,\"attempts\":1150,\"failed_attempts\":175,\"attempt_failure_pct\":15.217391304347826,\"retried_operations\":125,\"min_deadline_ms\":250,\"max_deadline_ms\":250},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"operations\":1000,\"terminal_failures\":210,\"terminal_failure_pct\":21.0,\"attempts\":1620,\"failed_attempts\":830,\"attempt_failure_pct\":51.23456790123457,\"retried_operations\":410,\"min_deadline_ms\":80,\"max_deadline_ms\":80},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"operations\":1000,\"terminal_failures\":25,\"terminal_failure_pct\":2.5,\"attempts\":1150,\"failed_attempts\":175,\"attempt_failure_pct\":15.217391304347826,\"retried_operations\":125,\"min_deadline_ms\":250,\"max_deadline_ms\":250}],\"telemetry\":[{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"signal_code\":\"available_workers\",\"mean_value\":16,\"unit\":\"workers\"},{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"signal_code\":\"cpu_utilization\",\"mean_value\":0.42,\"unit\":\"fraction\"},{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"signal_code\":\"queue_depth\",\"mean_value\":4,\"unit\":\"operations\"},{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"signal_code\":\"upstream_latency_p95\",\"mean_value\":118,\"unit\":\"ms\"},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"signal_code\":\"available_workers\",\"mean_value\":16,\"unit\":\"workers\"},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"signal_code\":\"cpu_utilization\",\"mean_value\":0.42,\"unit\":\"fraction\"},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"signal_code\":\"queue_depth\",\"mean_value\":4,\"unit\":\"operations\"},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"signal_code\":\"upstream_latency_p95\",\"mean_value\":118,\"unit\":\"ms\"},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"signal_code\":\"available_workers\",\"mean_value\":16,\"unit\":\"workers\"},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"signal_code\":\"cpu_utilization\",\"mean_value\":0.42,\"unit\":\"fraction\"},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"signal_code\":\"queue_depth\",\"mean_value\":4,\"unit\":\"operations\"},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"signal_code\":\"upstream_latency_p95\",\"mean_value\":118,\"unit\":\"ms\"},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"signal_code\":\"available_workers\",\"mean_value\":16,\"unit\":\"workers\"},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"signal_code\":\"cpu_utilization\",\"mean_value\":0.42,\"unit\":\"fraction\"},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"signal_code\":\"queue_depth\",\"mean_value\":4,\"unit\":\"operations\"},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"signal_code\":\"upstream_latency_p95\",\"mean_value\":118,\"unit\":\"ms\"}],\"changes\":[{\"kind_code\":\"deadline_policy\",\"pool_code\":\"idx-north\",\"effective_at_ms\":1777719600000,\"before_json\":\"{\\\"deadline_ms\\\": 250}\",\"after_json\":\"{\\\"deadline_ms\\\": 80}\"}],\"assessment\":\"The strongest proximal explanation is the applied deadline-policy reduction on idx-north from 250 ms to 80 ms at the incident-window boundary. That pool's terminal-failure rate rose from 2.5% to 21.0%, an increase of 18.5 percentage points; idx-south remained at 2.5%. The aligned increase in attempt failures and retries is also consistent with the change. A plausible alternative is an upstream latency shift, but the recorded mean upstream p95 sample is 118 ms in both periods and pools, as are the other recorded telemetry means. This association supports the deadline change as the leading explanation, but does not prove it caused the failures.\"},\"caveats\":[\"Telemetry means are ordinary means of samples within each window, not operation-weighted measures; equal means do not rule out unobserved or within-window changes.\",\"The routing assignment and applied policy effective at operation-open time were used for attribution; the observed association is not causal proof.\"],\"evidence_sql\":[\"WITH ops AS (SELECT o.operation_id,o.route_id,o.opened_at_ms,CASE WHEN o.opened_at_ms<1777719600000 THEN 'reference' ELSE 'incident' END AS period,a.pool_id,pp.deadline_ms FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN policy_profiles pp ON pp.profile_id=a.profile_id WHERE s.service_code='parcel-index' AND o.opened_at_ms>=1777716000000 AND o.opened_at_ms<1777723200000), per_op AS (SELECT ops.operation_id,ops.period,ops.pool_id,ops.deadline_ms,COUNT(a.attempt_id) AS attempts,SUM(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) AS failed_attempts,MAX(a.attempt_no) AS max_attempt_no,MAX(CASE WHEN a.attempt_no=(SELECT MAX(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=ops.operation_id) THEN f.is_success END) AS final_success FROM ops LEFT JOIN attempt_events a ON a.operation_id=ops.operation_id LEFT JOIN failure_codes f ON f.code_id=a.code_id GROUP BY ops.operation_id) SELECT period,p.pool_code,COUNT(*) AS operations,SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END) AS terminal_failures,100.0*SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END)/COUNT(*) AS terminal_failure_pct,SUM(attempts) AS attempts,SUM(failed_attempts) AS failed_attempts,100.0*SUM(failed_attempts)/SUM(attempts) AS attempt_failure_pct,SUM(CASE WHEN max_attempt_no>1 THEN 1 ELSE 0 END) AS retried_operations,MIN(deadline_ms) AS min_deadline_ms,MAX(deadline_ms) AS max_deadline_ms FROM per_op JOIN worker_pools p ON p.pool_id=per_op.pool_id GROUP BY period,per_op.pool_id ORDER BY period,per_op.pool_id;\",\"SELECT p.pool_code,s.signal_code,s.unit,CASE WHEN t.measured_at_ms<1777719600000 THEN 'reference' ELSE 'incident' END AS period,AVG(t.value) AS mean_value FROM telemetry_samples t JOIN worker_pools p ON p.pool_id=t.pool_id JOIN telemetry_signals s ON s.signal_id=t.signal_id WHERE t.measured_at_ms>=1777716000000 AND t.measured_at_ms<1777723200000 AND p.pool_code IN ('idx-north','idx-south') GROUP BY p.pool_id,s.signal_id,period ORDER BY period,p.pool_code,s.signal_code;\",\"SELECT k.kind_code,p.pool_code,c.effective_at_ms,c.before_json,c.after_json FROM change_events c JOIN change_kinds k ON k.kind_id=c.kind_id JOIN worker_pools p ON p.pool_id=c.pool_id JOIN services s ON s.service_id=c.service_id WHERE s.service_code='parcel-index' AND c.effective_at_ms>=1777716000000 AND c.effective_at_ms<1777723200000 ORDER BY c.effective_at_ms;\"]}",
+      "usage": {
+        "input_tokens": 7387,
+        "input_tokens_details": {
+          "cached_tokens": 6016,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 1700,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 9087,
+        "attribution": {
+          "items": {
+            "at_0cc0b23c87bf1e25016af098c32d3087d085e296effbf2da28": {
+              "input_tokens": 120,
+              "cached_tokens": 120,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+              "input_tokens": 36,
+              "cached_tokens": 36,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+              "input_tokens": 28,
+              "cached_tokens": 28,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+              "input_tokens": 45,
+              "cached_tokens": 45,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+              "input_tokens": 87,
+              "cached_tokens": 87,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+              "input_tokens": 366,
+              "cached_tokens": 366,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098aa962087d09d4f1cae79aa314a": {
+              "input_tokens": 137,
+              "cached_tokens": 137,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098af257c87d0a57f78473426b619": {
+              "input_tokens": 398,
+              "cached_tokens": 382,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098b8274087d08ca15994ee9bc518": {
+              "input_tokens": 67,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098ba58e887d09a9ba6e76e833f17": {
+              "input_tokens": 212,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098bfd80487d0baea0dde0b9a50f2": {
+              "input_tokens": 156,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cc0b23c87bf1e25016af098c32d3087d088f9d3e1711b6e68": {
+              "input_tokens": 27,
+              "cached_tokens": 27,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 27,
+                  "cached_tokens": 27,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098c32d3087d09293a300d9d945ec": {
+              "input_tokens": 928,
+              "cached_tokens": 928,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 928,
+                  "cached_tokens": 928,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098c32d3087d0a03236d60c6c218d": {
+              "input_tokens": 142,
+              "cached_tokens": 142,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 142,
+                  "cached_tokens": 142,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098c32d3087d0b8445f4ebf545562": {
+              "input_tokens": 740,
+              "cached_tokens": 740,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 740,
+                  "cached_tokens": 740,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098c32d3087d0bf337504c526a365": {
+              "input_tokens": 138,
+              "cached_tokens": 138,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 138,
+                  "cached_tokens": 138,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098c32d3487d086d20a8024d41213": {
+              "input_tokens": 338,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 338,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098c32d3487d0b87d48a8b22b6f77": {
+              "input_tokens": 353,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 353,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098c32d3487d0bb6b01c8cd6f583c": {
+              "input_tokens": 31,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 31,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098c32d3487d0beb1668e7ac4daa4": {
+              "input_tokens": 196,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 196,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0cc0b23c87bf1e25016af098c32d3487d0bef923f7b65cbe65": {
+              "input_tokens": 338,
+              "cached_tokens": 338,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 338,
+                  "cached_tokens": 338,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+              "input_tokens": 872,
+              "cached_tokens": 872,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 872,
+                  "cached_tokens": 872,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098c32d3087d090727764631f5922": {
+              "input_tokens": 137,
+              "cached_tokens": 137,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 137,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098c32d3087d0b3da8a88273fe858": {
+              "input_tokens": 882,
+              "cached_tokens": 882,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 882,
+                  "cached_tokens": 882,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098c32d3087d0ba8efccd485069ff": {
+              "input_tokens": 611,
+              "cached_tokens": 611,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 611,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cc0b23c87bf1e25016af098c3c6ac87d0958bfb5d5674d47c": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 1700,
+              "content": [
+                {
+                  "input_tokens": 2,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 1700
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0cc0b23c87bf1e25016af098c32c9487d0afec6416819c407f",
+      "elapsed_s": 31.59786748001352,
+      "token_accounting": {
+        "input_tokens": 7387,
+        "input_uncached_tokens": 1371,
+        "cache_read_input_tokens": 6016,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 1700,
+        "reasoning_tokens": 0,
+        "total_tokens": 9087
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0cc0b23c87bf1e25016af098c32c9487d0afec6416819c407f",
+        "object": "response",
+        "created_at": 1794152643,
+        "completed_at": 1794152674,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "message",
+            "id": "msg_0cc0b23c87bf1e25016af098c3c6ac87d0958bfb5d5674d47c",
+            "role": "assistant",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"answer\":{\"pool_metrics\":[{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"operations\":1000,\"terminal_failures\":25,\"terminal_failure_pct\":2.5,\"attempts\":1150,\"failed_attempts\":175,\"attempt_failure_pct\":15.217391304347826,\"retried_operations\":125,\"min_deadline_ms\":250,\"max_deadline_ms\":250},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"operations\":1000,\"terminal_failures\":25,\"terminal_failure_pct\":2.5,\"attempts\":1150,\"failed_attempts\":175,\"attempt_failure_pct\":15.217391304347826,\"retried_operations\":125,\"min_deadline_ms\":250,\"max_deadline_ms\":250},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"operations\":1000,\"terminal_failures\":210,\"terminal_failure_pct\":21.0,\"attempts\":1620,\"failed_attempts\":830,\"attempt_failure_pct\":51.23456790123457,\"retried_operations\":410,\"min_deadline_ms\":80,\"max_deadline_ms\":80},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"operations\":1000,\"terminal_failures\":25,\"terminal_failure_pct\":2.5,\"attempts\":1150,\"failed_attempts\":175,\"attempt_failure_pct\":15.217391304347826,\"retried_operations\":125,\"min_deadline_ms\":250,\"max_deadline_ms\":250}],\"telemetry\":[{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"signal_code\":\"available_workers\",\"mean_value\":16,\"unit\":\"workers\"},{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"signal_code\":\"cpu_utilization\",\"mean_value\":0.42,\"unit\":\"fraction\"},{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"signal_code\":\"queue_depth\",\"mean_value\":4,\"unit\":\"operations\"},{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"signal_code\":\"upstream_latency_p95\",\"mean_value\":118,\"unit\":\"ms\"},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"signal_code\":\"available_workers\",\"mean_value\":16,\"unit\":\"workers\"},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"signal_code\":\"cpu_utilization\",\"mean_value\":0.42,\"unit\":\"fraction\"},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"signal_code\":\"queue_depth\",\"mean_value\":4,\"unit\":\"operations\"},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"signal_code\":\"upstream_latency_p95\",\"mean_value\":118,\"unit\":\"ms\"},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"signal_code\":\"available_workers\",\"mean_value\":16,\"unit\":\"workers\"},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"signal_code\":\"cpu_utilization\",\"mean_value\":0.42,\"unit\":\"fraction\"},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"signal_code\":\"queue_depth\",\"mean_value\":4,\"unit\":\"operations\"},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"signal_code\":\"upstream_latency_p95\",\"mean_value\":118,\"unit\":\"ms\"},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"signal_code\":\"available_workers\",\"mean_value\":16,\"unit\":\"workers\"},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"signal_code\":\"cpu_utilization\",\"mean_value\":0.42,\"unit\":\"fraction\"},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"signal_code\":\"queue_depth\",\"mean_value\":4,\"unit\":\"operations\"},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"signal_code\":\"upstream_latency_p95\",\"mean_value\":118,\"unit\":\"ms\"}],\"changes\":[{\"kind_code\":\"deadline_policy\",\"pool_code\":\"idx-north\",\"effective_at_ms\":1777719600000,\"before_json\":\"{\\\"deadline_ms\\\": 250}\",\"after_json\":\"{\\\"deadline_ms\\\": 80}\"}],\"assessment\":\"The strongest proximal explanation is the applied deadline-policy reduction on idx-north from 250 ms to 80 ms at the incident-window boundary. That pool's terminal-failure rate rose from 2.5% to 21.0%, an increase of 18.5 percentage points; idx-south remained at 2.5%. The aligned increase in attempt failures and retries is also consistent with the change. A plausible alternative is an upstream latency shift, but the recorded mean upstream p95 sample is 118 ms in both periods and pools, as are the other recorded telemetry means. This association supports the deadline change as the leading explanation, but does not prove it caused the failures.\"},\"caveats\":[\"Telemetry means are ordinary means of samples within each window, not operation-weighted measures; equal means do not rule out unobserved or within-window changes.\",\"The routing assignment and applied policy effective at operation-open time were used for attribution; the observed association is not causal proof.\"],\"evidence_sql\":[\"WITH ops AS (SELECT o.operation_id,o.route_id,o.opened_at_ms,CASE WHEN o.opened_at_ms<1777719600000 THEN 'reference' ELSE 'incident' END AS period,a.pool_id,pp.deadline_ms FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN policy_profiles pp ON pp.profile_id=a.profile_id WHERE s.service_code='parcel-index' AND o.opened_at_ms>=1777716000000 AND o.opened_at_ms<1777723200000), per_op AS (SELECT ops.operation_id,ops.period,ops.pool_id,ops.deadline_ms,COUNT(a.attempt_id) AS attempts,SUM(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) AS failed_attempts,MAX(a.attempt_no) AS max_attempt_no,MAX(CASE WHEN a.attempt_no=(SELECT MAX(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=ops.operation_id) THEN f.is_success END) AS final_success FROM ops LEFT JOIN attempt_events a ON a.operation_id=ops.operation_id LEFT JOIN failure_codes f ON f.code_id=a.code_id GROUP BY ops.operation_id) SELECT period,p.pool_code,COUNT(*) AS operations,SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END) AS terminal_failures,100.0*SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END)/COUNT(*) AS terminal_failure_pct,SUM(attempts) AS attempts,SUM(failed_attempts) AS failed_attempts,100.0*SUM(failed_attempts)/SUM(attempts) AS attempt_failure_pct,SUM(CASE WHEN max_attempt_no>1 THEN 1 ELSE 0 END) AS retried_operations,MIN(deadline_ms) AS min_deadline_ms,MAX(deadline_ms) AS max_deadline_ms FROM per_op JOIN worker_pools p ON p.pool_id=per_op.pool_id GROUP BY period,per_op.pool_id ORDER BY period,per_op.pool_id;\",\"SELECT p.pool_code,s.signal_code,s.unit,CASE WHEN t.measured_at_ms<1777719600000 THEN 'reference' ELSE 'incident' END AS period,AVG(t.value) AS mean_value FROM telemetry_samples t JOIN worker_pools p ON p.pool_id=t.pool_id JOIN telemetry_signals s ON s.signal_id=t.signal_id WHERE t.measured_at_ms>=1777716000000 AND t.measured_at_ms<1777723200000 AND p.pool_code IN ('idx-north','idx-south') GROUP BY p.pool_id,s.signal_id,period ORDER BY period,p.pool_code,s.signal_code;\",\"SELECT k.kind_code,p.pool_code,c.effective_at_ms,c.before_json,c.after_json FROM change_events c JOIN change_kinds k ON k.kind_id=c.kind_id JOIN worker_pools p ON p.pool_id=c.pool_id JOIN services s ON s.service_id=c.service_id WHERE s.service_code='parcel-index' AND c.effective_at_ms>=1777716000000 AND c.effective_at_ms<1777723200000 ORDER BY c.effective_at_ms;\"]}",
+                "annotations": [],
+                "logprobs": []
+              }
+            ],
+            "phase": "final_answer"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "61ae93da-26fd-4868-baf3-cbc9d3b1bbfb",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 7387,
+          "input_tokens_details": {
+            "cached_tokens": 6016,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 1700,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 9087,
+          "attribution": {
+            "items": {
+              "at_0cc0b23c87bf1e25016af098c32d3087d085e296effbf2da28": {
+                "input_tokens": 120,
+                "cached_tokens": 120,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af09888b61487d0a8127b7d47e3b943": {
+                "input_tokens": 36,
+                "cached_tokens": 36,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988abeb087d0ad1ec93632fa2a29": {
+                "input_tokens": 28,
+                "cached_tokens": 28,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988c68cc87d0afcfd946278b743c": {
+                "input_tokens": 45,
+                "cached_tokens": 45,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0988e9d1487d0aa52725d43a08033": {
+                "input_tokens": 87,
+                "cached_tokens": 87,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af0989170c487d0a166196ec5172f73": {
+                "input_tokens": 366,
+                "cached_tokens": 366,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098aa962087d09d4f1cae79aa314a": {
+                "input_tokens": 137,
+                "cached_tokens": 137,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098af257c87d0a57f78473426b619": {
+                "input_tokens": 398,
+                "cached_tokens": 382,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098b8274087d08ca15994ee9bc518": {
+                "input_tokens": 67,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098ba58e887d09a9ba6e76e833f17": {
+                "input_tokens": 212,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098bfd80487d0baea0dde0b9a50f2": {
+                "input_tokens": 156,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cc0b23c87bf1e25016af098c32d3087d088f9d3e1711b6e68": {
+                "input_tokens": 27,
+                "cached_tokens": 27,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 27,
+                    "cached_tokens": 27,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098c32d3087d09293a300d9d945ec": {
+                "input_tokens": 928,
+                "cached_tokens": 928,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 928,
+                    "cached_tokens": 928,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098c32d3087d0a03236d60c6c218d": {
+                "input_tokens": 142,
+                "cached_tokens": 142,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 142,
+                    "cached_tokens": 142,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098c32d3087d0b8445f4ebf545562": {
+                "input_tokens": 740,
+                "cached_tokens": 740,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 740,
+                    "cached_tokens": 740,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098c32d3087d0bf337504c526a365": {
+                "input_tokens": 138,
+                "cached_tokens": 138,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 138,
+                    "cached_tokens": 138,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098c32d3487d086d20a8024d41213": {
+                "input_tokens": 338,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 338,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098c32d3487d0b87d48a8b22b6f77": {
+                "input_tokens": 353,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 353,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098c32d3487d0bb6b01c8cd6f583c": {
+                "input_tokens": 31,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 31,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098c32d3487d0beb1668e7ac4daa4": {
+                "input_tokens": 196,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 196,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0cc0b23c87bf1e25016af098c32d3487d0bef923f7b65cbe65": {
+                "input_tokens": 338,
+                "cached_tokens": 338,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 338,
+                    "cached_tokens": 338,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af09899d25487d0ae026d75a31dca2c": {
+                "input_tokens": 872,
+                "cached_tokens": 872,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 872,
+                    "cached_tokens": 872,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098c32d3087d090727764631f5922": {
+                "input_tokens": 137,
+                "cached_tokens": 137,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 137,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098c32d3087d0b3da8a88273fe858": {
+                "input_tokens": 882,
+                "cached_tokens": 882,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 882,
+                    "cached_tokens": 882,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098c32d3087d0ba8efccd485069ff": {
+                "input_tokens": 611,
+                "cached_tokens": 611,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 611,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cc0b23c87bf1e25016af098c3c6ac87d0958bfb5d5674d47c": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 1700,
+                "content": [
+                  {
+                    "input_tokens": 2,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 1700
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 41874,
+      "tool_results": []
+    }
+  ],
+  "status": "completed",
+  "final_text": "{\"answer\":{\"pool_metrics\":[{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"operations\":1000,\"terminal_failures\":25,\"terminal_failure_pct\":2.5,\"attempts\":1150,\"failed_attempts\":175,\"attempt_failure_pct\":15.217391304347826,\"retried_operations\":125,\"min_deadline_ms\":250,\"max_deadline_ms\":250},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"operations\":1000,\"terminal_failures\":25,\"terminal_failure_pct\":2.5,\"attempts\":1150,\"failed_attempts\":175,\"attempt_failure_pct\":15.217391304347826,\"retried_operations\":125,\"min_deadline_ms\":250,\"max_deadline_ms\":250},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"operations\":1000,\"terminal_failures\":210,\"terminal_failure_pct\":21.0,\"attempts\":1620,\"failed_attempts\":830,\"attempt_failure_pct\":51.23456790123457,\"retried_operations\":410,\"min_deadline_ms\":80,\"max_deadline_ms\":80},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"operations\":1000,\"terminal_failures\":25,\"terminal_failure_pct\":2.5,\"attempts\":1150,\"failed_attempts\":175,\"attempt_failure_pct\":15.217391304347826,\"retried_operations\":125,\"min_deadline_ms\":250,\"max_deadline_ms\":250}],\"telemetry\":[{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"signal_code\":\"available_workers\",\"mean_value\":16,\"unit\":\"workers\"},{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"signal_code\":\"cpu_utilization\",\"mean_value\":0.42,\"unit\":\"fraction\"},{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"signal_code\":\"queue_depth\",\"mean_value\":4,\"unit\":\"operations\"},{\"period\":\"reference\",\"pool_code\":\"idx-north\",\"signal_code\":\"upstream_latency_p95\",\"mean_value\":118,\"unit\":\"ms\"},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"signal_code\":\"available_workers\",\"mean_value\":16,\"unit\":\"workers\"},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"signal_code\":\"cpu_utilization\",\"mean_value\":0.42,\"unit\":\"fraction\"},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"signal_code\":\"queue_depth\",\"mean_value\":4,\"unit\":\"operations\"},{\"period\":\"reference\",\"pool_code\":\"idx-south\",\"signal_code\":\"upstream_latency_p95\",\"mean_value\":118,\"unit\":\"ms\"},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"signal_code\":\"available_workers\",\"mean_value\":16,\"unit\":\"workers\"},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"signal_code\":\"cpu_utilization\",\"mean_value\":0.42,\"unit\":\"fraction\"},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"signal_code\":\"queue_depth\",\"mean_value\":4,\"unit\":\"operations\"},{\"period\":\"incident\",\"pool_code\":\"idx-north\",\"signal_code\":\"upstream_latency_p95\",\"mean_value\":118,\"unit\":\"ms\"},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"signal_code\":\"available_workers\",\"mean_value\":16,\"unit\":\"workers\"},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"signal_code\":\"cpu_utilization\",\"mean_value\":0.42,\"unit\":\"fraction\"},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"signal_code\":\"queue_depth\",\"mean_value\":4,\"unit\":\"operations\"},{\"period\":\"incident\",\"pool_code\":\"idx-south\",\"signal_code\":\"upstream_latency_p95\",\"mean_value\":118,\"unit\":\"ms\"}],\"changes\":[{\"kind_code\":\"deadline_policy\",\"pool_code\":\"idx-north\",\"effective_at_ms\":1777719600000,\"before_json\":\"{\\\"deadline_ms\\\": 250}\",\"after_json\":\"{\\\"deadline_ms\\\": 80}\"}],\"assessment\":\"The strongest proximal explanation is the applied deadline-policy reduction on idx-north from 250 ms to 80 ms at the incident-window boundary. That pool's terminal-failure rate rose from 2.5% to 21.0%, an increase of 18.5 percentage points; idx-south remained at 2.5%. The aligned increase in attempt failures and retries is also consistent with the change. A plausible alternative is an upstream latency shift, but the recorded mean upstream p95 sample is 118 ms in both periods and pools, as are the other recorded telemetry means. This association supports the deadline change as the leading explanation, but does not prove it caused the failures.\"},\"caveats\":[\"Telemetry means are ordinary means of samples within each window, not operation-weighted measures; equal means do not rule out unobserved or within-window changes.\",\"The routing assignment and applied policy effective at operation-open time were used for attribution; the observed association is not causal proof.\"],\"evidence_sql\":[\"WITH ops AS (SELECT o.operation_id,o.route_id,o.opened_at_ms,CASE WHEN o.opened_at_ms<1777719600000 THEN 'reference' ELSE 'incident' END AS period,a.pool_id,pp.deadline_ms FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id JOIN route_assignments a ON a.route_id=o.route_id AND o.opened_at_ms>=a.effective_from_ms AND o.opened_at_ms<a.effective_to_ms JOIN policy_profiles pp ON pp.profile_id=a.profile_id WHERE s.service_code='parcel-index' AND o.opened_at_ms>=1777716000000 AND o.opened_at_ms<1777723200000), per_op AS (SELECT ops.operation_id,ops.period,ops.pool_id,ops.deadline_ms,COUNT(a.attempt_id) AS attempts,SUM(CASE WHEN f.is_success=0 THEN 1 ELSE 0 END) AS failed_attempts,MAX(a.attempt_no) AS max_attempt_no,MAX(CASE WHEN a.attempt_no=(SELECT MAX(a2.attempt_no) FROM attempt_events a2 WHERE a2.operation_id=ops.operation_id) THEN f.is_success END) AS final_success FROM ops LEFT JOIN attempt_events a ON a.operation_id=ops.operation_id LEFT JOIN failure_codes f ON f.code_id=a.code_id GROUP BY ops.operation_id) SELECT period,p.pool_code,COUNT(*) AS operations,SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END) AS terminal_failures,100.0*SUM(CASE WHEN final_success=0 THEN 1 ELSE 0 END)/COUNT(*) AS terminal_failure_pct,SUM(attempts) AS attempts,SUM(failed_attempts) AS failed_attempts,100.0*SUM(failed_attempts)/SUM(attempts) AS attempt_failure_pct,SUM(CASE WHEN max_attempt_no>1 THEN 1 ELSE 0 END) AS retried_operations,MIN(deadline_ms) AS min_deadline_ms,MAX(deadline_ms) AS max_deadline_ms FROM per_op JOIN worker_pools p ON p.pool_id=per_op.pool_id GROUP BY period,per_op.pool_id ORDER BY period,per_op.pool_id;\",\"SELECT p.pool_code,s.signal_code,s.unit,CASE WHEN t.measured_at_ms<1777719600000 THEN 'reference' ELSE 'incident' END AS period,AVG(t.value) AS mean_value FROM telemetry_samples t JOIN worker_pools p ON p.pool_id=t.pool_id JOIN telemetry_signals s ON s.signal_id=t.signal_id WHERE t.measured_at_ms>=1777716000000 AND t.measured_at_ms<1777723200000 AND p.pool_code IN ('idx-north','idx-south') GROUP BY p.pool_id,s.signal_id,period ORDER BY period,p.pool_code,s.signal_code;\",\"SELECT k.kind_code,p.pool_code,c.effective_at_ms,c.before_json,c.after_json FROM change_events c JOIN change_kinds k ON k.kind_id=c.kind_id JOIN worker_pools p ON p.pool_id=c.pool_id JOIN services s ON s.service_id=c.service_id WHERE s.service_code='parcel-index' AND c.effective_at_ms>=1777716000000 AND c.effective_at_ms<1777723200000 ORDER BY c.effective_at_ms;\"]}",
+  "memory_before": {},
+  "elapsed_s": 56.831804372021,
+  "memory_after": {},
+  "db_hash_after": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+  "db_unchanged": true
+}

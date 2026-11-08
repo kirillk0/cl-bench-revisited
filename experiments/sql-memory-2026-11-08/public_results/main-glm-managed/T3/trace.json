@@ -1,0 +1,1302 @@
+{
+  "task_id": "T3",
+  "db_sha256": "2823f7089388a1737e8b95389ae2f83598f581389b9af600453a6b2016835e03",
+  "snapshot": "post.db",
+  "prompt": "Use only the supplied current.db and README. All windows below are UTC and half-open, selected by logical-operation open time. A terminal-failure percentage has logical operations as its denominator; attempt-failure percentage has attempts as its denominator. Return only JSON matching the provided schema. Percentages use 0–100, differences use percentage points. evidence_sql must contain executable read-only SQLite queries with literal bounds, not pseudocode. Arrays may be in any order; include every requested group. A zero numerator is not missing data. No web or network access is needed.\n\nReport ledger-sync reliability for 2026-05-09: reference 10:00–11:00 versus incident 11:00–12:00. Report the authoritative event source for these windows (registry version, event table, event grain and effective start). For each period and actual serving PHYSICAL pool, report logical operations, terminal failures, terminal-failure percentage, retried operations, retry percentage and mean end-to-end latency_ms. Do not treat routing intent or an individual execution identity as a physical pool. Also give all-pool operations, terminal failures and terminal-failure percentage per period; identify the physical pool with the largest increase and report that increase in pp. In assessment state what the report establishes and the important attribution/counting limitations.\n\nRequired JSON response schema:\n{\"$schema\": \"https://json-schema.org/draft/2020-12/schema\", \"additionalProperties\": false, \"properties\": {\"answer\": {\"additionalProperties\": false, \"properties\": {\"assessment\": {\"type\": \"string\"}, \"largest_increase\": {\"additionalProperties\": false, \"properties\": {\"incident_failure_pct\": {\"type\": \"number\"}, \"increase_pp\": {\"type\": \"number\"}, \"pool_code\": {\"type\": \"string\"}, \"reference_failure_pct\": {\"type\": \"number\"}}, \"required\": [\"pool_code\", \"reference_failure_pct\", \"incident_failure_pct\", \"increase_pp\"], \"type\": \"object\"}, \"pool_metrics\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"mean_latency_ms\": {\"type\": \"number\"}, \"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"pool_code\": {\"type\": \"string\"}, \"retried_operations\": {\"type\": \"integer\"}, \"retry_pct\": {\"type\": \"number\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"period\", \"pool_code\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\", \"retried_operations\", \"retry_pct\", \"mean_latency_ms\"], \"type\": \"object\"}, \"maxItems\": 4, \"minItems\": 4, \"type\": \"array\"}, \"source\": {\"additionalProperties\": false, \"properties\": {\"effective_from_ms\": {\"type\": \"integer\"}, \"event_grain\": {\"type\": \"string\"}, \"event_table\": {\"type\": \"string\"}, \"version\": {\"type\": \"integer\"}}, \"required\": [\"version\", \"event_table\", \"event_grain\", \"effective_from_ms\"], \"type\": \"object\"}, \"totals\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"period\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\"], \"type\": \"object\"}, \"maxItems\": 2, \"minItems\": 2, \"type\": \"array\"}}, \"required\": [\"source\", \"pool_metrics\", \"totals\", \"largest_increase\", \"assessment\"], \"type\": \"object\"}, \"caveats\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}, \"evidence_sql\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}}, \"required\": [\"answer\", \"evidence_sql\", \"caveats\"], \"type\": \"object\"}",
+  "turns": [
+    {
+      "tool_calls": [
+        {
+          "id": "call_7b2bf715a33f4a5b99ecf611",
+          "name": "bash",
+          "arguments": {
+            "command": "cat ../data/README.md 2>/dev/null; ls ../data; echo ---; sqlite3 ../data/current.db \".tables\""
+          }
+        },
+        {
+          "id": "call_be2f1c80cd9d4d448ce4b538",
+          "name": "bash",
+          "arguments": {
+            "command": "cat ../memory/* 2>/dev/null"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 1175,
+        "completion_tokens": 63,
+        "total_tokens": 1238,
+        "cost": 0.000149,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.000149,
+          "upstream_inference_prompt_cost": 0.0001175,
+          "upstream_inference_completions_cost": 3.15e-05
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 9,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.000149,
+      "response_id": "gen-1794153154-iJKeFGSA5XNyy7jYNiDu",
+      "elapsed_s": 2.3863230999559164,
+      "token_accounting": {
+        "input_tokens": 1175,
+        "input_uncached_tokens": 1175,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 63,
+        "reasoning_tokens": 9,
+        "total_tokens": 1238
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153154-iJKeFGSA5XNyy7jYNiDu",
+        "object": "chat.completion",
+        "created": 1794153154,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Particle AI",
+        "system_fingerprint": null,
+        "service_tier": "default",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": "Let me inspect the README and DB.",
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "call_7b2bf715a33f4a5b99ecf611",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"cat ../data/README.md 2>/dev/null; ls ../data; echo ---; sqlite3 ../data/current.db \\\".tables\\\"\"}"
+                  }
+                },
+                {
+                  "type": "function",
+                  "index": 1,
+                  "id": "call_be2f1c80cd9d4d448ce4b538",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"cat ../memory/* 2>/dev/null\"}"
+                  }
+                }
+              ],
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Let me inspect the README and DB.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 1175,
+          "completion_tokens": 63,
+          "total_tokens": 1238,
+          "cost": 0.000149,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000149,
+            "upstream_inference_prompt_cost": 0.0001175,
+            "upstream_inference_completions_cost": 3.15e-05
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 9,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 5374,
+      "tool_results": [
+        {
+          "output": "current.db\n---\nattempt_events      incident_windows    releases            telemetry_signals \nchange_events       logical_operations  route_assignments   tenant_tiers      \nchange_kinds        operation_classes   service_routes      tenants           \nexecution_cells     outcome_events      services            worker_pools      \nfailure_codes       policy_profiles     subsystems        \nfeed_registry       regions             telemetry_samples \n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.036616885918192565, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.3607378900051117,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.036616885918192565,
+              "exit_code": 0
+            }
+          ],
+          "command": "cat ../data/README.md 2>/dev/null; ls ../data; echo ---; sqlite3 ../data/current.db \".tables\""
+        },
+        {
+          "output": "{\"answer\": {\"pool_metrics\": [{\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"operations\": 1000, \"terminal_failures\": 25, \"terminal_failure_pct\": 2.5, \"attempts\": 1150, \"failed_attempts\": 175, \"attempt_failure_pct\": 15.2174, \"retried_operations\": 125, \"min_deadline_ms\": 250, \"max_deadline_ms\": 250}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"operations\": 1000, \"terminal_failures\": 25, \"terminal_failure_pct\": 2.5, \"attempts\": 1150, \"failed_attempts\": 175, \"attempt_failure_pct\": 15.2174, \"retried_operations\": 125, \"min_deadline_ms\": 250, \"max_deadline_ms\": 250}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"operations\": 1000, \"terminal_failures\": 210, \"terminal_failure_pct\": 21.0, \"attempts\": 1620, \"failed_attempts\": 830, \"attempt_failure_pct\": 51.2346, \"retried_operations\": 410, \"min_deadline_ms\": 80, \"max_deadline_ms\": 80}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"operations\": 1000, \"terminal_failures\": 25, \"terminal_failure_pct\": 2.5, \"attempts\": 1150, \"failed_attempts\": 175, \"attempt_failure_pct\": 15.2174, \"retried_operations\": 125, \"min_deadline_ms\": 250, \"max_deadline_ms\": 250}], \"telemetry\": [{\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"signal_code\": \"upstream_latency_p95\", \"mean_value\": 118.0, \"unit\": \"ms\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"signal_code\": \"queue_depth\", \"mean_value\": 4.0, \"unit\": \"operations\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"signal_code\": \"available_workers\", \"mean_value\": 16.0, \"unit\": \"workers\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"signal_code\": \"cpu_utilization\", \"mean_value\": 0.42, \"unit\": \"fraction\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"signal_code\": \"upstream_latency_p95\", \"mean_value\": 118.0, \"unit\": \"ms\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"signal_code\": \"queue_depth\", \"mean_value\": 4.0, \"unit\": \"operations\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"signal_code\": \"available_workers\", \"mean_value\": 16.0, \"unit\": \"workers\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"signal_code\": \"cpu_utilization\", \"mean_value\": 0.42, \"unit\": \"fraction\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"signal_code\": \"upstream_latency_p95\", \"mean_value\": 118.0, \"unit\": \"ms\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"signal_code\": \"queue_depth\", \"mean_value\": 4.0, \"unit\": \"operations\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"signal_code\": \"available_workers\", \"mean_value\": 16.0, \"unit\": \"workers\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"signal_code\": \"cpu_utilization\", \"mean_value\": 0.42, \"unit\": \"fraction\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"signal_code\": \"upstream_latency_p95\", \"mean_value\": 118.0, \"unit\": \"ms\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"signal_code\": \"queue_depth\", \"mean_value\": 4.0, \"unit\": \"operations\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"signal_code\": \"available_workers\", \"mean_value\": 16.0, \"unit\": \"workers\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"signal_code\": \"cpu_utilization\", \"mean_value\": 0.42, \"unit\": \"fraction\"}], \"changes\": [{\"kind_code\": \"deadline_policy\", \"pool_code\": \"idx-north\", \"effective_at_ms\": 1777719600000, \"before_json\": \"{\\\"deadline_ms\\\": 250}\", \"after_json\": \"{\\\"deadline_ms\\\": 80}\"}], \"assessment\": \"Most strongly supported proximal explanation: the deadline_policy change effective at 1777719600000 (11:00 UTC) that applied the fast-80 profile (deadline_ms 80, replacing 250) to serving pool idx-north. Pool idx-north's terminal-failure rate rose from 2.5% (25/1000) in reference 10:00-11:00 to 21.0% (210/1000) in incident 11:00-12:00, an increase of 18.5 percentage points, and its min/max applied deadline_ms dropped from 250 to 80 exactly at the change boundary; attempt failures rose in parallel (15.2% to 51.2%). Meanwhile idx-south, serving the same service over the same windows, was unchanged (2.5% both periods) and kept deadline_ms 250, and all recorded telemetry for both pools (upstream_latency_p95 ~118 ms, queue_depth 4, available_workers 16, cpu_utilization 0.42) is identical across pools and periods, ruling out an upstream latency spike, capacity exhaustion or CPU saturation as supported proximate causes. Plausible alternative: a transient upstream latency regression affecting only idx-north's backends could in principle explain DEADLINE failures without any configuration change; however, that is not supported by the data, since upstream_latency_p95 sampled at idx-north is flat at 118 ms across both periods and identical to idx-south's (and 118 ms is below the old 250 ms deadline but above the new 80 ms one, consistent with the deadline change rather than upstream degradation). A second alternative, a worker-limit or capacity change on idx-north, is also unsupported: available_workers stayed 16 and no worker_limit change event covers this window. Evidence vs causal proof: these are observational associations - concurrent timing of a config change, a sharp rate shift confined to one pool, unchanged telemetry, and a stable counterfactual-like comparison pool. That strongly supports the deadline reduction as the proximate trigger, but a pre-deployed release or unobserved confounder cannot be excluded from telemetry alone; only the applied change record describes configuration, not a controlled experiment. Configuration is attributed per the routing-time feed (attempt_events): each operation is mapped to the route assignment and policy profile effective at its logical open time, not today's configuration.\"}, \"evidence_sql\": [\"WITH op AS (SELECT o.operation_id, o.opened_at_ms, CASE WHEN o.opened_at_ms < 1777719600000 THEN 'ref_10_11' ELSE 'inc_11_12' END AS period, (SELECT ra.pool_id FROM route_assignments ra WHERE ra.route_id = o.route_id AND ra.effective_from_ms <= o.opened_at_ms AND o.opened_at_ms < ra.effective_to_ms) AS pool_id, (SELECT p.deadline_ms FROM route_assignments ra JOIN policy_profiles p ON p.profile_id = ra.profile_id WHERE ra.route_id = o.route_id AND ra.effective_from_ms <= o.opened_at_ms AND o.opened_at_ms < ra.effective_to_ms) AS deadline_ms, (SELECT a.code_id FROM attempt_events a WHERE a.operation_id = o.operation_id ORDER BY a.attempt_no DESC LIMIT 1) AS final_code, (SELECT COUNT(*) FROM attempt_events a WHERE a.operation_id = o.operation_id) AS attempts, (SELECT SUM(a.code_id = 2) FROM attempt_events a WHERE a.operation_id = o.operation_id) AS failed_att FROM logical_operations o JOIN service_routes r ON r.route_id = o.route_id JOIN services s ON s.service_id = r.service_id WHERE s.service_id = 1 AND o.opened_at_ms >= 1777716000000 AND o.opened_at_ms < 1777723200000) SELECT period, wp.pool_code, COUNT(*) AS operations, SUM(final_code = 2) AS terminal_failures, ROUND(100.0 * SUM(final_code = 2) / COUNT(*), 4) AS terminal_failure_pct, SUM(attempts) AS attempts, SUM(failed_att) AS failed_attempts, ROUND(100.0 * SUM(failed_att) / SUM(attempts), 4) AS attempt_failure_pct, SUM(attempts > 1) AS retried_operations, MIN(deadline_ms) AS min_deadline_ms, MAX(deadline_ms) AS max_deadline_ms FROM op JOIN worker_pools wp ON wp.pool_id = op.pool_id GROUP BY period, wp.pool_code ORDER BY period, wp.pool_code;\", \"SELECT CASE WHEN s.measured_at_ms < 1777719600000 THEN 'ref_10_11' ELSE 'inc_11_12' END AS period, wp.pool_code, g.signal_code, g.unit, ROUND(AVG(s.value), 4) AS mean_value FROM telemetry_samples s JOIN telemetry_signals g ON g.signal_id = s.signal_id JOIN worker_pools wp ON wp.pool_id = s.pool_id WHERE s.measured_at_ms >= 1777716000000 AND s.measured_at_ms < 1777723200000 AND s.pool_id IN (SELECT pool_id FROM worker_pools WHERE pool_code IN ('idx-north','idx-south')) GROUP BY period, s.pool_id, s.signal_id ORDER BY period, wp.pool_code, g.signal_code;\", \"SELECT k.kind_code, wp.pool_code, ce.effective_at_ms, ce.before_json, ce.after_json, ce.change_note FROM change_events ce JOIN change_kinds k ON k.kind_id = ce.kind_id LEFT JOIN worker_pools wp ON wp.pool_id = ce.pool_id JOIN services s ON s.service_id = ce.service_id WHERE s.service_code = 'parcel-index' AND ce.effective_at_ms >= 1777716000000 AND ce.effective_at_ms < 1777723200000;\", \"SELECT * FROM feed_registry; -- confirms attempt_events is the active routing-time (operation-open attribution) feed for this window\", \"SELECT route_id, route_key FROM service_routes WHERE service_id = 1; SELECT ra.route_id, wp.pool_code, ra.effective_from_ms, ra.effective_to_ms, p.profile_code, p.deadline_ms FROM route_assignments ra JOIN worker_pools wp ON wp.pool_id = ra.pool_id JOIN policy_profiles p ON p.profile_id = ra.profile_id WHERE ra.route_id IN (SELECT route_id FROM service_routes WHERE service_id = 1) AND ra.effective_to_ms > 1777716000000 AND ra.effective_from_ms < 1777723200000 ORDER BY ra.route_id, ra.effective_from_ms; -- shows aliases (idx-primary-n, idx-canary-n, idx-alias-n) all map to physical pool idx-north, and the 250->80 profile switch at 11:00\"], \"caveats\": [\"Attribution uses routing-time (operation-open) assignment per feed_registry; execution-time identities would be an alternative basis.\", \"Multiple route keys (idx-primary-n, idx-canary-n, idx-alias-n) are aliases of physical pool idx-north and were counted once, not as separate pools.\", \"Terminal failures use the final attempt outcome (DEADLINE, is_success=0); earlier failed attempts followed by success are not terminal failures.\", \"Percentages are rounded to 4 decimals; differences quoted in assessment (18.5 pp) are computed from rounded values.\", \"Change events describe applied configuration, not a controlled experiment; causation is inferred, not proven.\", \"Telemetry samples are taken independently of operations; window means are ordinary arithmetic means.\", \"Only the deadline_policy change at 11:00 is included as required by the one-item changes array; no other parcel-index change falls in 10:00-12:00.\"]}",
+          "exit_code": 0,
+          "wall_seconds": 0.01476362009998411,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "cat ../memory/* 2>/dev/null"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_243f1246b4fd49499529c174",
+          "name": "bash",
+          "arguments": {
+            "command": "cd ../data; ls; find . -name README*; sqlite3 current.db \".schema feed_registry\" \".schema logical_operations\" \".schema outcome_events\" \".schema worker_pools\" \".schema attempt_events\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 4138,
+        "completion_tokens": 106,
+        "total_tokens": 4244,
+        "cost": 0.0004668,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0004668,
+          "upstream_inference_prompt_cost": 0.0004138,
+          "upstream_inference_completions_cost": 5.3e-05
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 54,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.0004668,
+      "response_id": "gen-1794153157-WDonoyI8B7xcDWfO0roG",
+      "elapsed_s": 5.23865046701394,
+      "token_accounting": {
+        "input_tokens": 4138,
+        "input_uncached_tokens": 4138,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 106,
+        "reasoning_tokens": 54,
+        "total_tokens": 4244
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153157-WDonoyI8B7xcDWfO0roG",
+        "object": "chat.completion",
+        "created": 1794153157,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Particle AI",
+        "system_fingerprint": null,
+        "service_tier": "default",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": "Memory has a previous task's answer for a different question (deadline policies). Now the current question is about ledger-sync reliability, feed_registry authoritative source, registry version etc. Different domain. Need fresh analysis. Check README absent? cat README gave nothing. Check schema.",
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "call_243f1246b4fd49499529c174",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"cd ../data; ls; find . -name README*; sqlite3 current.db \\\".schema feed_registry\\\" \\\".schema logical_operations\\\" \\\".schema outcome_events\\\" \\\".schema worker_pools\\\" \\\".schema attempt_events\\\"\"}"
+                  }
+                }
+              ],
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Memory has a previous task's answer for a different question (deadline policies). Now the current question is about ledger-sync reliability, feed_registry authoritative source, registry version etc. Different domain. Need fresh analysis. Check README absent? cat README gave nothing. Check schema.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 4138,
+          "completion_tokens": 106,
+          "total_tokens": 4244,
+          "cost": 0.0004668,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0004668,
+            "upstream_inference_prompt_cost": 0.0004138,
+            "upstream_inference_completions_cost": 5.3e-05
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 54,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 17605,
+      "tool_results": [
+        {
+          "output": "current.db\nCREATE TABLE feed_registry(version INTEGER PRIMARY KEY, event_table TEXT NOT NULL UNIQUE, event_grain TEXT NOT NULL CHECK(event_grain IN ('attempt','operation')), effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER, lifecycle TEXT NOT NULL CHECK(lifecycle IN ('active','historical')), operation_key_column TEXT NOT NULL, attribution_basis TEXT NOT NULL, CHECK(effective_to_ms IS NULL OR effective_to_ms>effective_from_ms));\nCREATE TABLE logical_operations(operation_id INTEGER PRIMARY KEY, tenant_id INTEGER NOT NULL REFERENCES tenants, route_id INTEGER NOT NULL REFERENCES service_routes, class_id INTEGER NOT NULL REFERENCES operation_classes, opened_at_ms INTEGER NOT NULL);\nCREATE INDEX ops_open ON logical_operations(opened_at_ms,route_id);\nCREATE TABLE outcome_events(outcome_id INTEGER PRIMARY KEY, operation_id INTEGER NOT NULL UNIQUE REFERENCES logical_operations, cell_id INTEGER NOT NULL REFERENCES execution_cells, completed_at_ms INTEGER NOT NULL, final_code_id INTEGER NOT NULL REFERENCES failure_codes, attempt_count INTEGER NOT NULL CHECK(attempt_count>=1), total_queue_ms INTEGER NOT NULL CHECK(total_queue_ms>=0), total_execution_ms INTEGER NOT NULL CHECK(total_execution_ms>=0), total_backoff_ms INTEGER NOT NULL CHECK(total_backoff_ms>=0));\nCREATE INDEX outcomes_cell ON outcome_events(cell_id,operation_id);\nCREATE TABLE worker_pools(pool_id INTEGER PRIMARY KEY, region_id INTEGER NOT NULL REFERENCES regions, pool_code TEXT NOT NULL UNIQUE);\nCREATE TABLE attempt_events(attempt_id INTEGER PRIMARY KEY, operation_id INTEGER NOT NULL REFERENCES logical_operations, attempt_no INTEGER NOT NULL CHECK(attempt_no>=1), started_at_ms INTEGER NOT NULL, completed_at_ms INTEGER NOT NULL, code_id INTEGER NOT NULL REFERENCES failure_codes, queue_ms INTEGER NOT NULL CHECK(queue_ms>=0), execution_ms INTEGER NOT NULL CHECK(execution_ms>=0), CHECK(completed_at_ms-started_at_ms=queue_ms+execution_ms), UNIQUE(operation_id,attempt_no));\nCREATE INDEX attempts_operation ON attempt_events(operation_id,attempt_no DESC);\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.03267942706588656, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.7309290079865605,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.03267942706588656,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd ../data; ls; find . -name README*; sqlite3 current.db \".schema feed_registry\" \".schema logical_operations\" \".schema outcome_events\" \".schema worker_pools\" \".schema attempt_events\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_81b66ffeca384b6c8aee9a2a",
+          "name": "bash",
+          "arguments": {
+            "command": "cd ../data; sqlite3 -header current.db \"select * from feed_registry;\"; echo ---; sqlite3 current.db \".schema execution_cells\" \".schema service_routes\" \".schema failure_codes\" \".schema operation_classes\" \".schema route_assignments\"; echo ---; sqlite3 -header current.db \"select * from failure_codes; select * from operation_classes;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 4691,
+        "completion_tokens": 83,
+        "total_tokens": 4774,
+        "cost": 0.0005106,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0005106,
+          "upstream_inference_prompt_cost": 0.0004691,
+          "upstream_inference_completions_cost": 4.15e-05
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.0005106,
+      "response_id": "gen-1794153163-6GNzEhazlTzrN2YW4mAt",
+      "elapsed_s": 2.008180548902601,
+      "token_accounting": {
+        "input_tokens": 4691,
+        "input_uncached_tokens": 4691,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 83,
+        "reasoning_tokens": 1,
+        "total_tokens": 4774
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153163-6GNzEhazlTzrN2YW4mAt",
+        "object": "chat.completion",
+        "created": 1794153163,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Particle AI",
+        "system_fingerprint": null,
+        "service_tier": "default",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": null,
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "call_81b66ffeca384b6c8aee9a2a",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"cd ../data; sqlite3 -header current.db \\\"select * from feed_registry;\\\"; echo ---; sqlite3 current.db \\\".schema execution_cells\\\" \\\".schema service_routes\\\" \\\".schema failure_codes\\\" \\\".schema operation_classes\\\" \\\".schema route_assignments\\\"; echo ---; sqlite3 -header current.db \\\"select * from failure_codes; select * from operation_classes;\\\"\"}"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 4691,
+          "completion_tokens": 83,
+          "total_tokens": 4774,
+          "cost": 0.0005106,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0005106,
+            "upstream_inference_prompt_cost": 0.0004691,
+            "upstream_inference_completions_cost": 4.15e-05
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 20452,
+      "tool_results": [
+        {
+          "output": "version|event_table|event_grain|effective_from_ms|effective_to_ms|lifecycle|operation_key_column|attribution_basis\n1|attempt_events|attempt|1777593600000|1778284800000|historical|operation_id|Routing decision effective at logical operation open\n2|outcome_events|operation|1778284800000||active|operation_id|Actual execution cell recorded on the outcome; routing intent is not serving attribution\n---\nCREATE TABLE execution_cells(cell_id INTEGER PRIMARY KEY, cell_key TEXT NOT NULL UNIQUE, service_id INTEGER NOT NULL REFERENCES services, pool_id INTEGER NOT NULL REFERENCES worker_pools, profile_id INTEGER NOT NULL REFERENCES policy_profiles, release_id INTEGER NOT NULL REFERENCES releases, effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER, CHECK(effective_to_ms IS NULL OR effective_to_ms>effective_from_ms));\nCREATE TABLE service_routes(route_id INTEGER PRIMARY KEY, service_id INTEGER NOT NULL REFERENCES services, route_key TEXT NOT NULL UNIQUE);\nCREATE TABLE failure_codes(code_id INTEGER PRIMARY KEY, code TEXT NOT NULL UNIQUE, is_success INTEGER NOT NULL CHECK(is_success IN (0,1)), description TEXT NOT NULL);\nCREATE TABLE operation_classes(class_id INTEGER PRIMARY KEY, class_code TEXT NOT NULL UNIQUE, description TEXT NOT NULL);\nCREATE TABLE route_assignments(assignment_id INTEGER PRIMARY KEY, route_id INTEGER NOT NULL REFERENCES service_routes, effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER NOT NULL, pool_id INTEGER NOT NULL REFERENCES worker_pools, profile_id INTEGER NOT NULL REFERENCES policy_profiles, release_id INTEGER NOT NULL REFERENCES releases, CHECK(effective_to_ms>effective_from_ms), UNIQUE(route_id,effective_from_ms));\nCREATE INDEX assignments_effective ON route_assignments(route_id,effective_from_ms,effective_to_ms);\n---\ncode_id|code|is_success|description\n1|OK|1|Completed successfully\n2|DEADLINE|0|Attempt or operation deadline exhausted\nclass_id|class_code|description\n1|small|Small logical payload\n2|large|Large logical payload\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.013404406025074422, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.04121271800249815, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.012632680009119213, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 1.7849828680045903,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.013404406025074422,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.04121271800249815,
+              "exit_code": 0
+            },
+            {
+              "wall_seconds": 0.012632680009119213,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd ../data; sqlite3 -header current.db \"select * from feed_registry;\"; echo ---; sqlite3 current.db \".schema execution_cells\" \".schema service_routes\" \".schema failure_codes\" \".schema operation_classes\" \".schema route_assignments\"; echo ---; sqlite3 -header current.db \"select * from failure_codes; select * from operation_classes;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_5980bd62852e4c45a1344f0f",
+          "name": "bash",
+          "arguments": {
+            "command": "date -u -d 2026-05-09T10:00 +%s; date -u -d 2026-05-11 +%s; date -u -d @1778284800000 2>/dev/null; python3 -c \"import datetime;print(datetime.datetime.utcfromtimestamp(1778284800))\"; sqlite3 -header ../data/current.db \"select * from execution_cells limit 20; select * from worker_pools; select * from services;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 5299,
+        "completion_tokens": 215,
+        "total_tokens": 5514,
+        "cost": 0.00031036,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 4672,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00031036,
+          "upstream_inference_prompt_cost": 0.00020286,
+          "upstream_inference_completions_cost": 0.0001075
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 102,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.00031036,
+      "response_id": "gen-1794153167-4l8c6UDsvRDlkLouOrXY",
+      "elapsed_s": 3.257749736076221,
+      "token_accounting": {
+        "input_tokens": 5299,
+        "input_uncached_tokens": 627,
+        "cache_read_input_tokens": 4672,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 215,
+        "reasoning_tokens": 102,
+        "total_tokens": 5514
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153167-4l8c6UDsvRDlkLouOrXY",
+        "object": "chat.completion",
+        "created": 1794153167,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Particle AI",
+        "system_fingerprint": null,
+        "service_tier": "default",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": "Windows: 2026-05-09 10:00–12:00 UTC. 2026-05-09T00:00Z epoch? Compute: 2026-05-09. Use date -d. Active feed: version 2, outcome_events, grain operation, effective_from 1778284800000 (which is 2026-05-11? check). So authoritative = outcome_events, attribution = cell's pool on outcome.\n\nCompute epoch bounds.",
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "call_5980bd62852e4c45a1344f0f",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"date -u -d 2026-05-09T10:00 +%s; date -u -d 2026-05-11 +%s; date -u -d @1778284800000 2>/dev/null; python3 -c \\\"import datetime;print(datetime.datetime.utcfromtimestamp(1778284800))\\\"; sqlite3 -header ../data/current.db \\\"select * from execution_cells limit 20; select * from worker_pools; select * from services;\\\"\"}"
+                  }
+                }
+              ],
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Windows: 2026-05-09 10:00–12:00 UTC. 2026-05-09T00:00Z epoch? Compute: 2026-05-09. Use date -d. Active feed: version 2, outcome_events, grain operation, effective_from 1778284800000 (which is 2026-05-11? check). So authoritative = outcome_events, attribution = cell's pool on outcome.\n\nCompute epoch bounds.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 5299,
+          "completion_tokens": 215,
+          "total_tokens": 5514,
+          "cost": 0.00031036,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 4672,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00031036,
+            "upstream_inference_prompt_cost": 0.00020286,
+            "upstream_inference_completions_cost": 0.0001075
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 102,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 24084,
+      "tool_results": [
+        {
+          "output": "1778320800\n1778457600\nTue Aug  9 00:00:00 UTC 58321\n2026-05-09 00:00:00\ncell_id|cell_key|service_id|pool_id|profile_id|release_id|effective_from_ms|effective_to_ms\n1|cell-01|2|3|1|3|1778284800000|\n2|cell-02|2|3|1|3|1778284800000|\n3|cell-03|2|4|1|3|1778284800000|\n4|cell-04|2|4|1|3|1778284800000|\npool_id|region_id|pool_code\n1|1|idx-north\n2|2|idx-south\n3|1|sync-north\n4|2|sync-south\nservice_id|subsystem_id|service_code\n1|1|parcel-index\n2|2|ledger-sync\n\nSTDERR:\n<string>:1: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.023124499013647437, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 1.1149992319988087,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.023124499013647437,
+              "exit_code": 0
+            }
+          ],
+          "command": "date -u -d 2026-05-09T10:00 +%s; date -u -d 2026-05-11 +%s; date -u -d @1778284800000 2>/dev/null; python3 -c \"import datetime;print(datetime.datetime.utcfromtimestamp(1778284800))\"; sqlite3 -header ../data/current.db \"select * from execution_cells limit 20; select * from worker_pools; select * from services;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_2175f42ba7b7450986cb3378",
+          "name": "bash",
+          "arguments": {
+            "command": "cd ../data; sqlite3 -header current.db \"select * from execution_cells; select * from route_assignments; select * from service_routes; select * from policy_profiles; select * from releases;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 5824,
+        "completion_tokens": 154,
+        "total_tokens": 5978,
+        "cost": 0.00057876,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 1152,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00057876,
+          "upstream_inference_prompt_cost": 0.00050176,
+          "upstream_inference_completions_cost": 7.7e-05
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 104,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.00057876,
+      "response_id": "gen-1794153172-UL0rrgm2N8jROmcEvYR8",
+      "elapsed_s": 1.3202669440070167,
+      "token_accounting": {
+        "input_tokens": 5824,
+        "input_uncached_tokens": 4672,
+        "cache_read_input_tokens": 1152,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 154,
+        "reasoning_tokens": 104,
+        "total_tokens": 5978
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153172-UL0rrgm2N8jROmcEvYR8",
+        "object": "chat.completion",
+        "created": 1794153172,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Particle AI",
+        "system_fingerprint": null,
+        "service_tier": "default",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": "Bounds: ref 1778320800000–1778324400000; inc 1778324400000–1778328000000.\n\nLedger-sync = service_id 2. Join logical_operations (opened_at) → outcome_events → execution_cells effective at... hmm cells have effective windows; attribution basis says cell recorded on the outcome. But cells also have effective_from/to — maybe multiple cell versions. Check all cells for service 2, and route_assignments.",
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "call_2175f42ba7b7450986cb3378",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"cd ../data; sqlite3 -header current.db \\\"select * from execution_cells; select * from route_assignments; select * from service_routes; select * from policy_profiles; select * from releases;\\\"\"}"
+                  }
+                }
+              ],
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Bounds: ref 1778320800000–1778324400000; inc 1778324400000–1778328000000.\n\nLedger-sync = service_id 2. Join logical_operations (opened_at) → outcome_events → execution_cells effective at... hmm cells have effective windows; attribution basis says cell recorded on the outcome. But cells also have effective_from/to — maybe multiple cell versions. Check all cells for service 2, and route_assignments.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 5824,
+          "completion_tokens": 154,
+          "total_tokens": 5978,
+          "cost": 0.00057876,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 1152,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00057876,
+            "upstream_inference_prompt_cost": 0.00050176,
+            "upstream_inference_completions_cost": 7.7e-05
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 104,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 26362,
+      "tool_results": [
+        {
+          "output": "cell_id|cell_key|service_id|pool_id|profile_id|release_id|effective_from_ms|effective_to_ms\n1|cell-01|2|3|1|3|1778284800000|\n2|cell-02|2|3|1|3|1778284800000|\n3|cell-03|2|4|1|3|1778284800000|\n4|cell-04|2|4|1|3|1778284800000|\nassignment_id|route_id|effective_from_ms|effective_to_ms|pool_id|profile_id|release_id\n1|1|1777593600000|1777719600000|1|1|1\n2|1|1777719600000|1777723200000|1|2|1\n3|1|1777723200000|1778284800000|1|1|1\n4|2|1777593600000|1778284800000|2|1|1\n5|3|1777593600000|1778284800000|3|1|3\n6|4|1777593600000|1778284800000|4|1|3\n7|5|1777593600000|1778284800000|1|1|2\n8|6|1777593600000|1778284800000|2|1|2\n9|7|1777593600000|1777719600000|1|1|1\n10|7|1777719600000|1777723200000|1|2|1\n11|7|1777723200000|1778284800000|1|1|1\n12|8|1777593600000|1778284800000|4|1|3\nroute_id|service_id|route_key\n1|1|idx-primary-n\n2|1|idx-primary-s\n3|2|sync-primary-n\n4|2|sync-primary-s\n5|1|idx-canary-n\n6|1|idx-canary-s\n7|1|idx-alias-n\n8|2|sync-alias-s\nprofile_id|profile_code|deadline_ms|max_attempts\n1|balanced-250|250|3\n2|fast-80|80|3\nrelease_id|service_id|build_code\n1|1|idx-r18\n2|1|idx-r19\n3|2|sync-r42\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.02622299804352224, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.40835987008176744,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.02622299804352224,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd ../data; sqlite3 -header current.db \"select * from execution_cells; select * from route_assignments; select * from service_routes; select * from policy_profiles; select * from releases;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_24559ff1b0284e2eac148da8",
+          "name": "bash",
+          "arguments": {
+            "command": "cd ../data; sqlite3 -header current.db \"\nWITH op AS (\n SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END period,\n        wp.pool_code, o.operation_id, oe.final_code_id, oe.attempt_count,\n        oe.total_queue_ms+oe.total_execution_ms+oe.total_backoff_ms AS e2e\n FROM logical_operations o\n JOIN outcome_events oe ON oe.operation_id=o.operation_id\n JOIN service_routes r ON r.route_id=o.route_id\n JOIN execution_cells c ON c.cell_id=oe.cell_id\n JOIN worker_pools wp ON wp.pool_id=c.pool_id\n WHERE r.service_id=2 AND o.opened_at_ms>=1778320800000 AND o.opened_at_ms<1778328000000)\nSELECT period, pool_code, COUNT(*) ops, SUM(final_code_id=2) tf,\n ROUND(100.0*SUM(final_code_id=2)/COUNT(*),4) tfpct,\n SUM(attempt_count>1) retried, ROUND(100.0*SUM(attempt_count>1)/COUNT(*),4) retpct,\n ROUND(AVG(e2e),4) lat\nFROM op GROUP BY 1,2;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 6588,
+        "completion_tokens": 283,
+        "total_tokens": 6871,
+        "cost": 0.00038814,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 5888,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00038814,
+          "upstream_inference_prompt_cost": 0.00024664,
+          "upstream_inference_completions_cost": 0.0001415
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.00038814,
+      "response_id": "gen-1794153173-hgwxvqa74sIyZrddBr3S",
+      "elapsed_s": 3.556944919982925,
+      "token_accounting": {
+        "input_tokens": 6588,
+        "input_uncached_tokens": 700,
+        "cache_read_input_tokens": 5888,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 283,
+        "reasoning_tokens": 1,
+        "total_tokens": 6871
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153173-hgwxvqa74sIyZrddBr3S",
+        "object": "chat.completion",
+        "created": 1794153173,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Particle AI",
+        "system_fingerprint": null,
+        "service_tier": "default",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": null,
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "call_24559ff1b0284e2eac148da8",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"cd ../data; sqlite3 -header current.db \\\"\\nWITH op AS (\\n SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END period,\\n        wp.pool_code, o.operation_id, oe.final_code_id, oe.attempt_count,\\n        oe.total_queue_ms+oe.total_execution_ms+oe.total_backoff_ms AS e2e\\n FROM logical_operations o\\n JOIN outcome_events oe ON oe.operation_id=o.operation_id\\n JOIN service_routes r ON r.route_id=o.route_id\\n JOIN execution_cells c ON c.cell_id=oe.cell_id\\n JOIN worker_pools wp ON wp.pool_id=c.pool_id\\n WHERE r.service_id=2 AND o.opened_at_ms>=1778320800000 AND o.opened_at_ms<1778328000000)\\nSELECT period, pool_code, COUNT(*) ops, SUM(final_code_id=2) tf,\\n ROUND(100.0*SUM(final_code_id=2)/COUNT(*),4) tfpct,\\n SUM(attempt_count>1) retried, ROUND(100.0*SUM(attempt_count>1)/COUNT(*),4) retpct,\\n ROUND(AVG(e2e),4) lat\\nFROM op GROUP BY 1,2;\\\"\"}"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 6588,
+          "completion_tokens": 283,
+          "total_tokens": 6871,
+          "cost": 0.00038814,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 5888,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00038814,
+            "upstream_inference_prompt_cost": 0.00024664,
+            "upstream_inference_completions_cost": 0.0001415
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 28808,
+      "tool_results": [
+        {
+          "output": "period|pool_code|ops|tf|tfpct|retried|retpct|lat\ninc_11_12|sync-north|1000|30|3.0|130|13.0|108.87\ninc_11_12|sync-south|1000|180|18.0|380|38.0|261.8\nref_10_11|sync-north|1000|30|3.0|130|13.0|108.87\nref_10_11|sync-south|1000|30|3.0|130|13.0|108.9\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.025657922960817814, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.4388012600829825,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.025657922960817814,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd ../data; sqlite3 -header current.db \"\nWITH op AS (\n SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END period,\n        wp.pool_code, o.operation_id, oe.final_code_id, oe.attempt_count,\n        oe.total_queue_ms+oe.total_execution_ms+oe.total_backoff_ms AS e2e\n FROM logical_operations o\n JOIN outcome_events oe ON oe.operation_id=o.operation_id\n JOIN service_routes r ON r.route_id=o.route_id\n JOIN execution_cells c ON c.cell_id=oe.cell_id\n JOIN worker_pools wp ON wp.pool_id=c.pool_id\n WHERE r.service_id=2 AND o.opened_at_ms>=1778320800000 AND o.opened_at_ms<1778328000000)\nSELECT period, pool_code, COUNT(*) ops, SUM(final_code_id=2) tf,\n ROUND(100.0*SUM(final_code_id=2)/COUNT(*),4) tfpct,\n SUM(attempt_count>1) retried, ROUND(100.0*SUM(attempt_count>1)/COUNT(*),4) retpct,\n ROUND(AVG(e2e),4) lat\nFROM op GROUP BY 1,2;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_b46c114d0ffa458f8ce62c94",
+          "name": "bash",
+          "arguments": {
+            "command": "cd ../data; sqlite3 -header current.db \"\nWITH op AS (\n SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END period,\n        wp.pool_code, oe.final_code_id, oe.attempt_count,\n        oe.total_queue_ms+oe.total_execution_ms+oe.total_backoff_ms AS e2e\n FROM logical_operations o JOIN outcome_events oe ON oe.operation_id=o.operation_id\n JOIN service_routes r ON r.route_id=o.route_id\n JOIN execution_cells c ON c.cell_id=oe.cell_id JOIN worker_pools wp ON wp.pool_id=c.pool_id\n WHERE r.service_id=2 AND o.opened_at_ms>=1778320800000 AND o.opened_at_ms<1778328000000)\nSELECT period, pool_code, printf('%.6f',AVG(e2e)) lat, COUNT(*) FROM op GROUP BY 1,2;\nSELECT period, COUNT(*) ops, SUM(final_code_id=2) tf, ROUND(100.0*SUM(final_code_id=2)/COUNT(*),6) tfpct FROM op GROUP BY period;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 7057,
+        "completion_tokens": 311,
+        "total_tokens": 7368,
+        "cost": 0.00057448,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 4096,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00057448,
+          "upstream_inference_prompt_cost": 0.00041898,
+          "upstream_inference_completions_cost": 0.0001555
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 54,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.00057448,
+      "response_id": "gen-1794153178-PHYemrufNqMtFJLfVbpa",
+      "elapsed_s": 1.96046634495724,
+      "token_accounting": {
+        "input_tokens": 7057,
+        "input_uncached_tokens": 2961,
+        "cache_read_input_tokens": 4096,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 311,
+        "reasoning_tokens": 54,
+        "total_tokens": 7368
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153178-PHYemrufNqMtFJLfVbpa",
+        "object": "chat.completion",
+        "created": 1794153178,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Particle AI",
+        "system_fingerprint": null,
+        "service_tier": "default",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": "Wait ref sync-south latency 108.9 vs 108.87 north? Check more precision. Also totals and largest increase: sync-south 3.0→18.0 = +15.0 pp.\n\nGet full precision latencies and totals.",
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "call_b46c114d0ffa458f8ce62c94",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"cd ../data; sqlite3 -header current.db \\\"\\nWITH op AS (\\n SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END period,\\n        wp.pool_code, oe.final_code_id, oe.attempt_count,\\n        oe.total_queue_ms+oe.total_execution_ms+oe.total_backoff_ms AS e2e\\n FROM logical_operations o JOIN outcome_events oe ON oe.operation_id=o.operation_id\\n JOIN service_routes r ON r.route_id=o.route_id\\n JOIN execution_cells c ON c.cell_id=oe.cell_id JOIN worker_pools wp ON wp.pool_id=c.pool_id\\n WHERE r.service_id=2 AND o.opened_at_ms>=1778320800000 AND o.opened_at_ms<1778328000000)\\nSELECT period, pool_code, printf('%.6f',AVG(e2e)) lat, COUNT(*) FROM op GROUP BY 1,2;\\nSELECT period, COUNT(*) ops, SUM(final_code_id=2) tf, ROUND(100.0*SUM(final_code_id=2)/COUNT(*),6) tfpct FROM op GROUP BY period;\\\"\"}"
+                  }
+                }
+              ],
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Wait ref sync-south latency 108.9 vs 108.87 north? Check more precision. Also totals and largest increase: sync-south 3.0→18.0 = +15.0 pp.\n\nGet full precision latencies and totals.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 7057,
+          "completion_tokens": 311,
+          "total_tokens": 7368,
+          "cost": 0.00057448,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 4096,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00057448,
+            "upstream_inference_prompt_cost": 0.00041898,
+            "upstream_inference_completions_cost": 0.0001555
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 54,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 30784,
+      "tool_results": [
+        {
+          "output": "period|pool_code|lat|COUNT(*)\ninc_11_12|sync-north|108.870000|1000\ninc_11_12|sync-south|261.800000|1000\nref_10_11|sync-north|108.870000|1000\nref_10_11|sync-south|108.900000|1000\n\nSTDERR:\nError: in prepare, no such table: op\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.013329073903150856, \"exit_code\": 1}\n",
+          "exit_code": 1,
+          "wall_seconds": 0.664644481963478,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.013329073903150856,
+              "exit_code": 1
+            }
+          ],
+          "command": "cd ../data; sqlite3 -header current.db \"\nWITH op AS (\n SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END period,\n        wp.pool_code, oe.final_code_id, oe.attempt_count,\n        oe.total_queue_ms+oe.total_execution_ms+oe.total_backoff_ms AS e2e\n FROM logical_operations o JOIN outcome_events oe ON oe.operation_id=o.operation_id\n JOIN service_routes r ON r.route_id=o.route_id\n JOIN execution_cells c ON c.cell_id=oe.cell_id JOIN worker_pools wp ON wp.pool_id=c.pool_id\n WHERE r.service_id=2 AND o.opened_at_ms>=1778320800000 AND o.opened_at_ms<1778328000000)\nSELECT period, pool_code, printf('%.6f',AVG(e2e)) lat, COUNT(*) FROM op GROUP BY 1,2;\nSELECT period, COUNT(*) ops, SUM(final_code_id=2) tf, ROUND(100.0*SUM(final_code_id=2)/COUNT(*),6) tfpct FROM op GROUP BY period;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_abf2fbd21c0248f7a1ea2a68",
+          "name": "bash",
+          "arguments": {
+            "command": "cd ../data; sqlite3 -header current.db \"\nWITH op AS (\n SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END period,\n        oe.final_code_id\n FROM logical_operations o JOIN outcome_events oe ON oe.operation_id=o.operation_id\n JOIN service_routes r ON r.route_id=o.route_id\n WHERE r.service_id=2 AND o.opened_at_ms>=1778320800000 AND o.opened_at_ms<1778328000000)\nSELECT period, COUNT(*) ops, SUM(final_code_id=2) tf, ROUND(100.0*SUM(final_code_id=2)/COUNT(*),6) tfpct FROM op GROUP BY period;\""
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 7509,
+        "completion_tokens": 172,
+        "total_tokens": 7681,
+        "cost": 0.00037098,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 6656,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00037098,
+          "upstream_inference_prompt_cost": 0.00028498,
+          "upstream_inference_completions_cost": 8.6e-05
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.00037098,
+      "response_id": "gen-1794153180-MyzmRZPuE2cDBPecaFYe",
+      "elapsed_s": 1.1094761359272525,
+      "token_accounting": {
+        "input_tokens": 7509,
+        "input_uncached_tokens": 853,
+        "cache_read_input_tokens": 6656,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 172,
+        "reasoning_tokens": 1,
+        "total_tokens": 7681
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153180-MyzmRZPuE2cDBPecaFYe",
+        "object": "chat.completion",
+        "created": 1794153180,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Particle AI",
+        "system_fingerprint": null,
+        "service_tier": "default",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": null,
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "call_abf2fbd21c0248f7a1ea2a68",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"cd ../data; sqlite3 -header current.db \\\"\\nWITH op AS (\\n SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END period,\\n        oe.final_code_id\\n FROM logical_operations o JOIN outcome_events oe ON oe.operation_id=o.operation_id\\n JOIN service_routes r ON r.route_id=o.route_id\\n WHERE r.service_id=2 AND o.opened_at_ms>=1778320800000 AND o.opened_at_ms<1778328000000)\\nSELECT period, COUNT(*) ops, SUM(final_code_id=2) tf, ROUND(100.0*SUM(final_code_id=2)/COUNT(*),6) tfpct FROM op GROUP BY period;\\\"\"}"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 7509,
+          "completion_tokens": 172,
+          "total_tokens": 7681,
+          "cost": 0.00037098,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 6656,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00037098,
+            "upstream_inference_prompt_cost": 0.00028498,
+            "upstream_inference_completions_cost": 8.6e-05
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 31970,
+      "tool_results": [
+        {
+          "output": "period|ops|tf|tfpct\ninc_11_12|2000|210|10.5\nref_10_11|2000|60|3.0\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.027898142929188907, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.7677309249993414,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.027898142929188907,
+              "exit_code": 0
+            }
+          ],
+          "command": "cd ../data; sqlite3 -header current.db \"\nWITH op AS (\n SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END period,\n        oe.final_code_id\n FROM logical_operations o JOIN outcome_events oe ON oe.operation_id=o.operation_id\n JOIN service_routes r ON r.route_id=o.route_id\n WHERE r.service_id=2 AND o.opened_at_ms>=1778320800000 AND o.opened_at_ms<1778328000000)\nSELECT period, COUNT(*) ops, SUM(final_code_id=2) tf, ROUND(100.0*SUM(final_code_id=2)/COUNT(*),6) tfpct FROM op GROUP BY period;\""
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_0df7a3d2432643f4b7e61110",
+          "name": "bash",
+          "arguments": {
+            "command": "cat > ../memory/ledger_sync_2026-05-09.md <<'EOF'\nTask: ledger-sync 2026-05-09 10-12 UTC. Authoritative feed v2: outcome_events (operation grain, effective_from 1778284800000), attribution = execution_cells.pool_id on outcome. Results: ref: sync-north 1000/30/3.0%,130 retried,108.87ms; sync-south 1000/30/3.0%,130,108.90. inc: sync-north 1000/30/3.0%,130,108.87; sync-south 1000/180/18.0%,380,261.80. Totals ref 60/2000 3.0%; inc 210/2000 10.5%. Largest increase sync-south +15pp. Old memory (deadline change) was a different service (parcel-index) — do not reuse.\nEOF"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "prompt_tokens": 7765,
+        "completion_tokens": 250,
+        "total_tokens": 8015,
+        "cost": 0.00039974,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 7168,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00039974,
+          "upstream_inference_prompt_cost": 0.00027474,
+          "upstream_inference_completions_cost": 0.000125
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 35,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.00039974,
+      "response_id": "gen-1794153182-VRuFbgCNfHM3zD5TNIfh",
+      "elapsed_s": 2.7158701920416206,
+      "token_accounting": {
+        "input_tokens": 7765,
+        "input_uncached_tokens": 597,
+        "cache_read_input_tokens": 7168,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 250,
+        "reasoning_tokens": 35,
+        "total_tokens": 8015
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153182-VRuFbgCNfHM3zD5TNIfh",
+        "object": "chat.completion",
+        "created": 1794153182,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Particle AI",
+        "system_fingerprint": null,
+        "service_tier": "default",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "native_finish_reason": "tool_calls",
+            "message": {
+              "role": "assistant",
+              "content": null,
+              "refusal": null,
+              "reasoning": "Done. Compose JSON. Update memory briefly? Optional; do quickly via writing file. I'll skip to save effort—actually instructions say may maintain; write note.",
+              "tool_calls": [
+                {
+                  "type": "function",
+                  "index": 0,
+                  "id": "call_0df7a3d2432643f4b7e61110",
+                  "function": {
+                    "name": "bash",
+                    "arguments": "{\"command\": \"cat > ../memory/ledger_sync_2026-05-09.md <<'EOF'\\nTask: ledger-sync 2026-05-09 10-12 UTC. Authoritative feed v2: outcome_events (operation grain, effective_from 1778284800000), attribution = execution_cells.pool_id on outcome. Results: ref: sync-north 1000/30/3.0%,130 retried,108.87ms; sync-south 1000/30/3.0%,130,108.90. inc: sync-north 1000/30/3.0%,130,108.87; sync-south 1000/180/18.0%,380,261.80. Totals ref 60/2000 3.0%; inc 210/2000 10.5%. Largest increase sync-south +15pp. Old memory (deadline change) was a different service (parcel-index) — do not reuse.\\nEOF\"}"
+                  }
+                }
+              ],
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Done. Compose JSON. Update memory briefly? Optional; do quickly via writing file. I'll skip to save effort—actually instructions say may maintain; write note.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 7765,
+          "completion_tokens": 250,
+          "total_tokens": 8015,
+          "cost": 0.00039974,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 7168,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00039974,
+            "upstream_inference_prompt_cost": 0.00027474,
+            "upstream_inference_completions_cost": 0.000125
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 35,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 33456,
+      "tool_results": [
+        {
+          "output": "",
+          "exit_code": 0,
+          "wall_seconds": 0.0503866330254823,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "cat > ../memory/ledger_sync_2026-05-09.md <<'EOF'\nTask: ledger-sync 2026-05-09 10-12 UTC. Authoritative feed v2: outcome_events (operation grain, effective_from 1778284800000), attribution = execution_cells.pool_id on outcome. Results: ref: sync-north 1000/30/3.0%,130 retried,108.87ms; sync-south 1000/30/3.0%,130,108.90. inc: sync-north 1000/30/3.0%,130,108.87; sync-south 1000/180/18.0%,380,261.80. Totals ref 60/2000 3.0%; inc 210/2000 10.5%. Largest increase sync-south +15pp. Old memory (deadline change) was a different service (parcel-index) — do not reuse.\nEOF"
+        }
+      ]
+    },
+    {
+      "tool_calls": [],
+      "final_text": "```json\n{\n  \"answer\": {\n    \"source\": {\n      \"version\": 2,\n      \"event_table\": \"outcome_events\",\n      \"event_grain\": \"operation\",\n      \"effective_from_ms\": 1778284800000\n    },\n    \"pool_metrics\": [\n      {\"period\": \"ref_10_11\", \"pool_code\": \"sync-north\", \"operations\": 1000, \"terminal_failures\": 30, \"terminal_failure_pct\": 3.0, \"retried_operations\": 130, \"retry_pct\": 13.0, \"mean_latency_ms\": 108.87},\n      {\"period\": \"ref_10_11\", \"pool_code\": \"sync-south\", \"operations\": 1000, \"terminal_failures\": 30, \"terminal_failure_pct\": 3.0, \"retried_operations\": 130, \"retry_pct\": 13.0, \"mean_latency_ms\": 108.9},\n      {\"period\": \"inc_11_12\", \"pool_code\": \"sync-north\", \"operations\": 1000, \"terminal_failures\": 30, \"terminal_failure_pct\": 3.0, \"retried_operations\": 130, \"retry_pct\": 13.0, \"mean_latency_ms\": 108.87},\n      {\"period\": \"inc_11_12\", \"pool_code\": \"sync-south\", \"operations\": 1000, \"terminal_failures\": 180, \"terminal_failure_pct\": 18.0, \"retried_operations\": 380, \"retry_pct\": 38.0, \"mean_latency_ms\": 261.8}\n    ],\n    \"totals\": [\n      {\"period\": \"ref_10_11\", \"operations\": 2000, \"terminal_failures\": 60, \"terminal_failure_pct\": 3.0},\n      {\"period\": \"inc_11_12\", \"operations\": 2000, \"terminal_failures\": 210, \"terminal_failure_pct\": 10.5}\n    ],\n    \"largest_increase\": {\n      \"pool_code\": \"sync-south\",\n      \"reference_failure_pct\": 3.0,\n      \"incident_failure_pct\": 18.0,\n      \"increase_pp\": 15.0\n    },\n    \"assessment\": \"Ledger-sync reliability for 2026-05-09 was stable on sync-north (3.0% terminal failures in both windows, ~108.87 ms mean latency) but degraded sharply on sync-south in the incident window 11:00-12:00 (3.0% -> 18.0% terminal failures, retries 13.0% -> 38.0%, mean end-to-end latency 108.90 ms -> 261.80 ms), driving the all-pool terminal-failure rate from 3.0% to 10.5%. The largest increase is sync-south at +15.0 pp. Attribution uses the authoritative source per feed_registry version 2: outcome_events at operation grain, effective from 1778284800000, with the actual serving physical pool taken from the execution cell recorded on each outcome. Limitations: routing intent (route_assignments.pool_id) was deliberately not used for attribution; execution cells cell-01/cell-02 both map to physical pool sync-north and cell-03/cell-04 to sync-south, so cell-level execution identities were collapsed to their physical pool (pool_code), which is what is reported. Terminal failures are counted at the operation level (final DEADLINE outcome per outcome_events); intermediate failed attempts followed by success are retried operations, not terminal failures. Windows are UTC half-opens selected by logical-operation open time (opened_at_ms), so operations are assigned to a window by open time even if they completed after the window's end. Percentages are of logical operations (terminal) and attempts implied by outcome attempt_count (retry percentage is per-operation), and a zero numerator would still be reported. No causal claim is made about the underlying cause of the sync-south degradation.\"\n  },\n  \"caveats\": [\n    \"Attribution follows feed_registry version 2 (active feed): outcome_events at operation grain, effective from 1778284800000; attempt_events (version 1) is historical and not authoritative for these windows.\",\n    \"Physical pool attribution comes from execution_cells.pool_id on the recorded outcome, not from routing intent in route_assignments; routing keys (sync-primary-n, sync-primary-s, sync-alias-s) were not treated as pools.\",\n    \"Multiple execution cells serve the same physical pool (cell-01/cell-02 -> sync-north; cell-03/cell-04 -> sync-south); metrics are aggregated to the physical pool, so per-cell variation is not visible.\",\n    \"Windows are UTC half-opens [10:00,11:00) and [11:00,12:00) on 2026-05-09, selected by logical-operation open time (opened_at_ms); outcomes completing after a window's end remain in the open-time window.\",\n    \"Terminal failure percentage uses logical operations as the denominator; retry percentage uses operations with attempt_count > 1 (attempt-granular attempt failure rate is not reported here).\",\n    \"Mean latency is mean of total_queue_ms + total_execution_ms + total_backoff_ms from outcome_events, rounded to 2 decimals.\",\n    \"A zero numerator would be reported as 0 and is not missing data; percentages are rounded values.\"\n  ],\n  \"evidence_sql\": [\n    \"SELECT version, event_table, event_grain, effective_from_ms, effective_to_ms, lifecycle, attribution_basis FROM feed_registry; -- authoritative source for 2026-05-09 windows is version 2: outcome_events, operation grain, effective 1778284800000\",\n    \"SELECT cell_id, cell_key, service_id, pool_id, release_id, effective_from_ms, effective_to_ms FROM execution_cells; -- ledger-sync (service_id=2) cells: cell-01/cell-02 -> pool 3 (sync-north), cell-03/cell-04 -> pool 4 (sync-south)\",\n    \"WITH op AS (SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END AS period, wp.pool_code, oe.final_code_id, oe.attempt_count, oe.total_queue_ms + oe.total_execution_ms + oe.total_backoff_ms AS e2e FROM logical_operations o JOIN outcome_events oe ON oe.operation_id = o.operation_id JOIN service_routes r ON r.route_id = o.route_id JOIN execution_cells c ON c.cell_id = oe.cell_id JOIN worker_pools wp ON wp.pool_id = c.pool_id WHERE r.service_id = 2 AND o.opened_at_ms >= 1778320800000 AND o.opened_at_ms < 1778328000000) SELECT period, pool_code, COUNT(*) AS operations, SUM(final_code_id = 2) AS terminal_failures, ROUND(100.0 * SUM(final_code_id = 2) / COUNT(*), 4) AS terminal_failure_pct, SUM(attempt_count > 1) AS retried_operations, ROUND(100.0 * SUM(attempt_count > 1) / COUNT(*), 4) AS retry_pct, ROUND(AVG(e2e), 4) AS mean_latency_ms FROM op GROUP BY period, pool_code ORDER BY period, pool_code; -- per-period, per-physical-pool metrics (literal bounds: ref [1778320800000,1778324400000), inc [1778324400000,1778328000000))\",\n    \"WITH op AS (SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END AS period, oe.final_code_id FROM logical_operations o JOIN outcome_events oe ON oe.operation_id = o.operation_id JOIN service_routes r ON r.route_id = o.route_id WHERE r.service_id = 2 AND o.opened_at_ms >= 1778320800000 AND o.opened_at_ms < 1778328000000) SELECT period, COUNT(*) AS operations, SUM(final_code_id = 2) AS terminal_failures, ROUND(100.0 * SUM(final_code_id = 2) / COUNT(*), 4) AS terminal_failure_pct FROM op GROUP BY period ORDER BY period; -- all-pool totals per period; largest increase: sync-south 3.0 -> 18.0 = +15.0 pp\"\n  ]\n}\n```",
+      "usage": {
+        "prompt_tokens": 8026,
+        "completion_tokens": 1835,
+        "total_tokens": 9861,
+        "cost": 0.00116458,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 7936,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00116458,
+          "upstream_inference_prompt_cost": 0.00024708,
+          "upstream_inference_completions_cost": 0.0009175
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "cost_usd": 0.00116458,
+      "response_id": "gen-1794153185-nBM1ve0OVKYSIje427ys",
+      "elapsed_s": 12.766550707980059,
+      "token_accounting": {
+        "input_tokens": 8026,
+        "input_uncached_tokens": 90,
+        "cache_read_input_tokens": 7936,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 1835,
+        "reasoning_tokens": 1,
+        "total_tokens": 9861
+      },
+      "cost_source": "usage.cost",
+      "native_response": {
+        "id": "gen-1794153185-nBM1ve0OVKYSIje427ys",
+        "object": "chat.completion",
+        "created": 1794153185,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Particle AI",
+        "system_fingerprint": null,
+        "service_tier": "default",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "```json\n{\n  \"answer\": {\n    \"source\": {\n      \"version\": 2,\n      \"event_table\": \"outcome_events\",\n      \"event_grain\": \"operation\",\n      \"effective_from_ms\": 1778284800000\n    },\n    \"pool_metrics\": [\n      {\"period\": \"ref_10_11\", \"pool_code\": \"sync-north\", \"operations\": 1000, \"terminal_failures\": 30, \"terminal_failure_pct\": 3.0, \"retried_operations\": 130, \"retry_pct\": 13.0, \"mean_latency_ms\": 108.87},\n      {\"period\": \"ref_10_11\", \"pool_code\": \"sync-south\", \"operations\": 1000, \"terminal_failures\": 30, \"terminal_failure_pct\": 3.0, \"retried_operations\": 130, \"retry_pct\": 13.0, \"mean_latency_ms\": 108.9},\n      {\"period\": \"inc_11_12\", \"pool_code\": \"sync-north\", \"operations\": 1000, \"terminal_failures\": 30, \"terminal_failure_pct\": 3.0, \"retried_operations\": 130, \"retry_pct\": 13.0, \"mean_latency_ms\": 108.87},\n      {\"period\": \"inc_11_12\", \"pool_code\": \"sync-south\", \"operations\": 1000, \"terminal_failures\": 180, \"terminal_failure_pct\": 18.0, \"retried_operations\": 380, \"retry_pct\": 38.0, \"mean_latency_ms\": 261.8}\n    ],\n    \"totals\": [\n      {\"period\": \"ref_10_11\", \"operations\": 2000, \"terminal_failures\": 60, \"terminal_failure_pct\": 3.0},\n      {\"period\": \"inc_11_12\", \"operations\": 2000, \"terminal_failures\": 210, \"terminal_failure_pct\": 10.5}\n    ],\n    \"largest_increase\": {\n      \"pool_code\": \"sync-south\",\n      \"reference_failure_pct\": 3.0,\n      \"incident_failure_pct\": 18.0,\n      \"increase_pp\": 15.0\n    },\n    \"assessment\": \"Ledger-sync reliability for 2026-05-09 was stable on sync-north (3.0% terminal failures in both windows, ~108.87 ms mean latency) but degraded sharply on sync-south in the incident window 11:00-12:00 (3.0% -> 18.0% terminal failures, retries 13.0% -> 38.0%, mean end-to-end latency 108.90 ms -> 261.80 ms), driving the all-pool terminal-failure rate from 3.0% to 10.5%. The largest increase is sync-south at +15.0 pp. Attribution uses the authoritative source per feed_registry version 2: outcome_events at operation grain, effective from 1778284800000, with the actual serving physical pool taken from the execution cell recorded on each outcome. Limitations: routing intent (route_assignments.pool_id) was deliberately not used for attribution; execution cells cell-01/cell-02 both map to physical pool sync-north and cell-03/cell-04 to sync-south, so cell-level execution identities were collapsed to their physical pool (pool_code), which is what is reported. Terminal failures are counted at the operation level (final DEADLINE outcome per outcome_events); intermediate failed attempts followed by success are retried operations, not terminal failures. Windows are UTC half-opens selected by logical-operation open time (opened_at_ms), so operations are assigned to a window by open time even if they completed after the window's end. Percentages are of logical operations (terminal) and attempts implied by outcome attempt_count (retry percentage is per-operation), and a zero numerator would still be reported. No causal claim is made about the underlying cause of the sync-south degradation.\"\n  },\n  \"caveats\": [\n    \"Attribution follows feed_registry version 2 (active feed): outcome_events at operation grain, effective from 1778284800000; attempt_events (version 1) is historical and not authoritative for these windows.\",\n    \"Physical pool attribution comes from execution_cells.pool_id on the recorded outcome, not from routing intent in route_assignments; routing keys (sync-primary-n, sync-primary-s, sync-alias-s) were not treated as pools.\",\n    \"Multiple execution cells serve the same physical pool (cell-01/cell-02 -> sync-north; cell-03/cell-04 -> sync-south); metrics are aggregated to the physical pool, so per-cell variation is not visible.\",\n    \"Windows are UTC half-opens [10:00,11:00) and [11:00,12:00) on 2026-05-09, selected by logical-operation open time (opened_at_ms); outcomes completing after a window's end remain in the open-time window.\",\n    \"Terminal failure percentage uses logical operations as the denominator; retry percentage uses operations with attempt_count > 1 (attempt-granular attempt failure rate is not reported here).\",\n    \"Mean latency is mean of total_queue_ms + total_execution_ms + total_backoff_ms from outcome_events, rounded to 2 decimals.\",\n    \"A zero numerator would be reported as 0 and is not missing data; percentages are rounded values.\"\n  ],\n  \"evidence_sql\": [\n    \"SELECT version, event_table, event_grain, effective_from_ms, effective_to_ms, lifecycle, attribution_basis FROM feed_registry; -- authoritative source for 2026-05-09 windows is version 2: outcome_events, operation grain, effective 1778284800000\",\n    \"SELECT cell_id, cell_key, service_id, pool_id, release_id, effective_from_ms, effective_to_ms FROM execution_cells; -- ledger-sync (service_id=2) cells: cell-01/cell-02 -> pool 3 (sync-north), cell-03/cell-04 -> pool 4 (sync-south)\",\n    \"WITH op AS (SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END AS period, wp.pool_code, oe.final_code_id, oe.attempt_count, oe.total_queue_ms + oe.total_execution_ms + oe.total_backoff_ms AS e2e FROM logical_operations o JOIN outcome_events oe ON oe.operation_id = o.operation_id JOIN service_routes r ON r.route_id = o.route_id JOIN execution_cells c ON c.cell_id = oe.cell_id JOIN worker_pools wp ON wp.pool_id = c.pool_id WHERE r.service_id = 2 AND o.opened_at_ms >= 1778320800000 AND o.opened_at_ms < 1778328000000) SELECT period, pool_code, COUNT(*) AS operations, SUM(final_code_id = 2) AS terminal_failures, ROUND(100.0 * SUM(final_code_id = 2) / COUNT(*), 4) AS terminal_failure_pct, SUM(attempt_count > 1) AS retried_operations, ROUND(100.0 * SUM(attempt_count > 1) / COUNT(*), 4) AS retry_pct, ROUND(AVG(e2e), 4) AS mean_latency_ms FROM op GROUP BY period, pool_code ORDER BY period, pool_code; -- per-period, per-physical-pool metrics (literal bounds: ref [1778320800000,1778324400000), inc [1778324400000,1778328000000))\",\n    \"WITH op AS (SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END AS period, oe.final_code_id FROM logical_operations o JOIN outcome_events oe ON oe.operation_id = o.operation_id JOIN service_routes r ON r.route_id = o.route_id WHERE r.service_id = 2 AND o.opened_at_ms >= 1778320800000 AND o.opened_at_ms < 1778328000000) SELECT period, COUNT(*) AS operations, SUM(final_code_id = 2) AS terminal_failures, ROUND(100.0 * SUM(final_code_id = 2) / COUNT(*), 4) AS terminal_failure_pct FROM op GROUP BY period ORDER BY period; -- all-pool totals per period; largest increase: sync-south 3.0 -> 18.0 = +15.0 pp\"\n  ]\n}\n```",
+              "refusal": null,
+              "reasoning": null
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 8026,
+          "completion_tokens": 1835,
+          "total_tokens": 9861,
+          "cost": 0.00116458,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 7936,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00116458,
+            "upstream_inference_prompt_cost": 0.00024708,
+            "upstream_inference_completions_cost": 0.0009175
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "state_chars": 40431,
+      "tool_results": []
+    }
+  ],
+  "status": "completed",
+  "final_text": "```json\n{\n  \"answer\": {\n    \"source\": {\n      \"version\": 2,\n      \"event_table\": \"outcome_events\",\n      \"event_grain\": \"operation\",\n      \"effective_from_ms\": 1778284800000\n    },\n    \"pool_metrics\": [\n      {\"period\": \"ref_10_11\", \"pool_code\": \"sync-north\", \"operations\": 1000, \"terminal_failures\": 30, \"terminal_failure_pct\": 3.0, \"retried_operations\": 130, \"retry_pct\": 13.0, \"mean_latency_ms\": 108.87},\n      {\"period\": \"ref_10_11\", \"pool_code\": \"sync-south\", \"operations\": 1000, \"terminal_failures\": 30, \"terminal_failure_pct\": 3.0, \"retried_operations\": 130, \"retry_pct\": 13.0, \"mean_latency_ms\": 108.9},\n      {\"period\": \"inc_11_12\", \"pool_code\": \"sync-north\", \"operations\": 1000, \"terminal_failures\": 30, \"terminal_failure_pct\": 3.0, \"retried_operations\": 130, \"retry_pct\": 13.0, \"mean_latency_ms\": 108.87},\n      {\"period\": \"inc_11_12\", \"pool_code\": \"sync-south\", \"operations\": 1000, \"terminal_failures\": 180, \"terminal_failure_pct\": 18.0, \"retried_operations\": 380, \"retry_pct\": 38.0, \"mean_latency_ms\": 261.8}\n    ],\n    \"totals\": [\n      {\"period\": \"ref_10_11\", \"operations\": 2000, \"terminal_failures\": 60, \"terminal_failure_pct\": 3.0},\n      {\"period\": \"inc_11_12\", \"operations\": 2000, \"terminal_failures\": 210, \"terminal_failure_pct\": 10.5}\n    ],\n    \"largest_increase\": {\n      \"pool_code\": \"sync-south\",\n      \"reference_failure_pct\": 3.0,\n      \"incident_failure_pct\": 18.0,\n      \"increase_pp\": 15.0\n    },\n    \"assessment\": \"Ledger-sync reliability for 2026-05-09 was stable on sync-north (3.0% terminal failures in both windows, ~108.87 ms mean latency) but degraded sharply on sync-south in the incident window 11:00-12:00 (3.0% -> 18.0% terminal failures, retries 13.0% -> 38.0%, mean end-to-end latency 108.90 ms -> 261.80 ms), driving the all-pool terminal-failure rate from 3.0% to 10.5%. The largest increase is sync-south at +15.0 pp. Attribution uses the authoritative source per feed_registry version 2: outcome_events at operation grain, effective from 1778284800000, with the actual serving physical pool taken from the execution cell recorded on each outcome. Limitations: routing intent (route_assignments.pool_id) was deliberately not used for attribution; execution cells cell-01/cell-02 both map to physical pool sync-north and cell-03/cell-04 to sync-south, so cell-level execution identities were collapsed to their physical pool (pool_code), which is what is reported. Terminal failures are counted at the operation level (final DEADLINE outcome per outcome_events); intermediate failed attempts followed by success are retried operations, not terminal failures. Windows are UTC half-opens selected by logical-operation open time (opened_at_ms), so operations are assigned to a window by open time even if they completed after the window's end. Percentages are of logical operations (terminal) and attempts implied by outcome attempt_count (retry percentage is per-operation), and a zero numerator would still be reported. No causal claim is made about the underlying cause of the sync-south degradation.\"\n  },\n  \"caveats\": [\n    \"Attribution follows feed_registry version 2 (active feed): outcome_events at operation grain, effective from 1778284800000; attempt_events (version 1) is historical and not authoritative for these windows.\",\n    \"Physical pool attribution comes from execution_cells.pool_id on the recorded outcome, not from routing intent in route_assignments; routing keys (sync-primary-n, sync-primary-s, sync-alias-s) were not treated as pools.\",\n    \"Multiple execution cells serve the same physical pool (cell-01/cell-02 -> sync-north; cell-03/cell-04 -> sync-south); metrics are aggregated to the physical pool, so per-cell variation is not visible.\",\n    \"Windows are UTC half-opens [10:00,11:00) and [11:00,12:00) on 2026-05-09, selected by logical-operation open time (opened_at_ms); outcomes completing after a window's end remain in the open-time window.\",\n    \"Terminal failure percentage uses logical operations as the denominator; retry percentage uses operations with attempt_count > 1 (attempt-granular attempt failure rate is not reported here).\",\n    \"Mean latency is mean of total_queue_ms + total_execution_ms + total_backoff_ms from outcome_events, rounded to 2 decimals.\",\n    \"A zero numerator would be reported as 0 and is not missing data; percentages are rounded values.\"\n  ],\n  \"evidence_sql\": [\n    \"SELECT version, event_table, event_grain, effective_from_ms, effective_to_ms, lifecycle, attribution_basis FROM feed_registry; -- authoritative source for 2026-05-09 windows is version 2: outcome_events, operation grain, effective 1778284800000\",\n    \"SELECT cell_id, cell_key, service_id, pool_id, release_id, effective_from_ms, effective_to_ms FROM execution_cells; -- ledger-sync (service_id=2) cells: cell-01/cell-02 -> pool 3 (sync-north), cell-03/cell-04 -> pool 4 (sync-south)\",\n    \"WITH op AS (SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END AS period, wp.pool_code, oe.final_code_id, oe.attempt_count, oe.total_queue_ms + oe.total_execution_ms + oe.total_backoff_ms AS e2e FROM logical_operations o JOIN outcome_events oe ON oe.operation_id = o.operation_id JOIN service_routes r ON r.route_id = o.route_id JOIN execution_cells c ON c.cell_id = oe.cell_id JOIN worker_pools wp ON wp.pool_id = c.pool_id WHERE r.service_id = 2 AND o.opened_at_ms >= 1778320800000 AND o.opened_at_ms < 1778328000000) SELECT period, pool_code, COUNT(*) AS operations, SUM(final_code_id = 2) AS terminal_failures, ROUND(100.0 * SUM(final_code_id = 2) / COUNT(*), 4) AS terminal_failure_pct, SUM(attempt_count > 1) AS retried_operations, ROUND(100.0 * SUM(attempt_count > 1) / COUNT(*), 4) AS retry_pct, ROUND(AVG(e2e), 4) AS mean_latency_ms FROM op GROUP BY period, pool_code ORDER BY period, pool_code; -- per-period, per-physical-pool metrics (literal bounds: ref [1778320800000,1778324400000), inc [1778324400000,1778328000000))\",\n    \"WITH op AS (SELECT CASE WHEN o.opened_at_ms < 1778324400000 THEN 'ref_10_11' ELSE 'inc_11_12' END AS period, oe.final_code_id FROM logical_operations o JOIN outcome_events oe ON oe.operation_id = o.operation_id JOIN service_routes r ON r.route_id = o.route_id WHERE r.service_id = 2 AND o.opened_at_ms >= 1778320800000 AND o.opened_at_ms < 1778328000000) SELECT period, COUNT(*) AS operations, SUM(final_code_id = 2) AS terminal_failures, ROUND(100.0 * SUM(final_code_id = 2) / COUNT(*), 4) AS terminal_failure_pct FROM op GROUP BY period ORDER BY period; -- all-pool totals per period; largest increase: sync-south 3.0 -> 18.0 = +15.0 pp\"\n  ]\n}\n```",
+  "memory_before": {
+    "answer.json": "{\"answer\": {\"pool_metrics\": [{\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"operations\": 1000, \"terminal_failures\": 25, \"terminal_failure_pct\": 2.5, \"attempts\": 1150, \"failed_attempts\": 175, \"attempt_failure_pct\": 15.2174, \"retried_operations\": 125, \"min_deadline_ms\": 250, \"max_deadline_ms\": 250}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"operations\": 1000, \"terminal_failures\": 25, \"terminal_failure_pct\": 2.5, \"attempts\": 1150, \"failed_attempts\": 175, \"attempt_failure_pct\": 15.2174, \"retried_operations\": 125, \"min_deadline_ms\": 250, \"max_deadline_ms\": 250}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"operations\": 1000, \"terminal_failures\": 210, \"terminal_failure_pct\": 21.0, \"attempts\": 1620, \"failed_attempts\": 830, \"attempt_failure_pct\": 51.2346, \"retried_operations\": 410, \"min_deadline_ms\": 80, \"max_deadline_ms\": 80}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"operations\": 1000, \"terminal_failures\": 25, \"terminal_failure_pct\": 2.5, \"attempts\": 1150, \"failed_attempts\": 175, \"attempt_failure_pct\": 15.2174, \"retried_operations\": 125, \"min_deadline_ms\": 250, \"max_deadline_ms\": 250}], \"telemetry\": [{\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"signal_code\": \"upstream_latency_p95\", \"mean_value\": 118.0, \"unit\": \"ms\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"signal_code\": \"queue_depth\", \"mean_value\": 4.0, \"unit\": \"operations\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"signal_code\": \"available_workers\", \"mean_value\": 16.0, \"unit\": \"workers\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"signal_code\": \"cpu_utilization\", \"mean_value\": 0.42, \"unit\": \"fraction\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"signal_code\": \"upstream_latency_p95\", \"mean_value\": 118.0, \"unit\": \"ms\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"signal_code\": \"queue_depth\", \"mean_value\": 4.0, \"unit\": \"operations\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"signal_code\": \"available_workers\", \"mean_value\": 16.0, \"unit\": \"workers\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"signal_code\": \"cpu_utilization\", \"mean_value\": 0.42, \"unit\": \"fraction\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"signal_code\": \"upstream_latency_p95\", \"mean_value\": 118.0, \"unit\": \"ms\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"signal_code\": \"queue_depth\", \"mean_value\": 4.0, \"unit\": \"operations\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"signal_code\": \"available_workers\", \"mean_value\": 16.0, \"unit\": \"workers\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"signal_code\": \"cpu_utilization\", \"mean_value\": 0.42, \"unit\": \"fraction\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"signal_code\": \"upstream_latency_p95\", \"mean_value\": 118.0, \"unit\": \"ms\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"signal_code\": \"queue_depth\", \"mean_value\": 4.0, \"unit\": \"operations\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"signal_code\": \"available_workers\", \"mean_value\": 16.0, \"unit\": \"workers\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"signal_code\": \"cpu_utilization\", \"mean_value\": 0.42, \"unit\": \"fraction\"}], \"changes\": [{\"kind_code\": \"deadline_policy\", \"pool_code\": \"idx-north\", \"effective_at_ms\": 1777719600000, \"before_json\": \"{\\\"deadline_ms\\\": 250}\", \"after_json\": \"{\\\"deadline_ms\\\": 80}\"}], \"assessment\": \"Most strongly supported proximal explanation: the deadline_policy change effective at 1777719600000 (11:00 UTC) that applied the fast-80 profile (deadline_ms 80, replacing 250) to serving pool idx-north. Pool idx-north's terminal-failure rate rose from 2.5% (25/1000) in reference 10:00-11:00 to 21.0% (210/1000) in incident 11:00-12:00, an increase of 18.5 percentage points, and its min/max applied deadline_ms dropped from 250 to 80 exactly at the change boundary; attempt failures rose in parallel (15.2% to 51.2%). Meanwhile idx-south, serving the same service over the same windows, was unchanged (2.5% both periods) and kept deadline_ms 250, and all recorded telemetry for both pools (upstream_latency_p95 ~118 ms, queue_depth 4, available_workers 16, cpu_utilization 0.42) is identical across pools and periods, ruling out an upstream latency spike, capacity exhaustion or CPU saturation as supported proximate causes. Plausible alternative: a transient upstream latency regression affecting only idx-north's backends could in principle explain DEADLINE failures without any configuration change; however, that is not supported by the data, since upstream_latency_p95 sampled at idx-north is flat at 118 ms across both periods and identical to idx-south's (and 118 ms is below the old 250 ms deadline but above the new 80 ms one, consistent with the deadline change rather than upstream degradation). A second alternative, a worker-limit or capacity change on idx-north, is also unsupported: available_workers stayed 16 and no worker_limit change event covers this window. Evidence vs causal proof: these are observational associations - concurrent timing of a config change, a sharp rate shift confined to one pool, unchanged telemetry, and a stable counterfactual-like comparison pool. That strongly supports the deadline reduction as the proximate trigger, but a pre-deployed release or unobserved confounder cannot be excluded from telemetry alone; only the applied change record describes configuration, not a controlled experiment. Configuration is attributed per the routing-time feed (attempt_events): each operation is mapped to the route assignment and policy profile effective at its logical open time, not today's configuration.\"}, \"evidence_sql\": [\"WITH op AS (SELECT o.operation_id, o.opened_at_ms, CASE WHEN o.opened_at_ms < 1777719600000 THEN 'ref_10_11' ELSE 'inc_11_12' END AS period, (SELECT ra.pool_id FROM route_assignments ra WHERE ra.route_id = o.route_id AND ra.effective_from_ms <= o.opened_at_ms AND o.opened_at_ms < ra.effective_to_ms) AS pool_id, (SELECT p.deadline_ms FROM route_assignments ra JOIN policy_profiles p ON p.profile_id = ra.profile_id WHERE ra.route_id = o.route_id AND ra.effective_from_ms <= o.opened_at_ms AND o.opened_at_ms < ra.effective_to_ms) AS deadline_ms, (SELECT a.code_id FROM attempt_events a WHERE a.operation_id = o.operation_id ORDER BY a.attempt_no DESC LIMIT 1) AS final_code, (SELECT COUNT(*) FROM attempt_events a WHERE a.operation_id = o.operation_id) AS attempts, (SELECT SUM(a.code_id = 2) FROM attempt_events a WHERE a.operation_id = o.operation_id) AS failed_att FROM logical_operations o JOIN service_routes r ON r.route_id = o.route_id JOIN services s ON s.service_id = r.service_id WHERE s.service_id = 1 AND o.opened_at_ms >= 1777716000000 AND o.opened_at_ms < 1777723200000) SELECT period, wp.pool_code, COUNT(*) AS operations, SUM(final_code = 2) AS terminal_failures, ROUND(100.0 * SUM(final_code = 2) / COUNT(*), 4) AS terminal_failure_pct, SUM(attempts) AS attempts, SUM(failed_att) AS failed_attempts, ROUND(100.0 * SUM(failed_att) / SUM(attempts), 4) AS attempt_failure_pct, SUM(attempts > 1) AS retried_operations, MIN(deadline_ms) AS min_deadline_ms, MAX(deadline_ms) AS max_deadline_ms FROM op JOIN worker_pools wp ON wp.pool_id = op.pool_id GROUP BY period, wp.pool_code ORDER BY period, wp.pool_code;\", \"SELECT CASE WHEN s.measured_at_ms < 1777719600000 THEN 'ref_10_11' ELSE 'inc_11_12' END AS period, wp.pool_code, g.signal_code, g.unit, ROUND(AVG(s.value), 4) AS mean_value FROM telemetry_samples s JOIN telemetry_signals g ON g.signal_id = s.signal_id JOIN worker_pools wp ON wp.pool_id = s.pool_id WHERE s.measured_at_ms >= 1777716000000 AND s.measured_at_ms < 1777723200000 AND s.pool_id IN (SELECT pool_id FROM worker_pools WHERE pool_code IN ('idx-north','idx-south')) GROUP BY period, s.pool_id, s.signal_id ORDER BY period, wp.pool_code, g.signal_code;\", \"SELECT k.kind_code, wp.pool_code, ce.effective_at_ms, ce.before_json, ce.after_json, ce.change_note FROM change_events ce JOIN change_kinds k ON k.kind_id = ce.kind_id LEFT JOIN worker_pools wp ON wp.pool_id = ce.pool_id JOIN services s ON s.service_id = ce.service_id WHERE s.service_code = 'parcel-index' AND ce.effective_at_ms >= 1777716000000 AND ce.effective_at_ms < 1777723200000;\", \"SELECT * FROM feed_registry; -- confirms attempt_events is the active routing-time (operation-open attribution) feed for this window\", \"SELECT route_id, route_key FROM service_routes WHERE service_id = 1; SELECT ra.route_id, wp.pool_code, ra.effective_from_ms, ra.effective_to_ms, p.profile_code, p.deadline_ms FROM route_assignments ra JOIN worker_pools wp ON wp.pool_id = ra.pool_id JOIN policy_profiles p ON p.profile_id = ra.profile_id WHERE ra.route_id IN (SELECT route_id FROM service_routes WHERE service_id = 1) AND ra.effective_to_ms > 1777716000000 AND ra.effective_from_ms < 1777723200000 ORDER BY ra.route_id, ra.effective_from_ms; -- shows aliases (idx-primary-n, idx-canary-n, idx-alias-n) all map to physical pool idx-north, and the 250->80 profile switch at 11:00\"], \"caveats\": [\"Attribution uses routing-time (operation-open) assignment per feed_registry; execution-time identities would be an alternative basis.\", \"Multiple route keys (idx-primary-n, idx-canary-n, idx-alias-n) are aliases of physical pool idx-north and were counted once, not as separate pools.\", \"Terminal failures use the final attempt outcome (DEADLINE, is_success=0); earlier failed attempts followed by success are not terminal failures.\", \"Percentages are rounded to 4 decimals; differences quoted in assessment (18.5 pp) are computed from rounded values.\", \"Change events describe applied configuration, not a controlled experiment; causation is inferred, not proven.\", \"Telemetry samples are taken independently of operations; window means are ordinary arithmetic means.\", \"Only the deadline_policy change at 11:00 is included as required by the one-item changes array; no other parcel-index change falls in 10:00-12:00.\"]}"
+  },
+  "elapsed_s": 43.704558499972336,
+  "memory_after": {
+    "ledger_sync_2026-05-09.md": "Task: ledger-sync 2026-05-09 10-12 UTC. Authoritative feed v2: outcome_events (operation grain, effective_from 1778284800000), attribution = execution_cells.pool_id on outcome. Results: ref: sync-north 1000/30/3.0%,130 retried,108.87ms; sync-south 1000/30/3.0%,130,108.90. inc: sync-north 1000/30/3.0%,130,108.87; sync-south 1000/180/18.0%,380,261.80. Totals ref 60/2000 3.0%; inc 210/2000 10.5%. Largest increase sync-south +15pp. Old memory (deadline change) was a different service (parcel-index) — do not reuse.\n",
+    "answer.json": "{\"answer\": {\"pool_metrics\": [{\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"operations\": 1000, \"terminal_failures\": 25, \"terminal_failure_pct\": 2.5, \"attempts\": 1150, \"failed_attempts\": 175, \"attempt_failure_pct\": 15.2174, \"retried_operations\": 125, \"min_deadline_ms\": 250, \"max_deadline_ms\": 250}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"operations\": 1000, \"terminal_failures\": 25, \"terminal_failure_pct\": 2.5, \"attempts\": 1150, \"failed_attempts\": 175, \"attempt_failure_pct\": 15.2174, \"retried_operations\": 125, \"min_deadline_ms\": 250, \"max_deadline_ms\": 250}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"operations\": 1000, \"terminal_failures\": 210, \"terminal_failure_pct\": 21.0, \"attempts\": 1620, \"failed_attempts\": 830, \"attempt_failure_pct\": 51.2346, \"retried_operations\": 410, \"min_deadline_ms\": 80, \"max_deadline_ms\": 80}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"operations\": 1000, \"terminal_failures\": 25, \"terminal_failure_pct\": 2.5, \"attempts\": 1150, \"failed_attempts\": 175, \"attempt_failure_pct\": 15.2174, \"retried_operations\": 125, \"min_deadline_ms\": 250, \"max_deadline_ms\": 250}], \"telemetry\": [{\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"signal_code\": \"upstream_latency_p95\", \"mean_value\": 118.0, \"unit\": \"ms\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"signal_code\": \"queue_depth\", \"mean_value\": 4.0, \"unit\": \"operations\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"signal_code\": \"available_workers\", \"mean_value\": 16.0, \"unit\": \"workers\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-north\", \"signal_code\": \"cpu_utilization\", \"mean_value\": 0.42, \"unit\": \"fraction\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"signal_code\": \"upstream_latency_p95\", \"mean_value\": 118.0, \"unit\": \"ms\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"signal_code\": \"queue_depth\", \"mean_value\": 4.0, \"unit\": \"operations\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"signal_code\": \"available_workers\", \"mean_value\": 16.0, \"unit\": \"workers\"}, {\"period\": \"inc_11_12\", \"pool_code\": \"idx-south\", \"signal_code\": \"cpu_utilization\", \"mean_value\": 0.42, \"unit\": \"fraction\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"signal_code\": \"upstream_latency_p95\", \"mean_value\": 118.0, \"unit\": \"ms\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"signal_code\": \"queue_depth\", \"mean_value\": 4.0, \"unit\": \"operations\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"signal_code\": \"available_workers\", \"mean_value\": 16.0, \"unit\": \"workers\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-north\", \"signal_code\": \"cpu_utilization\", \"mean_value\": 0.42, \"unit\": \"fraction\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"signal_code\": \"upstream_latency_p95\", \"mean_value\": 118.0, \"unit\": \"ms\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"signal_code\": \"queue_depth\", \"mean_value\": 4.0, \"unit\": \"operations\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"signal_code\": \"available_workers\", \"mean_value\": 16.0, \"unit\": \"workers\"}, {\"period\": \"ref_10_11\", \"pool_code\": \"idx-south\", \"signal_code\": \"cpu_utilization\", \"mean_value\": 0.42, \"unit\": \"fraction\"}], \"changes\": [{\"kind_code\": \"deadline_policy\", \"pool_code\": \"idx-north\", \"effective_at_ms\": 1777719600000, \"before_json\": \"{\\\"deadline_ms\\\": 250}\", \"after_json\": \"{\\\"deadline_ms\\\": 80}\"}], \"assessment\": \"Most strongly supported proximal explanation: the deadline_policy change effective at 1777719600000 (11:00 UTC) that applied the fast-80 profile (deadline_ms 80, replacing 250) to serving pool idx-north. Pool idx-north's terminal-failure rate rose from 2.5% (25/1000) in reference 10:00-11:00 to 21.0% (210/1000) in incident 11:00-12:00, an increase of 18.5 percentage points, and its min/max applied deadline_ms dropped from 250 to 80 exactly at the change boundary; attempt failures rose in parallel (15.2% to 51.2%). Meanwhile idx-south, serving the same service over the same windows, was unchanged (2.5% both periods) and kept deadline_ms 250, and all recorded telemetry for both pools (upstream_latency_p95 ~118 ms, queue_depth 4, available_workers 16, cpu_utilization 0.42) is identical across pools and periods, ruling out an upstream latency spike, capacity exhaustion or CPU saturation as supported proximate causes. Plausible alternative: a transient upstream latency regression affecting only idx-north's backends could in principle explain DEADLINE failures without any configuration change; however, that is not supported by the data, since upstream_latency_p95 sampled at idx-north is flat at 118 ms across both periods and identical to idx-south's (and 118 ms is below the old 250 ms deadline but above the new 80 ms one, consistent with the deadline change rather than upstream degradation). A second alternative, a worker-limit or capacity change on idx-north, is also unsupported: available_workers stayed 16 and no worker_limit change event covers this window. Evidence vs causal proof: these are observational associations - concurrent timing of a config change, a sharp rate shift confined to one pool, unchanged telemetry, and a stable counterfactual-like comparison pool. That strongly supports the deadline reduction as the proximate trigger, but a pre-deployed release or unobserved confounder cannot be excluded from telemetry alone; only the applied change record describes configuration, not a controlled experiment. Configuration is attributed per the routing-time feed (attempt_events): each operation is mapped to the route assignment and policy profile effective at its logical open time, not today's configuration.\"}, \"evidence_sql\": [\"WITH op AS (SELECT o.operation_id, o.opened_at_ms, CASE WHEN o.opened_at_ms < 1777719600000 THEN 'ref_10_11' ELSE 'inc_11_12' END AS period, (SELECT ra.pool_id FROM route_assignments ra WHERE ra.route_id = o.route_id AND ra.effective_from_ms <= o.opened_at_ms AND o.opened_at_ms < ra.effective_to_ms) AS pool_id, (SELECT p.deadline_ms FROM route_assignments ra JOIN policy_profiles p ON p.profile_id = ra.profile_id WHERE ra.route_id = o.route_id AND ra.effective_from_ms <= o.opened_at_ms AND o.opened_at_ms < ra.effective_to_ms) AS deadline_ms, (SELECT a.code_id FROM attempt_events a WHERE a.operation_id = o.operation_id ORDER BY a.attempt_no DESC LIMIT 1) AS final_code, (SELECT COUNT(*) FROM attempt_events a WHERE a.operation_id = o.operation_id) AS attempts, (SELECT SUM(a.code_id = 2) FROM attempt_events a WHERE a.operation_id = o.operation_id) AS failed_att FROM logical_operations o JOIN service_routes r ON r.route_id = o.route_id JOIN services s ON s.service_id = r.service_id WHERE s.service_id = 1 AND o.opened_at_ms >= 1777716000000 AND o.opened_at_ms < 1777723200000) SELECT period, wp.pool_code, COUNT(*) AS operations, SUM(final_code = 2) AS terminal_failures, ROUND(100.0 * SUM(final_code = 2) / COUNT(*), 4) AS terminal_failure_pct, SUM(attempts) AS attempts, SUM(failed_att) AS failed_attempts, ROUND(100.0 * SUM(failed_att) / SUM(attempts), 4) AS attempt_failure_pct, SUM(attempts > 1) AS retried_operations, MIN(deadline_ms) AS min_deadline_ms, MAX(deadline_ms) AS max_deadline_ms FROM op JOIN worker_pools wp ON wp.pool_id = op.pool_id GROUP BY period, wp.pool_code ORDER BY period, wp.pool_code;\", \"SELECT CASE WHEN s.measured_at_ms < 1777719600000 THEN 'ref_10_11' ELSE 'inc_11_12' END AS period, wp.pool_code, g.signal_code, g.unit, ROUND(AVG(s.value), 4) AS mean_value FROM telemetry_samples s JOIN telemetry_signals g ON g.signal_id = s.signal_id JOIN worker_pools wp ON wp.pool_id = s.pool_id WHERE s.measured_at_ms >= 1777716000000 AND s.measured_at_ms < 1777723200000 AND s.pool_id IN (SELECT pool_id FROM worker_pools WHERE pool_code IN ('idx-north','idx-south')) GROUP BY period, s.pool_id, s.signal_id ORDER BY period, wp.pool_code, g.signal_code;\", \"SELECT k.kind_code, wp.pool_code, ce.effective_at_ms, ce.before_json, ce.after_json, ce.change_note FROM change_events ce JOIN change_kinds k ON k.kind_id = ce.kind_id LEFT JOIN worker_pools wp ON wp.pool_id = ce.pool_id JOIN services s ON s.service_id = ce.service_id WHERE s.service_code = 'parcel-index' AND ce.effective_at_ms >= 1777716000000 AND ce.effective_at_ms < 1777723200000;\", \"SELECT * FROM feed_registry; -- confirms attempt_events is the active routing-time (operation-open attribution) feed for this window\", \"SELECT route_id, route_key FROM service_routes WHERE service_id = 1; SELECT ra.route_id, wp.pool_code, ra.effective_from_ms, ra.effective_to_ms, p.profile_code, p.deadline_ms FROM route_assignments ra JOIN worker_pools wp ON wp.pool_id = ra.pool_id JOIN policy_profiles p ON p.profile_id = ra.profile_id WHERE ra.route_id IN (SELECT route_id FROM service_routes WHERE service_id = 1) AND ra.effective_to_ms > 1777716000000 AND ra.effective_from_ms < 1777723200000 ORDER BY ra.route_id, ra.effective_from_ms; -- shows aliases (idx-primary-n, idx-canary-n, idx-alias-n) all map to physical pool idx-north, and the 250->80 profile switch at 11:00\"], \"caveats\": [\"Attribution uses routing-time (operation-open) assignment per feed_registry; execution-time identities would be an alternative basis.\", \"Multiple route keys (idx-primary-n, idx-canary-n, idx-alias-n) are aliases of physical pool idx-north and were counted once, not as separate pools.\", \"Terminal failures use the final attempt outcome (DEADLINE, is_success=0); earlier failed attempts followed by success are not terminal failures.\", \"Percentages are rounded to 4 decimals; differences quoted in assessment (18.5 pp) are computed from rounded values.\", \"Change events describe applied configuration, not a controlled experiment; causation is inferred, not proven.\", \"Telemetry samples are taken independently of operations; window means are ordinary arithmetic means.\", \"Only the deadline_policy change at 11:00 is included as required by the one-item changes array; no other parcel-index change falls in 10:00-12:00.\"]}"
+  },
+  "db_hash_after": "2823f7089388a1737e8b95389ae2f83598f581389b9af600453a6b2016835e03",
+  "db_unchanged": true
+}
