@@ -1,0 +1,7 @@
+{
+  "generator_version": 1,
+  "provenance": "Newly authored local synthetic tasks; not copied from a published benchmark. No network/API calls.",
+  "seed_fixed_before_population": true,
+  "seed_hex": "803f48a52cc40d784ec5285eb99f3cf514984acdb45fe18ef9eb239f81528022",
+  "seed_sha256": "05050f81e4783c9ac99eefec5785dc1441bc4452f246ffd2ba80aa8787f690b9"
+}

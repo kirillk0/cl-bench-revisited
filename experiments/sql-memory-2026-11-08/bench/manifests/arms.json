@@ -1,0 +1,114 @@
+{
+  "arms": {
+    "distilled_memory": {
+      "instructions_identical": true,
+      "task_bindings": {
+        "T1": {
+          "sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+          "snapshot": "pre.db"
+        },
+        "T2": {
+          "sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+          "snapshot": "pre.db"
+        },
+        "T3": {
+          "sha256": "2823f7089388a1737e8b95389ae2f83598f581389b9af600453a6b2016835e03",
+          "snapshot": "post.db"
+        },
+        "W1": {
+          "sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+          "snapshot": "pre.db"
+        },
+        "W2": {
+          "sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+          "snapshot": "pre.db"
+        }
+      },
+      "task_sequence": [
+        "W1",
+        "W2",
+        "T1",
+        "T2",
+        "T3"
+      ]
+    },
+    "no_memory": {
+      "instructions_identical": true,
+      "task_bindings": {
+        "T1": {
+          "sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+          "snapshot": "pre.db"
+        },
+        "T2": {
+          "sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+          "snapshot": "pre.db"
+        },
+        "T3": {
+          "sha256": "2823f7089388a1737e8b95389ae2f83598f581389b9af600453a6b2016835e03",
+          "snapshot": "post.db"
+        },
+        "W1": {
+          "sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+          "snapshot": "pre.db"
+        },
+        "W2": {
+          "sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+          "snapshot": "pre.db"
+        }
+      },
+      "task_sequence": [
+        "W1",
+        "W2",
+        "T1",
+        "T2",
+        "T3"
+      ]
+    },
+    "raw_history": {
+      "instructions_identical": true,
+      "task_bindings": {
+        "T1": {
+          "sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+          "snapshot": "pre.db"
+        },
+        "T2": {
+          "sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+          "snapshot": "pre.db"
+        },
+        "T3": {
+          "sha256": "2823f7089388a1737e8b95389ae2f83598f581389b9af600453a6b2016835e03",
+          "snapshot": "post.db"
+        },
+        "W1": {
+          "sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+          "snapshot": "pre.db"
+        },
+        "W2": {
+          "sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+          "snapshot": "pre.db"
+        }
+      },
+      "task_sequence": [
+        "W1",
+        "W2",
+        "T1",
+        "T2",
+        "T3"
+      ]
+    }
+  },
+  "fresh_baseline": "A fresh T3 baseline MUST receive post.db, not pre.db. Each task can be staged in isolation.",
+  "only_experimental_difference": "Harness-managed access to prior interactions/memory. No arm-specific database, task text, schema, README or task order. no_memory receives a fresh context per task; raw_history may retain prior interaction; distilled_memory receives its permitted memory. Benchmark does not execute models.",
+  "snapshots": {
+    "post.db": {
+      "bytes": 3989504,
+      "path": "snapshots/post.db",
+      "sha256": "2823f7089388a1737e8b95389ae2f83598f581389b9af600453a6b2016835e03"
+    },
+    "pre.db": {
+      "bytes": 3584000,
+      "path": "snapshots/pre.db",
+      "sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0"
+    }
+  }
+}
