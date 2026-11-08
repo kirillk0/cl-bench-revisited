@@ -1,0 +1,122 @@
+[
+  {
+    "job": "main-glm-icl",
+    "task": "T2",
+    "condition": "history",
+    "sync_south_operations": [
+      1150,
+      1550
+    ],
+    "sync_south_terminal_failures": [
+      25,
+      175
+    ],
+    "sync_south_failure_pct": [
+      2.17,
+      11.29
+    ],
+    "delta_pp": 9.12,
+    "full_original_trace_available": true,
+    "provenance": "Transcribed from pre-crash console analysis in parent conversation; not a replacement for missing original model traces. SQL-only re-executions archived separately."
+  },
+  {
+    "job": "main-glm-stateless",
+    "task": "T2",
+    "condition": "reset",
+    "sync_south_operations": [
+      1000,
+      1000
+    ],
+    "sync_south_terminal_failures": [
+      25,
+      175
+    ],
+    "sync_south_failure_pct": [
+      2.5,
+      17.5
+    ],
+    "delta_pp": 15,
+    "full_original_trace_available": false,
+    "provenance": "Transcribed from pre-crash console analysis in parent conversation; not a replacement for missing original model traces. SQL-only re-executions archived separately."
+  },
+  {
+    "job": "diag-glm-t2-history-r1",
+    "task": "T2",
+    "condition": "history",
+    "sync_south_operations": [
+      1150,
+      1550
+    ],
+    "sync_south_terminal_failures": [
+      25,
+      175
+    ],
+    "sync_south_failure_pct": [
+      2.17,
+      11.29
+    ],
+    "delta_pp": 9.12,
+    "full_original_trace_available": true,
+    "provenance": "Transcribed from pre-crash console analysis in parent conversation; not a replacement for missing original model traces. SQL-only re-executions archived separately."
+  },
+  {
+    "job": "diag-glm-t2-reset-r1",
+    "task": "T2",
+    "condition": "reset",
+    "sync_south_operations": [
+      1000,
+      1000
+    ],
+    "sync_south_terminal_failures": [
+      25,
+      175
+    ],
+    "sync_south_failure_pct": [
+      2.5,
+      17.5
+    ],
+    "delta_pp": 15,
+    "full_original_trace_available": false,
+    "provenance": "Transcribed from pre-crash console analysis in parent conversation; not a replacement for missing original model traces. SQL-only re-executions archived separately."
+  },
+  {
+    "job": "diag-glm-t2-history-r2",
+    "task": "T2",
+    "condition": "history",
+    "sync_south_operations": [
+      1150,
+      1550
+    ],
+    "sync_south_terminal_failures": [
+      25,
+      175
+    ],
+    "sync_south_failure_pct": [
+      2.17,
+      11.29
+    ],
+    "delta_pp": 9.12,
+    "full_original_trace_available": false,
+    "provenance": "Transcribed from pre-crash console analysis in parent conversation; not a replacement for missing original model traces. SQL-only re-executions archived separately."
+  },
+  {
+    "job": "diag-glm-t2-reset-r2",
+    "task": "T2",
+    "condition": "reset",
+    "sync_south_operations": [
+      1000,
+      1000
+    ],
+    "sync_south_terminal_failures": [
+      25,
+      175
+    ],
+    "sync_south_failure_pct": [
+      2.5,
+      17.5
+    ],
+    "delta_pp": 15,
+    "full_original_trace_available": false,
+    "provenance": "Transcribed from pre-crash console analysis in parent conversation; not a replacement for missing original model traces. SQL-only re-executions archived separately."
+  }
+]

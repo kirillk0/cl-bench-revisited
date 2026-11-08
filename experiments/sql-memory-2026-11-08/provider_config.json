@@ -1,1 +1,36 @@
-{"anthropic":{"model":"claude-haiku-5-5","thinking":{"type":"adaptive"},"output_config":{"effort":"medium"},"pricing_per_million":{"input":0.10,"output":0.50,"cache_write_5m":0.125,"cache_read":0.01},"long_context_threshold":100000,"long_context_multiplier":5,"budget_usd":20},"openrouter":{"model":"z-ai/glm-5.3-flash","reasoning":{"effort":"medium","enabled":true},"budget_usd":5,"pricing_source":"response.usage.cost"},"codex":{"model":"gpt-6-luna","reasoning":{"effort":"medium","context":"all_turns"},"dollar_cost":null,"billing":"ChatGPT subscription; token usage not equivalent to marginal dollar bill"}}
+{
+  "anthropic": {
+    "model": "claude-haiku-5-5",
+    "thinking": {
+      "type": "adaptive"
+    },
+    "pricing_per_million": {
+      "input": 0.1,
+      "output": 0.5,
+      "cache_write_5m": 0.125,
+      "cache_read": 0.01
+    },
+    "long_context_threshold": 100000,
+    "long_context_multiplier": 5,
+    "budget_usd": 20,
+    "effort_request": "omitted; provider default, not explicitly forced medium"
+  },
+  "openrouter": {
+    "model": "z-ai/glm-5.3-flash",
+    "reasoning": {
+      "effort": "medium",
+      "enabled": true
+    },
+    "budget_usd": 5,
+    "pricing_source": "response.usage.cost"
+  },
+  "codex": {
+    "model": "gpt-6-luna",
+    "reasoning": {
+      "effort": "medium",
+      "context": "all_turns"
+    },
+    "dollar_cost": null,
+    "billing": "ChatGPT subscription; token usage not equivalent to marginal dollar bill"
+  }
+}

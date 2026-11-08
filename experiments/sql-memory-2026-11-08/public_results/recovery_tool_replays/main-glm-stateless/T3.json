@@ -1,0 +1,219 @@
+{
+  "provenance": "TOOL-ONLY RE-EXECUTION AFTER CONTAINER LOSS. Commands archived before loss; outputs below newly generated. NO MODEL CALLS. NOT an original trace or original model final answer. Original model/API cost is in cost_summary.json.",
+  "original_job": "main-glm-stateless",
+  "task": "T3",
+  "snapshot_sha256": "2823f7089388a1737e8b95389ae2f83598f581389b9af600453a6b2016835e03",
+  "commands": [
+    {
+      "original_command_id": "main-glm-stateless/T3/turn-1/command-1",
+      "command_sha256": "cece989fa23aebedc301c02b96ad547b4ea1f5e8e15bcf5631b1d84a247a8d74",
+      "original_wall_s": 0.50220426695887,
+      "original_exit_code": 0,
+      "reexecuted": {
+        "output": "# Operations analytics data contract\n\nYou receive `current.db` (SQLite), this README and one task. Inspect the database schema, foreign keys and registry yourself. No network or external data is needed. The database is read-only input; use a read-only connection. All observations are synthetic, internally consistent and complete for the requested windows. Do not interpret absent windows as zero traffic. No hidden business definitions depend on an earlier task.\n\n* Times ending `_ms` are integer Unix milliseconds in UTC. Window membership uses the **logical operation open time**, with inclusive lower and exclusive upper bounds. Effective intervals are also half-open; a NULL end means no known end.\n* One logical operation is one business request. Retries are attempts, not extra incidents or requests. A terminal failure means the final attempt/outcome has a failure code whose `is_success` is 0; an earlier failed attempt followed by success is not a terminal failure. All included operations are finished and attempt ordinals are complete. An operation with more than one attempt is a retried operation, including ultimately failed operations.\n* `feed_registry` is authoritative about event sources, grains, applicable operation-open intervals and serving attribution. The active entry describes current instrumentation; historical entries remain authoritative for their historical intervals. Do not assume the highest version covers all history or that a still-queryable table is current. Historical values are retained without rewriting them into a new meaning.\n* Routing identifiers are routing intent, not necessarily unique physical pools. For routing-time instrumentation, select the assignment effective when the operation opens. For execution-time instrumentation, recorded execution attribution is authoritative. Multiple aliases or execution identities may belong to the same physical pool. Never count each identity as an independent pool.\n* End-to-end latency is final completion minus operation open, including queueing, execution and retry backoff. Per-attempt queue/execution times exclude backoff. Outcome totals cover all its attempts. Rates use logical-operation denominators unless a task explicitly asks for attempt metrics. Percentages are in percent (0–100); rate differences are percentage points.\n* Telemetry is sampled independently. A requested window mean is the ordinary arithmetic mean of samples in that window. An upstream p95 sample is a percentile observation, not an operation-weighted mean. Changes describe applied configuration, not a causal experiment. Tenant tier, operation class, release, region and pool are distinct dimensions.\n\nReturn only the JSON requested in the task: `answer`, `evidence_sql` (a list of executable, read-only SQLite SELECT/WITH statements supporting the answer), and `caveats` (a list of short strings). No placeholders, SQL parameters, temporary tables or external files in evidence. State uncertainty; observational association alone does not prove causation.\ntotal 3904\ndrwxr-xr-x  2 root root     4096 Nov  8 16:15 .\ndrwxr-x--- 13 root 24004    4096 Nov  8 16:15 ..\n-r--r--r--  1 root root  3989504 Nov  8 16:15 current.db\nattempt_events      incident_windows    releases            telemetry_signals \nchange_events       logical_operations  route_assignments   tenant_tiers      \nchange_kinds        operation_classes   service_routes      tenants           \nexecution_cells     outcome_events      services            worker_pools      \nfailure_codes       policy_profiles     subsystems        \nfeed_registry       regions             telemetry_samples \n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.005944701959379017, \"exit_code\": 0}\n",
+        "exit_code": 0,
+        "wall_seconds": 0.23399920295923948,
+        "timeout": false,
+        "truncated": false,
+        "sql_cli_calls": [
+          {
+            "wall_seconds": 0.005944701959379017,
+            "exit_code": 0
+          }
+        ],
+        "command": "cat README.md; ls -la ../data; sqlite3 ../data/current.db \".tables\""
+      }
+    },
+    {
+      "original_command_id": "main-glm-stateless/T3/turn-2/command-1",
+      "command_sha256": "7ba7e936cbe5de4c14ebbff955bc477b5e200f88b7a7b3fc88fe20665e4b76af",
+      "original_wall_s": 1.3723551250295714,
+      "original_exit_code": 0,
+      "reexecuted": {
+        "output": "CREATE TABLE feed_registry(version INTEGER PRIMARY KEY, event_table TEXT NOT NULL UNIQUE, event_grain TEXT NOT NULL CHECK(event_grain IN ('attempt','operation')), effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER, lifecycle TEXT NOT NULL CHECK(lifecycle IN ('active','historical')), operation_key_column TEXT NOT NULL, attribution_basis TEXT NOT NULL, CHECK(effective_to_ms IS NULL OR effective_to_ms>effective_from_ms));\n1|attempt_events|attempt|1777593600000|1778284800000|historical|operation_id|Routing decision effective at logical operation open\n2|outcome_events|operation|1778284800000||active|operation_id|Actual execution cell recorded on the outcome; routing intent is not serving attribution\nCREATE TABLE logical_operations(operation_id INTEGER PRIMARY KEY, tenant_id INTEGER NOT NULL REFERENCES tenants, route_id INTEGER NOT NULL REFERENCES service_routes, class_id INTEGER NOT NULL REFERENCES operation_classes, opened_at_ms INTEGER NOT NULL);\nCREATE INDEX ops_open ON logical_operations(opened_at_ms,route_id);\nCREATE TABLE outcome_events(outcome_id INTEGER PRIMARY KEY, operation_id INTEGER NOT NULL UNIQUE REFERENCES logical_operations, cell_id INTEGER NOT NULL REFERENCES execution_cells, completed_at_ms INTEGER NOT NULL, final_code_id INTEGER NOT NULL REFERENCES failure_codes, attempt_count INTEGER NOT NULL CHECK(attempt_count>=1), total_queue_ms INTEGER NOT NULL CHECK(total_queue_ms>=0), total_execution_ms INTEGER NOT NULL CHECK(total_execution_ms>=0), total_backoff_ms INTEGER NOT NULL CHECK(total_backoff_ms>=0));\nCREATE INDEX outcomes_cell ON outcome_events(cell_id,operation_id);\nCREATE TABLE attempt_events(attempt_id INTEGER PRIMARY KEY, operation_id INTEGER NOT NULL REFERENCES logical_operations, attempt_no INTEGER NOT NULL CHECK(attempt_no>=1), started_at_ms INTEGER NOT NULL, completed_at_ms INTEGER NOT NULL, code_id INTEGER NOT NULL REFERENCES failure_codes, queue_ms INTEGER NOT NULL CHECK(queue_ms>=0), execution_ms INTEGER NOT NULL CHECK(execution_ms>=0), CHECK(completed_at_ms-started_at_ms=queue_ms+execution_ms), UNIQUE(operation_id,attempt_no));\nCREATE INDEX attempts_operation ON attempt_events(operation_id,attempt_no DESC);\nCREATE TABLE worker_pools(pool_id INTEGER PRIMARY KEY, region_id INTEGER NOT NULL REFERENCES regions, pool_code TEXT NOT NULL UNIQUE);\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004657418001443148, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004922477062791586, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.006054474040865898, \"exit_code\": 0}\n",
+        "exit_code": 0,
+        "wall_seconds": 0.8436643530149013,
+        "timeout": false,
+        "truncated": false,
+        "sql_cli_calls": [
+          {
+            "wall_seconds": 0.004657418001443148,
+            "exit_code": 0
+          },
+          {
+            "wall_seconds": 0.004922477062791586,
+            "exit_code": 0
+          },
+          {
+            "wall_seconds": 0.006054474040865898,
+            "exit_code": 0
+          }
+        ],
+        "command": "cd ../data && sqlite3 current.db \".schema feed_registry\" && sqlite3 current.db \"select * from feed_registry;\" && sqlite3 current.db \".schema logical_operations\" \".schema outcome_events\" \".schema attempt_events\" \".schema worker_pools\""
+      }
+    },
+    {
+      "original_command_id": "main-glm-stateless/T3/turn-3/command-1",
+      "command_sha256": "88d7187a0cce5d47ddb1c79ee743556d45fd63b3b5f681f874ec1c3941dcc35f",
+      "original_wall_s": 0.03506231808569282,
+      "original_exit_code": 0,
+      "reexecuted": {
+        "output": "2026-05-09 00:00:00\n2026-05-01 00:00:00\n1778320800000.0 1778324400000.0 1778328000000.0\n\nSTDERR:\n<string>:3: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).\n<string>:4: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).\n",
+        "exit_code": 0,
+        "wall_seconds": 0.03815532405860722,
+        "timeout": false,
+        "truncated": false,
+        "sql_cli_calls": [],
+        "command": "cd ../data && python3 -c \"\nimport datetime\nprint(datetime.datetime.utcfromtimestamp(1778284800000/1000))\nprint(datetime.datetime.utcfromtimestamp(1777593600000/1000))\nprint(datetime.datetime(2026,5,9,10).timestamp()*1000, datetime.datetime(2026,5,9,11).timestamp()*1000, datetime.datetime(2026,5,9,12).timestamp()*1000)\n\""
+      }
+    },
+    {
+      "original_command_id": "main-glm-stateless/T3/turn-4/command-1",
+      "command_sha256": "8409e09435b73b1520c811ed0ce1e0b8af31a8c2c2feb7988e6ac592e969265b",
+      "original_wall_s": 0.8372168999630958,
+      "original_exit_code": 0,
+      "reexecuted": {
+        "output": "CREATE TABLE execution_cells(cell_id INTEGER PRIMARY KEY, cell_key TEXT NOT NULL UNIQUE, service_id INTEGER NOT NULL REFERENCES services, pool_id INTEGER NOT NULL REFERENCES worker_pools, profile_id INTEGER NOT NULL REFERENCES policy_profiles, release_id INTEGER NOT NULL REFERENCES releases, effective_from_ms INTEGER NOT NULL, effective_to_ms INTEGER, CHECK(effective_to_ms IS NULL OR effective_to_ms>effective_from_ms));\n1|cell-01|2|3|1|3|1778284800000|\n2|cell-02|2|3|1|3|1778284800000|\n3|cell-03|2|4|1|3|1778284800000|\n4|cell-04|2|4|1|3|1778284800000|\n1|1|idx-north\n2|2|idx-south\n3|1|sync-north\n4|2|sync-south\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.005997768021188676, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.003608735976740718, \"exit_code\": 0}\n",
+        "exit_code": 0,
+        "wall_seconds": 0.5123582240194082,
+        "timeout": false,
+        "truncated": false,
+        "sql_cli_calls": [
+          {
+            "wall_seconds": 0.005997768021188676,
+            "exit_code": 0
+          },
+          {
+            "wall_seconds": 0.003608735976740718,
+            "exit_code": 0
+          }
+        ],
+        "command": "cd ../data && sqlite3 current.db \".schema execution_cells\" && sqlite3 current.db \"select * from execution_cells; select * from worker_pools;\""
+      }
+    },
+    {
+      "original_command_id": "main-glm-stateless/T3/turn-5/command-1",
+      "command_sha256": "2d23aa19f15a6a9b0b375f8e83ab18a5b3029da5e9ee7c34be9f8817ac8943a3",
+      "original_wall_s": 0.6528281579958275,
+      "original_exit_code": 0,
+      "reexecuted": {
+        "output": "1|1|parcel-index\n2|2|ledger-sync\n1|1|idx-primary-n\n2|1|idx-primary-s\n3|2|sync-primary-n\n4|2|sync-primary-s\n5|1|idx-canary-n\n6|1|idx-canary-s\n7|1|idx-alias-n\n8|2|sync-alias-s\n1|OK|1|Completed successfully\n2|DEADLINE|0|Attempt or operation deadline exhausted\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.004449764033779502, \"exit_code\": 0}\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.0038876569597050548, \"exit_code\": 0}\n",
+        "exit_code": 0,
+        "wall_seconds": 0.723031626897864,
+        "timeout": false,
+        "truncated": false,
+        "sql_cli_calls": [
+          {
+            "wall_seconds": 0.004449764033779502,
+            "exit_code": 0
+          },
+          {
+            "wall_seconds": 0.0038876569597050548,
+            "exit_code": 0
+          }
+        ],
+        "command": "cd ../data && sqlite3 current.db \"select * from services; select * from service_routes;\" && sqlite3 current.db \"select f.*, count(*) from outcome_events o join logical_operations l on l.operation_id=o.operation_id join service_routes r on r.route_id=l.route_id where f=1;\" 2>/dev/null; sqlite3 current.db \"select * from failure_codes;\""
+      }
+    },
+    {
+      "original_command_id": "main-glm-stateless/T3/turn-6/command-1",
+      "command_sha256": "dd7581f75f90c69a8fda006b13d7aff17e84ba1efcb29f7458c94f2547444084",
+      "original_wall_s": 0.370961235021241,
+      "original_exit_code": 1,
+      "reexecuted": {
+        "output": "\nSTDERR:\nError: in prepare, no such column: final_code_id\n  CT period, pool_code, count(*) ops, sum(case when final_code_id=2 then 1 else \n                                      error here ---^\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.005033686989918351, \"exit_code\": 1}\n",
+        "exit_code": 1,
+        "wall_seconds": 0.24763148906640708,
+        "timeout": false,
+        "truncated": false,
+        "sql_cli_calls": [
+          {
+            "wall_seconds": 0.005033686989918351,
+            "exit_code": 1
+          }
+        ],
+        "command": "cd ../data && sqlite3 -header current.db \"\nWITH ops AS (\n SELECT l.operation_id, l.opened_at_ms,\n CASE WHEN l.opened_at_ms>=1778320800000 AND l.opened_at_ms<1778324400000 THEN 'ref'\n      WHEN l.opened_at_ms>=1778324400000 AND l.opened_at_ms<1778328000000 THEN 'inc' END AS period,\n wp.pool_code\n FROM logical_operations l\n JOIN service_routes r ON r.route_id=l.route_id AND r.service_id=2\n JOIN outcome_events o ON o.operation_id=l.operation_id\n JOIN execution_cells c ON c.cell_id=o.cell_id\n JOIN worker_pools wp ON wp.pool_id=c.pool_id\n WHERE l.opened_at_ms>=1778320800000 AND l.opened_at_ms<1778328000000\n)\nSELECT period, pool_code, count(*) ops, sum(case when final_code_id=2 then 1 else 0 end) tf,\n sum(case when attempt_count>1 then 1 else 0 end) retr,\n avg(completed_at_ms-opened_at_ms) lat FROM ops GROUP BY period, pool_code;\nSELECT period, count(*) ops, sum(case when final_code_id=2 then 1 else 0 end) tf\nFROM logical_operations l JOIN service_routes r ON r.route_id=l.route_id AND r.service_id=2\nJOIN outcome_events o ON o.operation_id=l.operation_id\nWHERE l.opened_at_ms>=1778320800000 AND l.opened_at_ms<1778328000000\nGROUP BY period;\""
+      }
+    },
+    {
+      "original_command_id": "main-glm-stateless/T3/turn-7/command-1",
+      "command_sha256": "7487c27c03dfe4211f0d0eca448d33793e2efe7c8760c3ec1519db6697562668",
+      "original_wall_s": 0.42176902398932725,
+      "original_exit_code": 0,
+      "reexecuted": {
+        "output": "period|pool_code|ops|tf|retr|lat\ninc|sync-north|1000|30|130|108.87\ninc|sync-south|1000|180|380|261.8\nref|sync-north|1000|30|130|108.87\nref|sync-south|1000|30|130|108.9\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.015194201027043164, \"exit_code\": 0}\n",
+        "exit_code": 0,
+        "wall_seconds": 0.25975883891806006,
+        "timeout": false,
+        "truncated": false,
+        "sql_cli_calls": [
+          {
+            "wall_seconds": 0.015194201027043164,
+            "exit_code": 0
+          }
+        ],
+        "command": "cd ../data && sqlite3 -header current.db \"\nWITH ops AS (\n SELECT l.opened_at_ms,\n CASE WHEN l.opened_at_ms>=1778320800000 AND l.opened_at_ms<1778324400000 THEN 'ref'\n      WHEN l.opened_at_ms>=1778324400000 AND l.opened_at_ms<1778328000000 THEN 'inc' END AS period,\n wp.pool_code, o.final_code_id, o.attempt_count, o.completed_at_ms\n FROM logical_operations l\n JOIN service_routes r ON r.route_id=l.route_id AND r.service_id=2\n JOIN outcome_events o ON o.operation_id=l.operation_id\n JOIN execution_cells c ON c.cell_id=o.cell_id\n JOIN worker_pools wp ON wp.pool_id=c.pool_id\n WHERE l.opened_at_ms>=1778320800000 AND l.opened_at_ms<1778328000000\n)\nSELECT period, pool_code, count(*) ops, sum(final_code_id=2) tf,\n sum(attempt_count>1) retr, avg(completed_at_ms-opened_at_ms) lat FROM ops GROUP BY period, pool_code;\""
+      }
+    },
+    {
+      "original_command_id": "main-glm-stateless/T3/turn-8/command-1",
+      "command_sha256": "8f9c67fe6023071554964a5e6dd7294edd681afb5482db19fcaad1a346117f85",
+      "original_wall_s": 0.3869791569886729,
+      "original_exit_code": 1,
+      "reexecuted": {
+        "output": "\nSTDERR:\nError: in prepare, no such column: period\n   SELECT period, count(*) ops, sum(final_code_id=2) tf FROM logical_operations \n          ^--- error here\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.00362697197124362, \"exit_code\": 1}\n",
+        "exit_code": 1,
+        "wall_seconds": 0.2439763629809022,
+        "timeout": false,
+        "truncated": false,
+        "sql_cli_calls": [
+          {
+            "wall_seconds": 0.00362697197124362,
+            "exit_code": 1
+          }
+        ],
+        "command": "cd ../data && sqlite3 -header current.db \"\nSELECT period, count(*) ops, sum(final_code_id=2) tf\nFROM logical_operations l JOIN service_routes r ON r.route_id=l.route_id AND r.service_id=2\nJOIN outcome_events o ON o.operation_id=l.operation_id\nWHERE l.opened_at_ms>=1778320800000 AND l.opened_at_ms<1778328000000\nGROUP BY period;\nSELECT count(*) FROM logical_operations l JOIN service_routes r ON r.route_id=l.route_id AND r.service_id=2\nWHERE l.opened_at_ms>=1778320800000 AND l.opened_at_ms<1778328000000;\nSELECT * FROM incident_windows;\""
+      }
+    },
+    {
+      "original_command_id": "main-glm-stateless/T3/turn-9/command-1",
+      "command_sha256": "5d06c39797ed8485f06921d87e0a7b2488bdc1f1ff863572b21f3a2ed1ad38a4",
+      "original_wall_s": 0.9679666080046445,
+      "original_exit_code": 0,
+      "reexecuted": {
+        "output": "period|ops|tf\ninc|2000|210\nref|2000|60\ncount(*)\n4000\nincident_id|incident_key|subsystem_id|start_ms|end_ms|report_summary\n1|I-early|1|1777719600000|1777723200000|Search deadline alarm\n2|I-later|2|1778151600000|1778155200000|Settlement deadline alarm\n3|I-current|2|1778324400000|1778328000000|Settlement terminal failure alarm\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.011371045955456793, \"exit_code\": 0}\n",
+        "exit_code": 0,
+        "wall_seconds": 0.2591289239935577,
+        "timeout": false,
+        "truncated": false,
+        "sql_cli_calls": [
+          {
+            "wall_seconds": 0.011371045955456793,
+            "exit_code": 0
+          }
+        ],
+        "command": "cd ../data && sqlite3 -header current.db \"\nSELECT CASE WHEN l.opened_at_ms>=1778324400000 THEN 'inc' ELSE 'ref' END period, count(*) ops, sum(final_code_id=2) tf\nFROM logical_operations l JOIN service_routes r ON r.route_id=l.route_id AND r.service_id=2\nJOIN outcome_events o ON o.operation_id=l.operation_id\nWHERE l.opened_at_ms>=1778320800000 AND l.opened_at_ms<1778328000000 GROUP BY period;\nSELECT count(*) FROM logical_operations l JOIN service_routes r ON r.route_id=l.route_id AND r.service_id=2\nWHERE l.opened_at_ms>=1778320800000 AND l.opened_at_ms<1778328000000;\nSELECT * FROM incident_windows;\""
+      }
+    },
+    {
+      "original_command_id": "main-glm-stateless/T3/turn-10/command-1",
+      "command_sha256": "6a1d21bce78b1e08d87d3636ab7ad5388a7fbadc6fe4a388ad5a02c9303d0238",
+      "original_wall_s": 0.24085086898412555,
+      "original_exit_code": 0,
+      "reexecuted": {
+        "output": "period|pool_code|ops|tf|tf_pct|retr|retry_pct|lat|sum_e2e\ninc|sync-north|1000|30|3.0|130|13.0|108.87|108870\ninc|sync-south|1000|180|18.0|380|38.0|261.8|261800\nref|sync-north|1000|30|3.0|130|13.0|108.87|108870\nref|sync-south|1000|30|3.0|130|13.0|108.9|108900\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.015256662969477475, \"exit_code\": 0}\n",
+        "exit_code": 0,
+        "wall_seconds": 0.3318368489854038,
+        "timeout": false,
+        "truncated": false,
+        "sql_cli_calls": [
+          {
+            "wall_seconds": 0.015256662969477475,
+            "exit_code": 0
+          }
+        ],
+        "command": "cd ../data && sqlite3 -header current.db \"\nWITH ops AS (\n SELECT l.opened_at_ms,\n CASE WHEN l.opened_at_ms>=1778324400000 THEN 'inc' ELSE 'ref' END period,\n wp.pool_code, o.final_code_id, o.attempt_count, o.completed_at_ms, o.total_queue_ms+o.total_execution_ms+o.total_backoff_ms e2e\n FROM logical_operations l\n JOIN service_routes r ON r.route_id=l.route_id AND r.service_id=2\n JOIN outcome_events o ON o.operation_id=l.operation_id\n JOIN execution_cells c ON c.cell_id=o.cell_id\n JOIN worker_pools wp ON wp.pool_id=c.pool_id\n WHERE l.opened_at_ms>=1778320800000 AND l.opened_at_ms<1778328000000\n)\nSELECT period, pool_code, count(*) ops, sum(final_code_id=2) tf, round(100.0*sum(final_code_id=2)/count(*),4) tf_pct,\n sum(attempt_count>1) retr, round(100.0*sum(attempt_count>1)/count(*),4) retry_pct,\n avg(completed_at_ms-opened_at_ms) lat, sum(e2e) sum_e2e FROM ops GROUP BY period, pool_code ORDER BY period, pool_code;\""
+      }
+    }
+  ]
+}

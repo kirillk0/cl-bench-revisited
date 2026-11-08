@@ -1,3 +1,14 @@
+# Start here: completed experiment and recovery notice
+
+- [Results in Russian](REPORT.md)
+- [Standalone HTML evidence viewer](public_results/report.html) (download/open locally)
+- [Archive completeness and recovery](RECOVERY.md)
+- [Costs and all 448 archived shell commands](analysis/cost_audit.md)
+
+**Final container loss:** 45 original full traces are recovered and hash-verified (43 primary + 2 diagnostic). For the other 15 attempts, commands and cost audit survive, not full dialogues. Five GLM tool-only replays are distinctly labeled. No fabricated original traces or private checkpoints. The old summary/strict grades are an interim snapshot, not a final accuracy score. Browser stress-testing was not repeated after recovery; recovered HTML is static, has no JavaScript/external dependencies, and was parsed locally.
+
+---
+
 # SQL agent memory: exploratory three-arm case study
 
 Repository: `kirillk0/cl-bench-revisited`, branch `experiment/sql-memory-2026-11-08`.

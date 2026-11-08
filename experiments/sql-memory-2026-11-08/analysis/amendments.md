@@ -24,3 +24,9 @@ Selected after observing primary ICL W1/W2/T2 reuse operation-to-attempt fanout 
 
 ## Selected diagnostic: memory adoption/lifecycle clarity
 Primary minimal instruction produced no notes in Luna/Haiku and one unconsumed answer.json in GLM. Separate Luna five-task sequence with explicit generic lifecycle wording (fresh conversations, only ../memory persists, no automatic injection), no prescribed note content, memory tool, mandatory write, or answers. Flag memory_instruction_variant=lifecycle. This changes instructions and is not pooled into primary three-arm outcome. Frozen dataset unchanged.
+
+
+## Final recovered amendments (reconstructed from parent conversation)
+After the already committed lifecycle-only diagnostic, one Luna managed sequence added generic maintain instruction; content still agent-selected, no gold. Actual Haiku effort was API-default (adaptive), not explicitly medium; provider_config now describes the actual request and matches pre-crash audit hash. GLM optional memory was read at T3, unlike earlier T1/T2. Final source runner reconstructed byte-for-byte against pre-crash hash.
+
+All model calls completed before final container loss. See RECOVERY.md and recovery_inventory.json; 45 original complete traces hash-match pre-crash inventory, 15 full traces missing, aggregated costs and all448 shell commands preserved in uploaded audit. No model API calls after loss. Five lost GLM command trajectories (50 commands) were executed tool-only on exact regenerated databases; 50/50 exit codes match. These new outputs are explicitly not original traces. Full late semantic-grader files and private native checkpoints lost; strict existing grades are not final accuracy.
