@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Hidden offline audit, with a Python oracle independent of gold SQL joins."""
-import collections, hashlib, json, math, os, sqlite3, stat, tempfile
+import collections, hashlib, json, math, os, sqlite3, stat, tempfile, subprocess, sys
 from pathlib import Path
 from generate import ms, dump, digest
 from stage import stage
@@ -201,6 +201,7 @@ def main():
         r=next(x for x in gold[tid]['answer']['pool_metrics'] if x['period']=='incident' and x['pool_code']==pool)
         check(r['terminal_failure_pct']==rate,tid+' incident design anchor')
     with tempfile.TemporaryDirectory(prefix='sql-bench-isolation-') as tmp:
+        Path(tmp).chmod(0o755)
         for task in manifest['tasks']:
             tid=task['id'];all_hashes=[]
             for arm in arms['arms']:
@@ -215,11 +216,42 @@ def main():
                     result=run_readonly(fresh,sql);want=gold[tid]['answer'][key]
                     compare(result[0] if isinstance(want,dict) else result,want,tid+' '+arm+' fresh staged evidence')
                 fresh.close()
+                if os.geteuid()==0:
+                    probe = """import json,sqlite3,sys
+from pathlib import Path
+p=Path(sys.argv[1]); private=Path(sys.argv[2])
+assert set(x.name for x in p.iterdir())=={'current.db','README.md','TASK.json'}
+json.loads((p/'TASK.json').read_text()); assert (p/'README.md').read_text()
+c=sqlite3.connect('file:'+str(p/'current.db')+'?mode=ro',uri=True)
+assert c.execute('PRAGMA integrity_check').fetchone()[0]=='ok'
+try: (private/'gold.json').read_text()
+except PermissionError: pass
+else: raise AssertionError('private gold readable by unprivileged UID')
+try: (private/'private/generated_config.json').read_text()
+except PermissionError: pass
+else: raise AssertionError('private seed readable by unprivileged UID')
+print('isolated')
+"""
+                    proc=subprocess.run([sys.executable,'-c',probe,str(dest),str(ROOT)],user=65534,group=65534,extra_groups=[],cwd=tmp,capture_output=True,text=True)
+                    check(proc.returncode==0,tid+' '+arm+' unprivileged UID can read staged input but not gold/seed: '+proc.stderr.strip())
             check(all(x==all_hashes[0] for x in all_hashes),tid+' all three arms have byte-identical db/README/task')
     # Attribution trap is real: 80% of v2 outcomes are executed outside intended pool.
     post=dbs['post.db']
     mismatch=post.execute('SELECT COUNT(*) FROM outcome_events e JOIN logical_operations o USING(operation_id) JOIN execution_cells c USING(cell_id) WHERE o.route_id != c.pool_id').fetchone()[0]
     check(mismatch==3200,'T3 actual attribution differs from routing intent for 3200/4000 operations')
+    # Failure-mode probes: common shortcuts must yield measurably incorrect answers.
+    pre=dbs['pre.db']
+    timeless=pre.execute('SELECT COUNT(*) FROM logical_operations o JOIN service_routes r USING(route_id) JOIN route_assignments a USING(route_id) WHERE r.service_id=1 AND o.opened_at_ms>=? AND o.opened_at_ms<?',(ms('2026-05-02T10:00:00Z'),ms('2026-05-02T12:00:00Z'))).fetchone()[0]
+    check(timeless==8000,'Negative control: timeless W2 join duplicates 4000 operations to 8000')
+    w2=next(r for r in gold['W2']['answer']['pool_metrics'] if r['period']=='incident' and r['pool_code']=='idx-north')
+    check(w2['failed_attempts']!=w2['terminal_failures'],'Negative control: retry counting differs from terminal failures')
+    latest=pre.execute('SELECT p.deadline_ms FROM route_assignments a JOIN policy_profiles p USING(profile_id) WHERE a.route_id=1 ORDER BY a.effective_from_ms DESC LIMIT 1').fetchone()[0]
+    check(latest==250 and w2['min_deadline_ms']==80,'Negative control: latest policy is not W2 event-time policy')
+    builds={r['build_code']:r for r in gold['T1']['answer']['builds']}
+    check(builds['idx-r19']['terminal_failure_pct']<builds['idx-r18']['terminal_failure_pct'] and gold['T1']['answer']['standardized']['candidate_minus_reference_pp']>0,'Negative control: pooled release contrast has wrong sign')
+    bad=post.execute("SELECT o.route_id,100.0*SUM(f.is_success=0)/COUNT(*) pct FROM outcome_events e JOIN logical_operations o USING(operation_id) JOIN failure_codes f ON f.code_id=e.final_code_id WHERE o.opened_at_ms>=? AND o.opened_at_ms<? GROUP BY o.route_id",(ms('2026-05-09T11:00:00Z'),ms('2026-05-09T12:00:00Z'))).fetchall()
+    wrong=dict((r[0],r[1]) for r in bad)
+    check(wrong[3]>wrong[4] and wrong[4]!=18,'Negative control: intended-route attribution points to wrong T3 pool')
     # Only source tables/operational metadata; no task/gold material in snapshots.
     check(all('gold' not in t and 'answer' not in t and 'task' not in t for s in sizes.values() for t in s['row_counts']),'No answer/task tables in snapshots')
     for c in dbs.values():c.close()

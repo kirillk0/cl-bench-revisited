@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "byte_reproducibility": {
+    "snapshots/pre.db": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+    "snapshots/post.db": "2823f7089388a1737e8b95389ae2f83598f581389b9af600453a6b2016835e03",
+    "gold.json": "8e097637006d2fb13722dbf627cc275c25f09d9539a40afabed3e523ff60064f",
+    "manifests/tasks.json": "ffa9415331e13611b592fabe678a293cc154c1c77c0eba16c14ae685786363b4",
+    "manifests/arms.json": "dfb88ea9ff5a9c4d1156541c060418be394ae3cf6f5acf81005c7789f6b17b88",
+    "private/generated_config.json": "e1b69c891b12561b3c6a4948fe065d6e3bf0520f96c845c70af55240efedb1ab",
+    "agent/README.md": "e1740ca561b4ace24c6f218ebc8541c7041a67055e734b8150ff47a639caa2ac"
+  },
+  "grader_selftests": {
+    "T1": {
+      "gold_scores_full_metrics": true,
+      "reordered_rows_score_full_metrics": true,
+      "duplicate_group_penalized": true
+    },
+    "T2": {
+      "gold_scores_full_metrics": true,
+      "reordered_rows_score_full_metrics": true,
+      "duplicate_group_penalized": true
+    },
+    "T3": {
+      "gold_scores_full_metrics": true,
+      "reordered_rows_score_full_metrics": true,
+      "duplicate_group_penalized": true
+    },
+    "W1": {
+      "gold_scores_full_metrics": true,
+      "reordered_rows_score_full_metrics": true,
+      "duplicate_group_penalized": true
+    },
+    "W2": {
+      "gold_scores_full_metrics": true,
+      "reordered_rows_score_full_metrics": true,
+      "duplicate_group_penalized": true
+    }
+  },
+  "write_and_constant_only_sql_rejected": true
+}

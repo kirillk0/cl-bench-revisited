@@ -1,0 +1,10 @@
+job,provider,arm,task,status,numeric_correct,metric_fraction,schema_valid,evidence_valid,model_calls,shell_calls,sql_cli_invocations,sql_cli_over_1s,sql_cli_seconds,shell_over_1s,shell_seconds,model_seconds,elapsed_seconds,cost_usd,input_tokens,cached_tokens,cache_write_tokens,output_tokens,reasoning_tokens,notes_before_chars,notes_after_chars,db_unchanged,truncated_calls
+pilot-luna-icl,codex,icl,T1,running,,,,,1,1,1,0,0.006431892979890108,0,0.09455922897905111,2.5011851949384436,2.60435449401848,,12183,0,0,81,0,0,0,,0
+pilot-luna-icl,codex,icl,W1,completed,False,0.1875,True,True,4,3,3,0,0.058770722011104226,0,0.2691325859632343,32.97957414505072,33.27915502805263,,9318,0,0,1600,142,0,0,True,0
+pilot-luna-icl,codex,icl,W2,completed,True,1.0,True,True,6,5,4,0,0.05265161499846727,0,0.40199838182888925,66.07281752419658,66.59824486100115,,39359,3200,0,3314,219,0,0,True,0
+pilot-luna-managed,codex,managed,T1,running,,,,,1,1,1,0,0.0047749950317665935,0,0.07977126096375287,1.4419852079590783,1.5309490889776498,,1405,0,0,30,0,0,0,,0
+pilot-luna-managed,codex,managed,W1,completed,True,1.0,True,True,6,5,6,0,0.06325265683699399,0,0.47725580900441855,34.90565832494758,35.43267086800188,,12895,0,0,1498,101,0,0,True,0
+pilot-luna-managed,codex,managed,W2,completed,False,0.6666666666666666,False,False,9,8,6,0,0.05763341300189495,0,0.7349747080588713,63.30635689187329,64.17458818107843,,31356,3712,0,2920,15,0,0,True,0
+pilot-luna-stateless,codex,stateless,T1,running,,,,,4,4,1,0,0.007133373059332371,0,0.5568399830954149,20.045745535986498,20.661882147891447,,10838,0,0,846,77,0,0,,0
+pilot-luna-stateless,codex,stateless,W1,completed,True,1.0,True,True,5,4,3,0,0.04356831789482385,0,0.31395020987838507,34.29046479403041,34.63958417298272,,11956,0,0,1595,85,0,0,True,0
+pilot-luna-stateless,codex,stateless,W2,completed,False,0.6666666666666666,False,True,9,8,6,0,0.03826907998882234,0,0.6854364241007715,59.81701112096198,60.612370866001584,,32358,0,0,2584,0,0,0,True,0

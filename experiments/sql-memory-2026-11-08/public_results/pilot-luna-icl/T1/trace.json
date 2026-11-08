@@ -1,0 +1,3301 @@
+{
+  "task_id": "T1",
+  "db_sha256": "edb6cf91434fc5bc6c9c1345928145a5b463538c4930365bd6189b4b2c749cf0",
+  "snapshot": "pre.db",
+  "prompt": "Use only the supplied current.db and README. All windows below are UTC and half-open, selected by logical-operation open time. A terminal-failure percentage has logical operations as its denominator; attempt-failure percentage has attempts as its denominator. Return only JSON matching the provided schema. Percentages use 0\u2013100, differences use percentage points. evidence_sql must contain executable read-only SQLite queries with literal bounds, not pseudocode. Arrays may be in any order; include every requested group. A zero numerator is not missing data. No web or network access is needed.\n\nEvaluate parcel-index during early 2026-05-04 00:00\u201301:00 and late 2026-05-05 00:00\u201301:00. Candidate build is idx-r19 and reference is idx-r18. (1) For each period report operations, terminal failures, failure percentage, and candidate traffic percentage. (2) Pool both periods and report operations, terminal failures and failure percentage per build. (3) Report operations, terminal failures and failure percentage for each period \u00d7 region \u00d7 operation-class \u00d7 build cell. These define eight matched slices (period \u00d7 region \u00d7 operation class), each containing both builds. (4) Standardize each build by giving those eight slices equal weight; report both standardized failure percentages, candidate minus reference in pp, and the number of slices where candidate is worse. (5) Report period \u00d7 operation-class traffic shares and failure percentages. In assessment, explain whether the time trend and pooled build comparison support the claim \u201cexpanding the candidate improved reliability.\u201d Identify the strongest measured association and distinguish a possible root-cause hypothesis from causal identification. Do not extrapolate beyond the observed strata. Equal weighting here is the specified target population, not weighting by observed build traffic.\n\nRequired JSON response schema:\n{\"$schema\": \"https://json-schema.org/draft/2020-12/schema\", \"additionalProperties\": false, \"properties\": {\"answer\": {\"additionalProperties\": false, \"properties\": {\"assessment\": {\"type\": \"string\"}, \"builds\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"build_code\": {\"type\": \"string\"}, \"operations\": {\"type\": \"integer\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"build_code\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\"], \"type\": \"object\"}, \"maxItems\": 2, \"minItems\": 2, \"type\": \"array\"}, \"matched_cells\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"build_code\": {\"type\": \"string\"}, \"class_code\": {\"type\": \"string\"}, \"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"region_code\": {\"type\": \"string\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"period\", \"region_code\", \"class_code\", \"build_code\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\"], \"type\": \"object\"}, \"maxItems\": 16, \"minItems\": 16, \"type\": \"array\"}, \"periods\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"candidate_traffic_pct\": {\"type\": \"number\"}, \"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"period\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\", \"candidate_traffic_pct\"], \"type\": \"object\"}, \"maxItems\": 2, \"minItems\": 2, \"type\": \"array\"}, \"standardized\": {\"additionalProperties\": false, \"properties\": {\"candidate_failure_pct\": {\"type\": \"number\"}, \"candidate_minus_reference_pp\": {\"type\": \"number\"}, \"candidate_worse_slices\": {\"type\": \"integer\"}, \"matched_slices\": {\"type\": \"integer\"}, \"reference_failure_pct\": {\"type\": \"number\"}}, \"required\": [\"reference_failure_pct\", \"candidate_failure_pct\", \"candidate_minus_reference_pp\", \"candidate_worse_slices\", \"matched_slices\"], \"type\": \"object\"}, \"workload_mix\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"class_code\": {\"type\": \"string\"}, \"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"traffic_pct\": {\"type\": \"number\"}}, \"required\": [\"period\", \"class_code\", \"operations\", \"traffic_pct\", \"terminal_failure_pct\"], \"type\": \"object\"}, \"maxItems\": 4, \"minItems\": 4, \"type\": \"array\"}}, \"required\": [\"periods\", \"builds\", \"matched_cells\", \"standardized\", \"workload_mix\", \"assessment\"], \"type\": \"object\"}, \"caveats\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}, \"evidence_sql\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}}, \"required\": [\"answer\", \"evidence_sql\", \"caveats\"], \"type\": \"object\"}",
+  "turns": [
+    {
+      "tool_calls": [
+        {
+          "id": "call_a5862632124642afbf9726528e1e728e",
+          "name": "bash",
+          "arguments": {
+            "command": "date -u -d '2026-05-04 00:00:00' +%s; sqlite3 ../data/current.db 'select * from feed_registry; select service_id,service_code from services; select build_code from releases; select region_code from regions; select class_code from operation_classes;'"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 12183,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 81,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 12264,
+        "attribution": {
+          "items": {
+            "at_0f057385b810c343016af0974b55cc87d0a282d6272d81a3c8": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af096e81f0887d089c9832b563b7dae": {
+              "input_tokens": 32,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af096e9d9bc87d0b083a874418e6840": {
+              "input_tokens": 63,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af096ed647887d0a904e971b3f34c1c": {
+              "input_tokens": 364,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af09709694c87d08a0275d0a7230181": {
+              "input_tokens": 20,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0970ae49c87d08f2a679cf6203fc7": {
+              "input_tokens": 37,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0970cb1e487d08c3db8fbf6cfc5fd": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0970e6f2887d09e408eca29d0f20c": {
+              "input_tokens": 99,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af09712b6e087d09d5d7d0526426427": {
+              "input_tokens": 497,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0974b55cc87d0824c0d61258fae2a": {
+              "input_tokens": 1480,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 1480,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974b55cc87d084a7952e14adeebb": {
+              "input_tokens": 545,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 545,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974b55cc87d085e10d9f1598ceb2": {
+              "input_tokens": 136,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 136,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974b55cc87d0877341f340eb5eee": {
+              "input_tokens": 348,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 348,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974b55cc87d0963941c92a5f3169": {
+              "input_tokens": 625,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 625,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974b55cc87d09bd3b76bc4797b6f": {
+              "input_tokens": 16,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 16,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974b55cc87d0a8bd8f847a9486f8": {
+              "input_tokens": 927,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 927,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974b55cc87d0bb2f423ac8f1aa6b": {
+              "input_tokens": 299,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 299,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974c1a8887d0a8d88e4db58d06cf": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 81
+            },
+            "msg_0f057385b810c343016af096f6279487d09dd6bebbdcfc0dec": {
+              "input_tokens": 1003,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 1003,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0971f5d4c87d088b2dcdf1c4e6c74": {
+              "input_tokens": 2423,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 2423,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0974b55cc87d0907807c9f337cc17": {
+              "input_tokens": 882,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 882,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0974b55cc87d0b36cbd4c697cda9a": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0974b55cc87d0b8fac2f693275385": {
+              "input_tokens": 1120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 1120,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0974b55cc87d0bd8a69639db43ddf": {
+              "input_tokens": 611,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "rs_0f057385b810c343016af096ed1ab887d09c7f35f2e2b8494b": {
+              "input_tokens": 78,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af096f610c487d09f28678b04e4ae4d": {
+              "input_tokens": 68,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af0971271b887d0a11abad65f0a84b9": {
+              "input_tokens": 80,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af0971f273487d093ce1d565bbc5898": {
+              "input_tokens": 143,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0f057385b810c343016af0974b553087d087d1373d383a32d5",
+      "elapsed_s": 2.5011851949384436,
+      "token_accounting": {
+        "input_tokens": 12183,
+        "input_uncached_tokens": 12183,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 81,
+        "reasoning_tokens": 0,
+        "total_tokens": 12264
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0f057385b810c343016af0974b553087d087d1373d383a32d5",
+        "object": "response",
+        "created_at": 1794152267,
+        "completed_at": 1794152269,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0f057385b810c343016af0974c1a8887d0a8d88e4db58d06cf",
+            "call_id": "call_a5862632124642afbf9726528e1e728e",
+            "name": "bash",
+            "arguments": "{\"command\":\"date -u -d '2026-05-04 00:00:00' +%s; sqlite3 ../data/current.db 'select * from feed_registry; select service_id,service_code from services; select build_code from releases; select region_code from regions; select class_code from operation_classes;'\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "f06bb888-f767-474f-ac1c-3626b541e3fe",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 12183,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 81,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 12264,
+          "attribution": {
+            "items": {
+              "at_0f057385b810c343016af0974b55cc87d0a282d6272d81a3c8": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af096e81f0887d089c9832b563b7dae": {
+                "input_tokens": 32,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af096e9d9bc87d0b083a874418e6840": {
+                "input_tokens": 63,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af096ed647887d0a904e971b3f34c1c": {
+                "input_tokens": 364,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af09709694c87d08a0275d0a7230181": {
+                "input_tokens": 20,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0970ae49c87d08f2a679cf6203fc7": {
+                "input_tokens": 37,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0970cb1e487d08c3db8fbf6cfc5fd": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0970e6f2887d09e408eca29d0f20c": {
+                "input_tokens": 99,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af09712b6e087d09d5d7d0526426427": {
+                "input_tokens": 497,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0974b55cc87d0824c0d61258fae2a": {
+                "input_tokens": 1480,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 1480,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974b55cc87d084a7952e14adeebb": {
+                "input_tokens": 545,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 545,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974b55cc87d085e10d9f1598ceb2": {
+                "input_tokens": 136,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 136,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974b55cc87d0877341f340eb5eee": {
+                "input_tokens": 348,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 348,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974b55cc87d0963941c92a5f3169": {
+                "input_tokens": 625,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 625,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974b55cc87d09bd3b76bc4797b6f": {
+                "input_tokens": 16,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 16,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974b55cc87d0a8bd8f847a9486f8": {
+                "input_tokens": 927,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 927,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974b55cc87d0bb2f423ac8f1aa6b": {
+                "input_tokens": 299,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 299,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974c1a8887d0a8d88e4db58d06cf": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 81
+              },
+              "msg_0f057385b810c343016af096f6279487d09dd6bebbdcfc0dec": {
+                "input_tokens": 1003,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 1003,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0971f5d4c87d088b2dcdf1c4e6c74": {
+                "input_tokens": 2423,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 2423,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0974b55cc87d0907807c9f337cc17": {
+                "input_tokens": 882,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 882,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0974b55cc87d0b36cbd4c697cda9a": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0974b55cc87d0b8fac2f693275385": {
+                "input_tokens": 1120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 1120,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0974b55cc87d0bd8a69639db43ddf": {
+                "input_tokens": 611,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "rs_0f057385b810c343016af096ed1ab887d09c7f35f2e2b8494b": {
+                "input_tokens": 78,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af096f610c487d09f28678b04e4ae4d": {
+                "input_tokens": 68,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af0971271b887d0a11abad65f0a84b9": {
+                "input_tokens": 80,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af0971f273487d093ce1d565bbc5898": {
+                "input_tokens": 143,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 65569,
+      "tool_results": [
+        {
+          "output": "1777852800\n1|attempt_events|attempt|1777593600000||active|operation_id|Routing decision effective at logical operation open\n2|ledger-sync\n1|parcel-index\nidx-r18\nidx-r19\nsync-r42\nnorth\nsouth\nlarge\nsmall\n\nSTDERR:\n\n__SQL_CLI_TIMING__{\"wall_seconds\": 0.006431892979890108, \"exit_code\": 0}\n",
+          "exit_code": 0,
+          "wall_seconds": 0.09455922897905111,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [
+            {
+              "wall_seconds": 0.006431892979890108,
+              "exit_code": 0
+            }
+          ],
+          "command": "date -u -d '2026-05-04 00:00:00' +%s; sqlite3 ../data/current.db 'select * from feed_registry; select service_id,service_code from services; select build_code from releases; select region_code from regions; select class_code from operation_classes;'"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_6e1fc627374145e38cd76f58800bb5aa",
+          "name": "bash",
+          "arguments": {
+            "command": "cat > /tmp/q.py <<'PY'\nimport sqlite3\nc=sqlite3.connect('../data/current.db'); c.row_factory=sqlite3.Row\nbase=\"\"\"WITH op AS (SELECT o.operation_id,o.opened_at_ms,rgn.region_code,cl.class_code,rel.build_code,CASE WHEN o.opened_at_ms<1777939200000 THEN 'early' ELSE 'late' END period FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id JOIN route_assignments ra ON ra.route_id=o.route_id AND o.opened_at_ms>=ra.effective_from_ms AND o.opened_at_ms<ra.effective_to_ms JOIN releases rel ON rel.release_id=ra.release_id JOIN regions rgn ON rgn.region_id=(SELECT wp.region_id FROM worker_pools wp WHERE wp.pool_id=ra.pool_id) JOIN operation_classes cl ON cl.class_id=o.class_id WHERE s.service_code='parcel-index' AND ((o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777856400000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777942800000))), final AS (SELECT a.operation_id,f.is_success FROM attempt_events a JOIN failure_codes f ON f.code_id=a.code_id WHERE a.attempt_no=(SELECT max(x.attempt_no) FROM attempt_events x WHERE x.operation_id=a.operation_id)), d AS (SELECT op.*,CASE WHEN final.is_success=0 THEN 1 ELSE 0 END fail FROM op JOIN final USING(operation_id)) \"\"\"\nfor sql in [\n\"SELECT period,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct,100.0*sum(build_code='idx-r19')/count(*) cand FROM d GROUP BY period\",\n\"SELECT build_code,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct FROM d GROUP BY build_code\",\n\"SELECT period,region_code,class_code,build_code,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct FROM d GROUP BY 1,2,3,4 ORDER BY 1,2,3,4\",\n\"SELECT period,class_code,count(*) n,100.0*count(*)/(SELECT count(*) FROM d x WHERE x.period=d.period) traffic,100.0*sum(fail)/count(*) pct FROM d GROUP BY 1,2 ORDER BY 1,2\"\n]:\n print('\\n',sql); print([dict(x) for x in c.execute(base+sql)])\nPY\npython /tmp/q.py"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 12373,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 619,
+        "output_tokens_details": {
+          "reasoning_tokens": 31
+        },
+        "total_tokens": 12992,
+        "attribution": {
+          "items": {
+            "at_0f057385b810c343016af0974e0b9c87d0b54016449faa15ab": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af096e81f0887d089c9832b563b7dae": {
+              "input_tokens": 32,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af096e9d9bc87d0b083a874418e6840": {
+              "input_tokens": 63,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af096ed647887d0a904e971b3f34c1c": {
+              "input_tokens": 364,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af09709694c87d08a0275d0a7230181": {
+              "input_tokens": 20,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0970ae49c87d08f2a679cf6203fc7": {
+              "input_tokens": 37,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0970cb1e487d08c3db8fbf6cfc5fd": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0970e6f2887d09e408eca29d0f20c": {
+              "input_tokens": 99,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af09712b6e087d09d5d7d0526426427": {
+              "input_tokens": 497,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0974c1a8887d0a8d88e4db58d06cf": {
+              "input_tokens": 83,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0974e0b9c87d083766e0f3dad0ae0": {
+              "input_tokens": 136,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 136,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974e0b9c87d084a01186ad74f37a": {
+              "input_tokens": 545,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 545,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974e0b9c87d08dbd319f2f984f07": {
+              "input_tokens": 927,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 927,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974e0b9c87d0927e7c64c36afd43": {
+              "input_tokens": 16,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 16,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974e0b9c87d09ad63632aabc78e0": {
+              "input_tokens": 625,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 625,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974e0b9c87d0a26f02e5043b8c18": {
+              "input_tokens": 348,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 348,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974e0b9c87d0bcf23f4103a4481b": {
+              "input_tokens": 107,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 107,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974e0b9c87d0be0c5043eacd7d45": {
+              "input_tokens": 299,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 299,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974e0b9c87d0be1d3ed670c20492": {
+              "input_tokens": 1480,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 1480,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0974f550c87d097c743a54a171161": {
+              "input_tokens": 0,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 588
+            },
+            "msg_0f057385b810c343016af096f6279487d09dd6bebbdcfc0dec": {
+              "input_tokens": 1003,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 1003,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0971f5d4c87d088b2dcdf1c4e6c74": {
+              "input_tokens": 2423,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 2423,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0974e0b9c87d0a23a28d13e689278": {
+              "input_tokens": 1120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 1120,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0974e0b9c87d0ad3dced4cd63b43a": {
+              "input_tokens": 882,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 882,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0974e0b9c87d0b06e389f7623aade": {
+              "input_tokens": 611,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0974e0b9c87d0bdd97318f2a6dc89": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "rs_0f057385b810c343016af096ed1ab887d09c7f35f2e2b8494b": {
+              "input_tokens": 78,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af096f610c487d09f28678b04e4ae4d": {
+              "input_tokens": 68,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af0971271b887d0a11abad65f0a84b9": {
+              "input_tokens": 80,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af0971f273487d093ce1d565bbc5898": {
+              "input_tokens": 143,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af0974f0fe487d0b2fa5f29de0dcf69": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 31
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0f057385b810c343016af0974e0b0487d0af674e75f08603f4",
+      "elapsed_s": 12.206405148026533,
+      "token_accounting": {
+        "input_tokens": 12373,
+        "input_uncached_tokens": 12373,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 619,
+        "reasoning_tokens": 31,
+        "total_tokens": 12992
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0f057385b810c343016af0974e0b0487d0af674e75f08603f4",
+        "object": "response",
+        "created_at": 1794152270,
+        "completed_at": 1794152281,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "reasoning",
+            "id": "rs_0f057385b810c343016af0974f0fe487d0b2fa5f29de0dcf69",
+            "summary": [],
+            "content": [],
+            "encrypted_content": {
+              "omitted": true,
+              "sha256": "08510d4ebfbce7d565ffc1badcde31534f013b45bc78f0c9f20ae43e46cba3ac",
+              "length": 2040
+            }
+          },
+          {
+            "type": "function_call",
+            "id": "fc_0f057385b810c343016af0974f550c87d097c743a54a171161",
+            "call_id": "call_6e1fc627374145e38cd76f58800bb5aa",
+            "name": "bash",
+            "arguments": "{\"command\":\"cat > /tmp/q.py <<'PY'\\nimport sqlite3\\nc=sqlite3.connect('../data/current.db'); c.row_factory=sqlite3.Row\\nbase=\\\"\\\"\\\"WITH op AS (SELECT o.operation_id,o.opened_at_ms,rgn.region_code,cl.class_code,rel.build_code,CASE WHEN o.opened_at_ms<1777939200000 THEN 'early' ELSE 'late' END period FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id JOIN route_assignments ra ON ra.route_id=o.route_id AND o.opened_at_ms>=ra.effective_from_ms AND o.opened_at_ms<ra.effective_to_ms JOIN releases rel ON rel.release_id=ra.release_id JOIN regions rgn ON rgn.region_id=(SELECT wp.region_id FROM worker_pools wp WHERE wp.pool_id=ra.pool_id) JOIN operation_classes cl ON cl.class_id=o.class_id WHERE s.service_code='parcel-index' AND ((o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777856400000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777942800000))), final AS (SELECT a.operation_id,f.is_success FROM attempt_events a JOIN failure_codes f ON f.code_id=a.code_id WHERE a.attempt_no=(SELECT max(x.attempt_no) FROM attempt_events x WHERE x.operation_id=a.operation_id)), d AS (SELECT op.*,CASE WHEN final.is_success=0 THEN 1 ELSE 0 END fail FROM op JOIN final USING(operation_id)) \\\"\\\"\\\"\\nfor sql in [\\n\\\"SELECT period,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct,100.0*sum(build_code='idx-r19')/count(*) cand FROM d GROUP BY period\\\",\\n\\\"SELECT build_code,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct FROM d GROUP BY build_code\\\",\\n\\\"SELECT period,region_code,class_code,build_code,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct FROM d GROUP BY 1,2,3,4 ORDER BY 1,2,3,4\\\",\\n\\\"SELECT period,class_code,count(*) n,100.0*count(*)/(SELECT count(*) FROM d x WHERE x.period=d.period) traffic,100.0*sum(fail)/count(*) pct FROM d GROUP BY 1,2 ORDER BY 1,2\\\"\\n]:\\n print('\\\\n',sql); print([dict(x) for x in c.execute(base+sql)])\\nPY\\npython /tmp/q.py\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "be21d7a7-0b88-4212-9e84-5c5ad8915a90",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 12373,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 619,
+          "output_tokens_details": {
+            "reasoning_tokens": 31
+          },
+          "total_tokens": 12992,
+          "attribution": {
+            "items": {
+              "at_0f057385b810c343016af0974e0b9c87d0b54016449faa15ab": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af096e81f0887d089c9832b563b7dae": {
+                "input_tokens": 32,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af096e9d9bc87d0b083a874418e6840": {
+                "input_tokens": 63,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af096ed647887d0a904e971b3f34c1c": {
+                "input_tokens": 364,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af09709694c87d08a0275d0a7230181": {
+                "input_tokens": 20,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0970ae49c87d08f2a679cf6203fc7": {
+                "input_tokens": 37,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0970cb1e487d08c3db8fbf6cfc5fd": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0970e6f2887d09e408eca29d0f20c": {
+                "input_tokens": 99,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af09712b6e087d09d5d7d0526426427": {
+                "input_tokens": 497,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0974c1a8887d0a8d88e4db58d06cf": {
+                "input_tokens": 83,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0974e0b9c87d083766e0f3dad0ae0": {
+                "input_tokens": 136,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 136,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974e0b9c87d084a01186ad74f37a": {
+                "input_tokens": 545,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 545,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974e0b9c87d08dbd319f2f984f07": {
+                "input_tokens": 927,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 927,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974e0b9c87d0927e7c64c36afd43": {
+                "input_tokens": 16,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 16,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974e0b9c87d09ad63632aabc78e0": {
+                "input_tokens": 625,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 625,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974e0b9c87d0a26f02e5043b8c18": {
+                "input_tokens": 348,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 348,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974e0b9c87d0bcf23f4103a4481b": {
+                "input_tokens": 107,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 107,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974e0b9c87d0be0c5043eacd7d45": {
+                "input_tokens": 299,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 299,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974e0b9c87d0be1d3ed670c20492": {
+                "input_tokens": 1480,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 1480,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0974f550c87d097c743a54a171161": {
+                "input_tokens": 0,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 588
+              },
+              "msg_0f057385b810c343016af096f6279487d09dd6bebbdcfc0dec": {
+                "input_tokens": 1003,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 1003,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0971f5d4c87d088b2dcdf1c4e6c74": {
+                "input_tokens": 2423,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 2423,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0974e0b9c87d0a23a28d13e689278": {
+                "input_tokens": 1120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 1120,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0974e0b9c87d0ad3dced4cd63b43a": {
+                "input_tokens": 882,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 882,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0974e0b9c87d0b06e389f7623aade": {
+                "input_tokens": 611,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0974e0b9c87d0bdd97318f2a6dc89": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "rs_0f057385b810c343016af096ed1ab887d09c7f35f2e2b8494b": {
+                "input_tokens": 78,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af096f610c487d09f28678b04e4ae4d": {
+                "input_tokens": 68,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af0971271b887d0a11abad65f0a84b9": {
+                "input_tokens": 80,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af0971f273487d093ce1d565bbc5898": {
+                "input_tokens": 143,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af0974f0fe487d0b2fa5f29de0dcf69": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 31
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 70355,
+      "tool_results": [
+        {
+          "output": "2026-05-02T10:00:00 1777716000000\n2026-05-02T11:00:00 1777719600000\n2026-05-02T12:00:00 1777723200000\n{'period': 'incident', 'pool_code': 'idx-north', 'operations': 1000, 'terminals': 210, 'pct': 21.0, 'attempts': 1620, 'failed': 830, 'apct': 51.2346, 'retried': 410, 'min(deadline_ms)': 80, 'max(deadline_ms)': 80}\n{'period': 'incident', 'pool_code': 'idx-south', 'operations': 1000, 'terminals': 25, 'pct': 2.5, 'attempts': 1150, 'failed': 175, 'apct': 15.2174, 'retried': 125, 'min(deadline_ms)': 250, 'max(deadline_ms)': 250}\n{'period': 'reference', 'pool_code': 'idx-north', 'operations': 1000, 'terminals': 25, 'pct': 2.5, 'attempts': 1150, 'failed': 175, 'apct': 15.2174, 'retried': 125, 'min(deadline_ms)': 250, 'max(deadline_ms)': 250}\n{'period': 'reference', 'pool_code': 'idx-south', 'operations': 1000, 'terminals': 25, 'pct': 2.5, 'attempts': 1150, 'failed': 175, 'apct': 15.2174, 'retried': 125, 'min(deadline_ms)': 250, 'max(deadline_ms)': 250}\n\nSTDERR:\n/bin/bash: line 1: /tmp/q.py: Permission denied\n",
+          "exit_code": 0,
+          "wall_seconds": 0.07592758093960583,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "cat > /tmp/q.py <<'PY'\nimport sqlite3\nc=sqlite3.connect('../data/current.db'); c.row_factory=sqlite3.Row\nbase=\"\"\"WITH op AS (SELECT o.operation_id,o.opened_at_ms,rgn.region_code,cl.class_code,rel.build_code,CASE WHEN o.opened_at_ms<1777939200000 THEN 'early' ELSE 'late' END period FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id JOIN route_assignments ra ON ra.route_id=o.route_id AND o.opened_at_ms>=ra.effective_from_ms AND o.opened_at_ms<ra.effective_to_ms JOIN releases rel ON rel.release_id=ra.release_id JOIN regions rgn ON rgn.region_id=(SELECT wp.region_id FROM worker_pools wp WHERE wp.pool_id=ra.pool_id) JOIN operation_classes cl ON cl.class_id=o.class_id WHERE s.service_code='parcel-index' AND ((o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777856400000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777942800000))), final AS (SELECT a.operation_id,f.is_success FROM attempt_events a JOIN failure_codes f ON f.code_id=a.code_id WHERE a.attempt_no=(SELECT max(x.attempt_no) FROM attempt_events x WHERE x.operation_id=a.operation_id)), d AS (SELECT op.*,CASE WHEN final.is_success=0 THEN 1 ELSE 0 END fail FROM op JOIN final USING(operation_id)) \"\"\"\nfor sql in [\n\"SELECT period,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct,100.0*sum(build_code='idx-r19')/count(*) cand FROM d GROUP BY period\",\n\"SELECT build_code,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct FROM d GROUP BY build_code\",\n\"SELECT period,region_code,class_code,build_code,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct FROM d GROUP BY 1,2,3,4 ORDER BY 1,2,3,4\",\n\"SELECT period,class_code,count(*) n,100.0*count(*)/(SELECT count(*) FROM d x WHERE x.period=d.period) traffic,100.0*sum(fail)/count(*) pct FROM d GROUP BY 1,2 ORDER BY 1,2\"\n]:\n print('\\n',sql); print([dict(x) for x in c.execute(base+sql)])\nPY\npython /tmp/q.py"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_1df66e5b3b9f48dcb81c5c2cb06bf8fb",
+          "name": "bash",
+          "arguments": {
+            "command": "cat > q.py <<'PY'\nimport sqlite3\nc=sqlite3.connect('../data/current.db'); c.row_factory=sqlite3.Row\nbase=\"\"\"WITH op AS (SELECT o.operation_id,o.opened_at_ms,rgn.region_code,cl.class_code,rel.build_code,CASE WHEN o.opened_at_ms<1777939200000 THEN 'early' ELSE 'late' END period FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id JOIN route_assignments ra ON ra.route_id=o.route_id AND o.opened_at_ms>=ra.effective_from_ms AND o.opened_at_ms<ra.effective_to_ms JOIN releases rel ON rel.release_id=ra.release_id JOIN worker_pools wp ON wp.pool_id=ra.pool_id JOIN regions rgn ON rgn.region_id=wp.region_id JOIN operation_classes cl ON cl.class_id=o.class_id WHERE s.service_code='parcel-index' AND ((o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777856400000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777942800000))), final AS (SELECT a.operation_id,f.is_success FROM attempt_events a JOIN failure_codes f ON f.code_id=a.code_id WHERE a.attempt_no=(SELECT max(x.attempt_no) FROM attempt_events x WHERE x.operation_id=a.operation_id)), d AS (SELECT op.*,CASE WHEN final.is_success=0 THEN 1 ELSE 0 END fail FROM op JOIN final USING(operation_id)) \"\"\"\nfor sql in [\"SELECT period,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct,100.0*sum(build_code='idx-r19')/count(*) cand FROM d GROUP BY period\",\"SELECT build_code,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct FROM d GROUP BY build_code\",\"SELECT period,region_code,class_code,build_code,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct FROM d GROUP BY 1,2,3,4 ORDER BY 1,2,3,4\",\"SELECT period,class_code,count(*) n,100.0*count(*)/(SELECT count(*) FROM d x WHERE x.period=d.period) traffic,100.0*sum(fail)/count(*) pct FROM d GROUP BY 1,2 ORDER BY 1,2\"]:\n print([dict(x) for x in c.execute(base+sql)])\nPY\npython q.py"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 13428,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 577,
+        "output_tokens_details": {
+          "reasoning_tokens": 11
+        },
+        "total_tokens": 14005,
+        "attribution": {
+          "items": {
+            "at_0f057385b810c343016af0975a46e087d08c8f4959af4f7e09": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af096e81f0887d089c9832b563b7dae": {
+              "input_tokens": 32,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af096e9d9bc87d0b083a874418e6840": {
+              "input_tokens": 63,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af096ed647887d0a904e971b3f34c1c": {
+              "input_tokens": 364,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af09709694c87d08a0275d0a7230181": {
+              "input_tokens": 20,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0970ae49c87d08f2a679cf6203fc7": {
+              "input_tokens": 37,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0970cb1e487d08c3db8fbf6cfc5fd": {
+              "input_tokens": 28,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0970e6f2887d09e408eca29d0f20c": {
+              "input_tokens": 99,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af09712b6e087d09d5d7d0526426427": {
+              "input_tokens": 497,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0974c1a8887d0a8d88e4db58d06cf": {
+              "input_tokens": 83,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0974f550c87d097c743a54a171161": {
+              "input_tokens": 588,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0975a46e087d08e656c2b43078790": {
+              "input_tokens": 348,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 348,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0975a46e087d08f3b7429d36ebbdf": {
+              "input_tokens": 625,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 625,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0975a46e087d08f577d0ed88fa32b": {
+              "input_tokens": 299,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 299,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0975a46e087d09b80ab3cb4847e70": {
+              "input_tokens": 927,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 927,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0975a46e087d09bb3da62f9efa31d": {
+              "input_tokens": 1480,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 1480,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0975a46e087d0a2711e3b6f6468c0": {
+              "input_tokens": 16,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 16,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0975a46e087d0a61caf2a355bc469": {
+              "input_tokens": 136,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 136,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0975a46e087d0ae3513d83504bfed": {
+              "input_tokens": 434,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 434,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0975a46e087d0b4ae7de3b6323d40": {
+              "input_tokens": 107,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 107,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0975a46e087d0b7cc8eee8c38deb3": {
+              "input_tokens": 545,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 545,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af0975b2e1887d0ab4a0ea755093822": {
+              "input_tokens": 0,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 566
+            },
+            "msg_0f057385b810c343016af096f6279487d09dd6bebbdcfc0dec": {
+              "input_tokens": 1003,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 1003,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0971f5d4c87d088b2dcdf1c4e6c74": {
+              "input_tokens": 2423,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 2423,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0975a46e087d0825d5508be9776f9": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0975a46e087d085c4b1e44079135f": {
+              "input_tokens": 882,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 882,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0975a46e087d09e2d88092460cb75": {
+              "input_tokens": 611,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0975a46e087d0be2dbbe1eb8c1775": {
+              "input_tokens": 1120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 1120,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "rs_0f057385b810c343016af096ed1ab887d09c7f35f2e2b8494b": {
+              "input_tokens": 78,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af096f610c487d09f28678b04e4ae4d": {
+              "input_tokens": 68,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af0971271b887d0a11abad65f0a84b9": {
+              "input_tokens": 80,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af0971f273487d093ce1d565bbc5898": {
+              "input_tokens": 143,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af0974f0fe487d0b2fa5f29de0dcf69": {
+              "input_tokens": 33,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af0975ae8cc87d09fa154910773e9b7": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 11
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0f057385b810c343016af0975a464487d0bedaee49aad7eb04",
+      "elapsed_s": 11.538959547993727,
+      "token_accounting": {
+        "input_tokens": 13428,
+        "input_uncached_tokens": 13428,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 577,
+        "reasoning_tokens": 11,
+        "total_tokens": 14005
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0f057385b810c343016af0975a464487d0bedaee49aad7eb04",
+        "object": "response",
+        "created_at": 1794152282,
+        "completed_at": 1794152293,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "reasoning",
+            "id": "rs_0f057385b810c343016af0975ae8cc87d09fa154910773e9b7",
+            "summary": [],
+            "content": [],
+            "encrypted_content": {
+              "omitted": true,
+              "sha256": "070c120f3b5a7c0d66f92afd85be32a311769a25d923530f11d3452476213c21",
+              "length": 1848
+            }
+          },
+          {
+            "type": "function_call",
+            "id": "fc_0f057385b810c343016af0975b2e1887d0ab4a0ea755093822",
+            "call_id": "call_1df66e5b3b9f48dcb81c5c2cb06bf8fb",
+            "name": "bash",
+            "arguments": "{\"command\":\"cat > q.py <<'PY'\\nimport sqlite3\\nc=sqlite3.connect('../data/current.db'); c.row_factory=sqlite3.Row\\nbase=\\\"\\\"\\\"WITH op AS (SELECT o.operation_id,o.opened_at_ms,rgn.region_code,cl.class_code,rel.build_code,CASE WHEN o.opened_at_ms<1777939200000 THEN 'early' ELSE 'late' END period FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id JOIN route_assignments ra ON ra.route_id=o.route_id AND o.opened_at_ms>=ra.effective_from_ms AND o.opened_at_ms<ra.effective_to_ms JOIN releases rel ON rel.release_id=ra.release_id JOIN worker_pools wp ON wp.pool_id=ra.pool_id JOIN regions rgn ON rgn.region_id=wp.region_id JOIN operation_classes cl ON cl.class_id=o.class_id WHERE s.service_code='parcel-index' AND ((o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777856400000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777942800000))), final AS (SELECT a.operation_id,f.is_success FROM attempt_events a JOIN failure_codes f ON f.code_id=a.code_id WHERE a.attempt_no=(SELECT max(x.attempt_no) FROM attempt_events x WHERE x.operation_id=a.operation_id)), d AS (SELECT op.*,CASE WHEN final.is_success=0 THEN 1 ELSE 0 END fail FROM op JOIN final USING(operation_id)) \\\"\\\"\\\"\\nfor sql in [\\\"SELECT period,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct,100.0*sum(build_code='idx-r19')/count(*) cand FROM d GROUP BY period\\\",\\\"SELECT build_code,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct FROM d GROUP BY build_code\\\",\\\"SELECT period,region_code,class_code,build_code,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct FROM d GROUP BY 1,2,3,4 ORDER BY 1,2,3,4\\\",\\\"SELECT period,class_code,count(*) n,100.0*count(*)/(SELECT count(*) FROM d x WHERE x.period=d.period) traffic,100.0*sum(fail)/count(*) pct FROM d GROUP BY 1,2 ORDER BY 1,2\\\"]:\\n print([dict(x) for x in c.execute(base+sql)])\\nPY\\npython q.py\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "a88aa3b1-a177-4fc3-b0b6-ddaf1024e9dd",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 13428,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 577,
+          "output_tokens_details": {
+            "reasoning_tokens": 11
+          },
+          "total_tokens": 14005,
+          "attribution": {
+            "items": {
+              "at_0f057385b810c343016af0975a46e087d08c8f4959af4f7e09": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af096e81f0887d089c9832b563b7dae": {
+                "input_tokens": 32,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af096e9d9bc87d0b083a874418e6840": {
+                "input_tokens": 63,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af096ed647887d0a904e971b3f34c1c": {
+                "input_tokens": 364,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af09709694c87d08a0275d0a7230181": {
+                "input_tokens": 20,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0970ae49c87d08f2a679cf6203fc7": {
+                "input_tokens": 37,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0970cb1e487d08c3db8fbf6cfc5fd": {
+                "input_tokens": 28,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0970e6f2887d09e408eca29d0f20c": {
+                "input_tokens": 99,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af09712b6e087d09d5d7d0526426427": {
+                "input_tokens": 497,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0974c1a8887d0a8d88e4db58d06cf": {
+                "input_tokens": 83,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0974f550c87d097c743a54a171161": {
+                "input_tokens": 588,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0975a46e087d08e656c2b43078790": {
+                "input_tokens": 348,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 348,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0975a46e087d08f3b7429d36ebbdf": {
+                "input_tokens": 625,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 625,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0975a46e087d08f577d0ed88fa32b": {
+                "input_tokens": 299,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 299,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0975a46e087d09b80ab3cb4847e70": {
+                "input_tokens": 927,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 927,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0975a46e087d09bb3da62f9efa31d": {
+                "input_tokens": 1480,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 1480,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0975a46e087d0a2711e3b6f6468c0": {
+                "input_tokens": 16,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 16,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0975a46e087d0a61caf2a355bc469": {
+                "input_tokens": 136,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 136,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0975a46e087d0ae3513d83504bfed": {
+                "input_tokens": 434,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 434,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0975a46e087d0b4ae7de3b6323d40": {
+                "input_tokens": 107,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 107,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0975a46e087d0b7cc8eee8c38deb3": {
+                "input_tokens": 545,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 545,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af0975b2e1887d0ab4a0ea755093822": {
+                "input_tokens": 0,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 566
+              },
+              "msg_0f057385b810c343016af096f6279487d09dd6bebbdcfc0dec": {
+                "input_tokens": 1003,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 1003,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0971f5d4c87d088b2dcdf1c4e6c74": {
+                "input_tokens": 2423,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 2423,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0975a46e087d0825d5508be9776f9": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0975a46e087d085c4b1e44079135f": {
+                "input_tokens": 882,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 882,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0975a46e087d09e2d88092460cb75": {
+                "input_tokens": 611,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0975a46e087d0be2dbbe1eb8c1775": {
+                "input_tokens": 1120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 1120,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "rs_0f057385b810c343016af096ed1ab887d09c7f35f2e2b8494b": {
+                "input_tokens": 78,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af096f610c487d09f28678b04e4ae4d": {
+                "input_tokens": 68,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af0971271b887d0a11abad65f0a84b9": {
+                "input_tokens": 80,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af0971f273487d093ce1d565bbc5898": {
+                "input_tokens": 143,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af0974f0fe487d0b2fa5f29de0dcf69": {
+                "input_tokens": 33,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af0975ae8cc87d09fa154910773e9b7": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 11
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 75615,
+      "tool_results": [
+        {
+          "output": "[{'period': 'early', 'n': 6000, 'f': 900, 'pct': 15.0, 'cand': 33.333333333333336}, {'period': 'late', 'n': 6500, 'f': 530, 'pct': 8.153846153846153, 'cand': 84.61538461538461}]\n[{'build_code': 'idx-r18', 'n': 5000, 'f': 730, 'pct': 14.6}, {'build_code': 'idx-r19', 'n': 7500, 'f': 700, 'pct': 9.333333333333334}]\n[{'period': 'early', 'region_code': 'north', 'class_code': 'large', 'build_code': 'idx-r18', 'n': 1500, 'f': 300, 'pct': 20.0}, {'period': 'early', 'region_code': 'north', 'class_code': 'large', 'build_code': 'idx-r19', 'n': 500, 'f': 120, 'pct': 24.0}, {'period': 'early', 'region_code': 'north', 'class_code': 'small', 'build_code': 'idx-r18', 'n': 500, 'f': 10, 'pct': 2.0}, {'period': 'early', 'region_code': 'north', 'class_code': 'small', 'build_code': 'idx-r19', 'n': 500, 'f': 20, 'pct': 4.0}, {'period': 'early', 'region_code': 'south', 'class_code': 'large', 'build_code': 'idx-r18', 'n': 1500, 'f': 300, 'pct': 20.0}, {'period': 'early', 'region_code': 'south', 'class_code': 'large', 'build_code': 'idx-r19', 'n': 500, 'f': 120, 'pct': 24.0}, {'period': 'early', 'region_code': 'south', 'class_code': 'small', 'build_code': 'idx-r18', 'n': 500, 'f': 10, 'pct': 2.0}, {'period': 'early', 'region_code': 'south', 'class_code': 'small', 'build_code': 'idx-r19', 'n': 500, 'f': 20, 'pct': 4.0}, {'period': 'late', 'region_code': 'north', 'class_code': 'large', 'build_code': 'idx-r18', 'n': 250, 'f': 50, 'pct': 20.0}, {'period': 'late', 'region_code': 'north', 'class_code': 'large', 'build_code': 'idx-r19', 'n': 500, 'f': 120, 'pct': 24.0}, {'period': 'late', 'region_code': 'north', 'class_code': 'small', 'build_code': 'idx-r18', 'n': 250, 'f': 5, 'pct': 2.0}, {'period': 'late', 'region_code': 'north', 'class_code': 'small', 'build_code': 'idx-r19', 'n': 2250, 'f': 90, 'pct': 4.0}, {'period': 'late', 'region_code': 'south', 'class_code': 'large', 'build_code': 'idx-r18', 'n': 250, 'f': 50, 'pct': 20.0}, {'period': 'late', 'region_code': 'south', 'class_code': 'large', 'build_code': 'idx-r19', 'n': 500, 'f': 120, 'pct': 24.0}, {'period': 'late', 'region_code': 'south', 'class_code': 'small', 'build_code': 'idx-r18', 'n': 250, 'f': 5, 'pct': 2.0}, {'period': 'late', 'region_code': 'south', 'class_code': 'small', 'build_code': 'idx-r19', 'n': 2250, 'f': 90, 'pct': 4.0}]\n[{'period': 'early', 'class_code': 'large', 'n': 4000, 'traffic': 66.66666666666667, 'pct': 21.0}, {'period': 'early', 'class_code': 'small', 'n': 2000, 'traffic': 33.333333333333336, 'pct': 3.0}, {'period': 'late', 'class_code': 'large', 'n': 1500, 'traffic': 23.076923076923077, 'pct': 22.666666666666668}, {'period': 'late', 'class_code': 'small', 'n': 5000, 'traffic': 76.92307692307692, 'pct': 3.8}]\n",
+          "exit_code": 0,
+          "wall_seconds": 0.4455894980346784,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "cat > q.py <<'PY'\nimport sqlite3\nc=sqlite3.connect('../data/current.db'); c.row_factory=sqlite3.Row\nbase=\"\"\"WITH op AS (SELECT o.operation_id,o.opened_at_ms,rgn.region_code,cl.class_code,rel.build_code,CASE WHEN o.opened_at_ms<1777939200000 THEN 'early' ELSE 'late' END period FROM logical_operations o JOIN service_routes r ON r.route_id=o.route_id JOIN services s ON s.service_id=r.service_id JOIN route_assignments ra ON ra.route_id=o.route_id AND o.opened_at_ms>=ra.effective_from_ms AND o.opened_at_ms<ra.effective_to_ms JOIN releases rel ON rel.release_id=ra.release_id JOIN worker_pools wp ON wp.pool_id=ra.pool_id JOIN regions rgn ON rgn.region_id=wp.region_id JOIN operation_classes cl ON cl.class_id=o.class_id WHERE s.service_code='parcel-index' AND ((o.opened_at_ms>=1777852800000 AND o.opened_at_ms<1777856400000) OR (o.opened_at_ms>=1777939200000 AND o.opened_at_ms<1777942800000))), final AS (SELECT a.operation_id,f.is_success FROM attempt_events a JOIN failure_codes f ON f.code_id=a.code_id WHERE a.attempt_no=(SELECT max(x.attempt_no) FROM attempt_events x WHERE x.operation_id=a.operation_id)), d AS (SELECT op.*,CASE WHEN final.is_success=0 THEN 1 ELSE 0 END fail FROM op JOIN final USING(operation_id)) \"\"\"\nfor sql in [\"SELECT period,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct,100.0*sum(build_code='idx-r19')/count(*) cand FROM d GROUP BY period\",\"SELECT build_code,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct FROM d GROUP BY build_code\",\"SELECT period,region_code,class_code,build_code,count(*) n,sum(fail) f,100.0*sum(fail)/count(*) pct FROM d GROUP BY 1,2,3,4 ORDER BY 1,2,3,4\",\"SELECT period,class_code,count(*) n,100.0*count(*)/(SELECT count(*) FROM d x WHERE x.period=d.period) traffic,100.0*sum(fail)/count(*) pct FROM d GROUP BY 1,2 ORDER BY 1,2\"]:\n print([dict(x) for x in c.execute(base+sql)])\nPY\npython q.py"
+        }
+      ]
+    },
+    {
+      "tool_calls": [
+        {
+          "id": "call_4c2fb2ba344c40cfa80220281ceb919e",
+          "name": "bash",
+          "arguments": {
+            "command": "date -u -d '2026-05-05 00:00:00' +%s"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 15125,
+        "input_tokens_details": {
+          "cached_tokens": 13312,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 132,
+        "output_tokens_details": {
+          "reasoning_tokens": 91
+        },
+        "total_tokens": 15257,
+        "attribution": {
+          "items": {
+            "at_0f057385b810c343016af09766564887d09ead78d1a217b39c": {
+              "input_tokens": 120,
+              "cached_tokens": 120,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af096e81f0887d089c9832b563b7dae": {
+              "input_tokens": 32,
+              "cached_tokens": 32,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af096e9d9bc87d0b083a874418e6840": {
+              "input_tokens": 63,
+              "cached_tokens": 63,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af096ed647887d0a904e971b3f34c1c": {
+              "input_tokens": 364,
+              "cached_tokens": 364,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af09709694c87d08a0275d0a7230181": {
+              "input_tokens": 20,
+              "cached_tokens": 20,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0970ae49c87d08f2a679cf6203fc7": {
+              "input_tokens": 37,
+              "cached_tokens": 37,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0970cb1e487d08c3db8fbf6cfc5fd": {
+              "input_tokens": 28,
+              "cached_tokens": 28,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0970e6f2887d09e408eca29d0f20c": {
+              "input_tokens": 99,
+              "cached_tokens": 99,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af09712b6e087d09d5d7d0526426427": {
+              "input_tokens": 497,
+              "cached_tokens": 497,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0974c1a8887d0a8d88e4db58d06cf": {
+              "input_tokens": 83,
+              "cached_tokens": 83,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0974f550c87d097c743a54a171161": {
+              "input_tokens": 588,
+              "cached_tokens": 588,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af0975b2e1887d0ab4a0ea755093822": {
+              "input_tokens": 566,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0f057385b810c343016af09766564887d08453237063acf61c": {
+              "input_tokens": 16,
+              "cached_tokens": 16,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 16,
+                  "cached_tokens": 16,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af09766564887d084a987898c65d6ac": {
+              "input_tokens": 1118,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 1118,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af09766564887d08c3146eb717535ba": {
+              "input_tokens": 348,
+              "cached_tokens": 348,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 348,
+                  "cached_tokens": 348,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af09766564887d091bda076cb525b31": {
+              "input_tokens": 625,
+              "cached_tokens": 625,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 625,
+                  "cached_tokens": 625,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af09766564887d0927800707b7b959a": {
+              "input_tokens": 545,
+              "cached_tokens": 545,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 545,
+                  "cached_tokens": 545,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af09766564887d09807f7e68d228419": {
+              "input_tokens": 136,
+              "cached_tokens": 136,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 136,
+                  "cached_tokens": 136,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af09766564887d09f615e49c985bf9f": {
+              "input_tokens": 927,
+              "cached_tokens": 927,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 927,
+                  "cached_tokens": 927,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af09766564887d0abaea313e737c3a0": {
+              "input_tokens": 434,
+              "cached_tokens": 320,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 434,
+                  "cached_tokens": 320,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af09766564887d0b428bb7036851221": {
+              "input_tokens": 1480,
+              "cached_tokens": 1480,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 1480,
+                  "cached_tokens": 1480,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af09766564887d0b9a4e2e8bc0697a5": {
+              "input_tokens": 107,
+              "cached_tokens": 107,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 107,
+                  "cached_tokens": 107,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af09766564887d0b9ab82cb0e998d72": {
+              "input_tokens": 299,
+              "cached_tokens": 299,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 299,
+                  "cached_tokens": 299,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "fc_0f057385b810c343016af09769308487d0a0c4c929c307ad8d": {
+              "input_tokens": 0,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 41
+            },
+            "msg_0f057385b810c343016af096f6279487d09dd6bebbdcfc0dec": {
+              "input_tokens": 1003,
+              "cached_tokens": 1003,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 1003,
+                  "cached_tokens": 1003,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af0971f5d4c87d088b2dcdf1c4e6c74": {
+              "input_tokens": 2423,
+              "cached_tokens": 2423,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 2423,
+                  "cached_tokens": 2423,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af09766564887d0861aa86ed53bf1fb": {
+              "input_tokens": 882,
+              "cached_tokens": 882,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 882,
+                  "cached_tokens": 882,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af09766564887d094851ecafb7d1502": {
+              "input_tokens": 1120,
+              "cached_tokens": 1120,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 1120,
+                  "cached_tokens": 1120,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af09766564887d0be1098f2994d096e": {
+              "input_tokens": 611,
+              "cached_tokens": 611,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 611,
+                  "cached_tokens": 611,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0f057385b810c343016af09766564887d0bec68b80cfadd3dc": {
+              "input_tokens": 137,
+              "cached_tokens": 137,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 137,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "rs_0f057385b810c343016af096ed1ab887d09c7f35f2e2b8494b": {
+              "input_tokens": 78,
+              "cached_tokens": 78,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af096f610c487d09f28678b04e4ae4d": {
+              "input_tokens": 68,
+              "cached_tokens": 68,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af0971271b887d0a11abad65f0a84b9": {
+              "input_tokens": 80,
+              "cached_tokens": 80,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af0971f273487d093ce1d565bbc5898": {
+              "input_tokens": 143,
+              "cached_tokens": 143,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af0974f0fe487d0b2fa5f29de0dcf69": {
+              "input_tokens": 33,
+              "cached_tokens": 33,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af0975ae8cc87d09fa154910773e9b7": {
+              "input_tokens": 13,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "rs_0f057385b810c343016af09768e6b487d085bc4fa1fdad618a": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 91
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0f057385b810c343016af0976655b887d0a4a9156262f9fce5",
+      "elapsed_s": 3.9900646039750427,
+      "token_accounting": {
+        "input_tokens": 15125,
+        "input_uncached_tokens": 1813,
+        "cache_read_input_tokens": 13312,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 132,
+        "reasoning_tokens": 91,
+        "total_tokens": 15257
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0f057385b810c343016af0976655b887d0a4a9156262f9fce5",
+        "object": "response",
+        "created_at": 1794152294,
+        "completed_at": 1794152297,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "reasoning",
+            "id": "rs_0f057385b810c343016af09768e6b487d085bc4fa1fdad618a",
+            "summary": [],
+            "content": [],
+            "encrypted_content": {
+              "omitted": true,
+              "sha256": "732ade7295443c3b91594701ad845989d17337322371a18d1b37c7a518844792",
+              "length": 2808
+            }
+          },
+          {
+            "type": "function_call",
+            "id": "fc_0f057385b810c343016af09769308487d0a0c4c929c307ad8d",
+            "call_id": "call_4c2fb2ba344c40cfa80220281ceb919e",
+            "name": "bash",
+            "arguments": "{\"command\":\"date -u -d '2026-05-05 00:00:00' +%s\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "929539d7-afa1-44d6-b970-1ce2f210d6ef",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 15125,
+          "input_tokens_details": {
+            "cached_tokens": 13312,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 132,
+          "output_tokens_details": {
+            "reasoning_tokens": 91
+          },
+          "total_tokens": 15257,
+          "attribution": {
+            "items": {
+              "at_0f057385b810c343016af09766564887d09ead78d1a217b39c": {
+                "input_tokens": 120,
+                "cached_tokens": 120,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af096e81f0887d089c9832b563b7dae": {
+                "input_tokens": 32,
+                "cached_tokens": 32,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af096e9d9bc87d0b083a874418e6840": {
+                "input_tokens": 63,
+                "cached_tokens": 63,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af096ed647887d0a904e971b3f34c1c": {
+                "input_tokens": 364,
+                "cached_tokens": 364,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af09709694c87d08a0275d0a7230181": {
+                "input_tokens": 20,
+                "cached_tokens": 20,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0970ae49c87d08f2a679cf6203fc7": {
+                "input_tokens": 37,
+                "cached_tokens": 37,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0970cb1e487d08c3db8fbf6cfc5fd": {
+                "input_tokens": 28,
+                "cached_tokens": 28,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0970e6f2887d09e408eca29d0f20c": {
+                "input_tokens": 99,
+                "cached_tokens": 99,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af09712b6e087d09d5d7d0526426427": {
+                "input_tokens": 497,
+                "cached_tokens": 497,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0974c1a8887d0a8d88e4db58d06cf": {
+                "input_tokens": 83,
+                "cached_tokens": 83,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0974f550c87d097c743a54a171161": {
+                "input_tokens": 588,
+                "cached_tokens": 588,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af0975b2e1887d0ab4a0ea755093822": {
+                "input_tokens": 566,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0f057385b810c343016af09766564887d08453237063acf61c": {
+                "input_tokens": 16,
+                "cached_tokens": 16,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 16,
+                    "cached_tokens": 16,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af09766564887d084a987898c65d6ac": {
+                "input_tokens": 1118,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 1118,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af09766564887d08c3146eb717535ba": {
+                "input_tokens": 348,
+                "cached_tokens": 348,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 348,
+                    "cached_tokens": 348,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af09766564887d091bda076cb525b31": {
+                "input_tokens": 625,
+                "cached_tokens": 625,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 625,
+                    "cached_tokens": 625,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af09766564887d0927800707b7b959a": {
+                "input_tokens": 545,
+                "cached_tokens": 545,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 545,
+                    "cached_tokens": 545,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af09766564887d09807f7e68d228419": {
+                "input_tokens": 136,
+                "cached_tokens": 136,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 136,
+                    "cached_tokens": 136,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af09766564887d09f615e49c985bf9f": {
+                "input_tokens": 927,
+                "cached_tokens": 927,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 927,
+                    "cached_tokens": 927,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af09766564887d0abaea313e737c3a0": {
+                "input_tokens": 434,
+                "cached_tokens": 320,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 434,
+                    "cached_tokens": 320,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af09766564887d0b428bb7036851221": {
+                "input_tokens": 1480,
+                "cached_tokens": 1480,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 1480,
+                    "cached_tokens": 1480,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af09766564887d0b9a4e2e8bc0697a5": {
+                "input_tokens": 107,
+                "cached_tokens": 107,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 107,
+                    "cached_tokens": 107,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af09766564887d0b9ab82cb0e998d72": {
+                "input_tokens": 299,
+                "cached_tokens": 299,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 299,
+                    "cached_tokens": 299,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "fc_0f057385b810c343016af09769308487d0a0c4c929c307ad8d": {
+                "input_tokens": 0,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 41
+              },
+              "msg_0f057385b810c343016af096f6279487d09dd6bebbdcfc0dec": {
+                "input_tokens": 1003,
+                "cached_tokens": 1003,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 1003,
+                    "cached_tokens": 1003,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af0971f5d4c87d088b2dcdf1c4e6c74": {
+                "input_tokens": 2423,
+                "cached_tokens": 2423,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 2423,
+                    "cached_tokens": 2423,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af09766564887d0861aa86ed53bf1fb": {
+                "input_tokens": 882,
+                "cached_tokens": 882,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 882,
+                    "cached_tokens": 882,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af09766564887d094851ecafb7d1502": {
+                "input_tokens": 1120,
+                "cached_tokens": 1120,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 1120,
+                    "cached_tokens": 1120,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af09766564887d0be1098f2994d096e": {
+                "input_tokens": 611,
+                "cached_tokens": 611,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 611,
+                    "cached_tokens": 611,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0f057385b810c343016af09766564887d0bec68b80cfadd3dc": {
+                "input_tokens": 137,
+                "cached_tokens": 137,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 137,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "rs_0f057385b810c343016af096ed1ab887d09c7f35f2e2b8494b": {
+                "input_tokens": 78,
+                "cached_tokens": 78,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af096f610c487d09f28678b04e4ae4d": {
+                "input_tokens": 68,
+                "cached_tokens": 68,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af0971271b887d0a11abad65f0a84b9": {
+                "input_tokens": 80,
+                "cached_tokens": 80,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af0971f273487d093ce1d565bbc5898": {
+                "input_tokens": 143,
+                "cached_tokens": 143,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af0974f0fe487d0b2fa5f29de0dcf69": {
+                "input_tokens": 33,
+                "cached_tokens": 33,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af0975ae8cc87d09fa154910773e9b7": {
+                "input_tokens": 13,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "rs_0f057385b810c343016af09768e6b487d085bc4fa1fdad618a": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 91
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 81647,
+      "tool_results": [
+        {
+          "output": "1777939200\n",
+          "exit_code": 0,
+          "wall_seconds": 0.008742270059883595,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "date -u -d '2026-05-05 00:00:00' +%s"
+        }
+      ]
+    }
+  ],
+  "status": "canceled_infrastructure_invalid",
+  "final_text": null,
+  "memory_before": {},
+  "elapsed_s": 30.923484203056432,
+  "valid_for_comparison": false,
+  "invalid_reason": "shared_host_tmp_isolation_bug",
+  "inflight_call_charge_unknown": true
+}

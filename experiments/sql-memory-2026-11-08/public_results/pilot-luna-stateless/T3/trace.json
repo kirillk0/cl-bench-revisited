@@ -1,0 +1,269 @@
+{
+  "task_id": "T3",
+  "db_sha256": "2823f7089388a1737e8b95389ae2f83598f581389b9af600453a6b2016835e03",
+  "snapshot": "post.db",
+  "prompt": "Use only the supplied current.db and README. All windows below are UTC and half-open, selected by logical-operation open time. A terminal-failure percentage has logical operations as its denominator; attempt-failure percentage has attempts as its denominator. Return only JSON matching the provided schema. Percentages use 0\u2013100, differences use percentage points. evidence_sql must contain executable read-only SQLite queries with literal bounds, not pseudocode. Arrays may be in any order; include every requested group. A zero numerator is not missing data. No web or network access is needed.\n\nReport ledger-sync reliability for 2026-05-09: reference 10:00\u201311:00 versus incident 11:00\u201312:00. Report the authoritative event source for these windows (registry version, event table, event grain and effective start). For each period and actual serving PHYSICAL pool, report logical operations, terminal failures, terminal-failure percentage, retried operations, retry percentage and mean end-to-end latency_ms. Do not treat routing intent or an individual execution identity as a physical pool. Also give all-pool operations, terminal failures and terminal-failure percentage per period; identify the physical pool with the largest increase and report that increase in pp. In assessment state what the report establishes and the important attribution/counting limitations.\n\nRequired JSON response schema:\n{\"$schema\": \"https://json-schema.org/draft/2020-12/schema\", \"additionalProperties\": false, \"properties\": {\"answer\": {\"additionalProperties\": false, \"properties\": {\"assessment\": {\"type\": \"string\"}, \"largest_increase\": {\"additionalProperties\": false, \"properties\": {\"incident_failure_pct\": {\"type\": \"number\"}, \"increase_pp\": {\"type\": \"number\"}, \"pool_code\": {\"type\": \"string\"}, \"reference_failure_pct\": {\"type\": \"number\"}}, \"required\": [\"pool_code\", \"reference_failure_pct\", \"incident_failure_pct\", \"increase_pp\"], \"type\": \"object\"}, \"pool_metrics\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"mean_latency_ms\": {\"type\": \"number\"}, \"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"pool_code\": {\"type\": \"string\"}, \"retried_operations\": {\"type\": \"integer\"}, \"retry_pct\": {\"type\": \"number\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"period\", \"pool_code\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\", \"retried_operations\", \"retry_pct\", \"mean_latency_ms\"], \"type\": \"object\"}, \"maxItems\": 4, \"minItems\": 4, \"type\": \"array\"}, \"source\": {\"additionalProperties\": false, \"properties\": {\"effective_from_ms\": {\"type\": \"integer\"}, \"event_grain\": {\"type\": \"string\"}, \"event_table\": {\"type\": \"string\"}, \"version\": {\"type\": \"integer\"}}, \"required\": [\"version\", \"event_table\", \"event_grain\", \"effective_from_ms\"], \"type\": \"object\"}, \"totals\": {\"items\": {\"additionalProperties\": false, \"properties\": {\"operations\": {\"type\": \"integer\"}, \"period\": {\"type\": \"string\"}, \"terminal_failure_pct\": {\"type\": \"number\"}, \"terminal_failures\": {\"type\": \"integer\"}}, \"required\": [\"period\", \"operations\", \"terminal_failures\", \"terminal_failure_pct\"], \"type\": \"object\"}, \"maxItems\": 2, \"minItems\": 2, \"type\": \"array\"}}, \"required\": [\"source\", \"pool_metrics\", \"totals\", \"largest_increase\", \"assessment\"], \"type\": \"object\"}, \"caveats\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}, \"evidence_sql\": {\"items\": {\"type\": \"string\"}, \"minItems\": 1, \"type\": \"array\"}}, \"required\": [\"answer\", \"evidence_sql\", \"caveats\"], \"type\": \"object\"}",
+  "turns": [
+    {
+      "tool_calls": [
+        {
+          "id": "call_3cdd899f5c384697988359f1b8987ba0",
+          "name": "bash",
+          "arguments": {
+            "command": "cat README.md; ls -la;"
+          }
+        }
+      ],
+      "final_text": "",
+      "usage": {
+        "input_tokens": 1116,
+        "input_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0
+        },
+        "output_tokens": 25,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1141,
+        "attribution": {
+          "items": {
+            "at_0cb9b81a501f0ab2016af0979e42b487d0b692c044f6b78b85": {
+              "input_tokens": 120,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0
+            },
+            "fc_0cb9b81a501f0ab2016af0979edba087d0b5a59d6ed947bc6e": {
+              "input_tokens": 2,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 25
+            },
+            "msg_0cb9b81a501f0ab2016af0979e42b487d09cf50d4b8cb54302": {
+              "input_tokens": 137,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 137,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            },
+            "msg_0cb9b81a501f0ab2016af0979e42b487d0a25f9a0c5c0f5e06": {
+              "input_tokens": 857,
+              "cached_tokens": 0,
+              "cache_write_tokens": 0,
+              "output_tokens": 0,
+              "content": [
+                {
+                  "input_tokens": 857,
+                  "cached_tokens": 0,
+                  "cache_write_tokens": 0,
+                  "output_tokens": 0
+                }
+              ]
+            }
+          }
+        }
+      },
+      "cost_usd": null,
+      "response_id": "resp_0cb9b81a501f0ab2016af0979e421487d0ac04270353ba983b",
+      "elapsed_s": 1.4048005769727752,
+      "token_accounting": {
+        "input_tokens": 1116,
+        "input_uncached_tokens": 1116,
+        "cache_read_input_tokens": 0,
+        "cache_creation_input_tokens": 0,
+        "cache_creation_5m_input_tokens": 0,
+        "cache_creation_1h_input_tokens": 0,
+        "output_tokens": 25,
+        "reasoning_tokens": 0,
+        "total_tokens": 1141
+      },
+      "cost_source": "unpriced",
+      "native_response": {
+        "id": "resp_0cb9b81a501f0ab2016af0979e421487d0ac04270353ba983b",
+        "object": "response",
+        "created_at": 1794152350,
+        "completed_at": 1794152351,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6-luna",
+        "access_programs": null,
+        "previous_response_id": null,
+        "instructions": null,
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0cb9b81a501f0ab2016af0979edba087d0b5a59d6ed947bc6e",
+            "call_id": "call_3cdd899f5c384697988359f1b8987ba0",
+            "name": "bash",
+            "arguments": "{\"command\":\"cat README.md; ls -la;\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "namespace",
+            "name": "functions",
+            "description": "",
+            "tools": [
+              {
+                "type": "function",
+                "strict": true,
+                "name": "bash",
+                "description": "Execute a bash command and return its output.",
+                "output_schema": null,
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            ]
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": false,
+        "prompt_cache_key": "8e8fbd3e-eea6-45c1-a429-d1b415706635",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "effort": "medium",
+          "context": "all_turns",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 1116,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 25,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1141,
+          "attribution": {
+            "items": {
+              "at_0cb9b81a501f0ab2016af0979e42b487d0b692c044f6b78b85": {
+                "input_tokens": 120,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "fc_0cb9b81a501f0ab2016af0979edba087d0b5a59d6ed947bc6e": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 25
+              },
+              "msg_0cb9b81a501f0ab2016af0979e42b487d09cf50d4b8cb54302": {
+                "input_tokens": 137,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 137,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              },
+              "msg_0cb9b81a501f0ab2016af0979e42b487d0a25f9a0c5c0f5e06": {
+                "input_tokens": 857,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 857,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-kDPDfPDLeScJ9G6PQDnX7w5t",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      },
+      "state_chars": 5289,
+      "tool_results": [
+        {
+          "output": "# Operations analytics data contract\n\nYou receive `current.db` (SQLite), this README and one task. Inspect the database schema, foreign keys and registry yourself. No network or external data is needed. The database is read-only input; use a read-only connection. All observations are synthetic, internally consistent and complete for the requested windows. Do not interpret absent windows as zero traffic. No hidden business definitions depend on an earlier task.\n\n* Times ending `_ms` are integer Unix milliseconds in UTC. Window membership uses the **logical operation open time**, with inclusive lower and exclusive upper bounds. Effective intervals are also half-open; a NULL end means no known end.\n* One logical operation is one business request. Retries are attempts, not extra incidents or requests. A terminal failure means the final attempt/outcome has a failure code whose `is_success` is 0; an earlier failed attempt followed by success is not a terminal failure. All included operations are finished and attempt ordinals are complete. An operation with more than one attempt is a retried operation, including ultimately failed operations.\n* `feed_registry` is authoritative about event sources, grains, applicable operation-open intervals and serving attribution. The active entry describes current instrumentation; historical entries remain authoritative for their historical intervals. Do not assume the highest version covers all history or that a still-queryable table is current. Historical values are retained without rewriting them into a new meaning.\n* Routing identifiers are routing intent, not necessarily unique physical pools. For routing-time instrumentation, select the assignment effective when the operation opens. For execution-time instrumentation, recorded execution attribution is authoritative. Multiple aliases or execution identities may belong to the same physical pool. Never count each identity as an independent pool.\n* End-to-end latency is final completion minus operation open, including queueing, execution and retry backoff. Per-attempt queue/execution times exclude backoff. Outcome totals cover all its attempts. Rates use logical-operation denominators unless a task explicitly asks for attempt metrics. Percentages are in percent (0\u2013100); rate differences are percentage points.\n* Telemetry is sampled independently. A requested window mean is the ordinary arithmetic mean of samples in that window. An upstream p95 sample is a percentile observation, not an operation-weighted mean. Changes describe applied configuration, not a causal experiment. Tenant tier, operation class, release, region and pool are distinct dimensions.\n\nReturn only the JSON requested in the task: `answer`, `evidence_sql` (a list of executable, read-only SQLite SELECT/WITH statements supporting the answer), and `caveats` (a list of short strings). No placeholders, SQL parameters, temporary tables or external files in evidence. State uncertainty; observational association alone does not prove causation.\ntotal 12\ndrwx------ 2 22000 22000 4096 Nov  8 15:39 .\ndrwxr-x--- 4 root  22000 4096 Nov  8 15:39 ..\n-r--r--r-- 1 root  root  3038 Nov  8 15:39 README.md\n",
+          "exit_code": 0,
+          "wall_seconds": 0.016721728025004268,
+          "timeout": false,
+          "truncated": false,
+          "sql_cli_calls": [],
+          "command": "cat README.md; ls -la;"
+        }
+      ]
+    }
+  ],
+  "status": "canceled_infrastructure_invalid",
+  "final_text": null,
+  "memory_before": {},
+  "elapsed_s": 1.4336049689445645,
+  "valid_for_comparison": false,
+  "invalid_reason": "shared_host_tmp_isolation_bug",
+  "inflight_call_charge_unknown": true
+}

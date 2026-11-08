@@ -1,0 +1,57 @@
+{
+  "task": "W2",
+  "schema_valid": false,
+  "schema_errors": [
+    "$.evidence_sql: required",
+    "$.answer.evidence_sql: unexpected",
+    "$.answer.changes: wrong number of items"
+  ],
+  "metric_fraction": 0.6666666666666666,
+  "suggested_metric_points_out_of_70": 46.666666666666664,
+  "section_results": {
+    "changes": {
+      "correct": 0,
+      "total": 5,
+      "fraction": 0.0,
+      "failed_paths": [
+        "changes[kind_code=deadline_policy,pool_code=idx-north].after_json",
+        "changes[kind_code=deadline_policy,pool_code=idx-north].before_json",
+        "changes[kind_code=deadline_policy,pool_code=idx-north].effective_at_ms",
+        "changes[kind_code=deadline_policy,pool_code=idx-north].kind_code",
+        "changes[kind_code=deadline_policy,pool_code=idx-north].pool_code"
+      ]
+    },
+    "pool_metrics": {
+      "correct": 44,
+      "total": 44,
+      "fraction": 1.0,
+      "failed_paths": []
+    },
+    "telemetry": {
+      "correct": 80,
+      "total": 80,
+      "fraction": 1.0,
+      "failed_paths": []
+    }
+  },
+  "evidence_execution_checks": [],
+  "human_review_required": {
+    "evidence_points_out_of_10": "Queries must actually support the reported values and attribution. Executing successfully or SELECTing constants is not sufficient.",
+    "verdict_points_out_of_20": [
+      {
+        "criterion": "Names idx-north and +18.5 pp; idx-south is unchanged.",
+        "id": "localization"
+      },
+      {
+        "criterion": "Links 250\u219280 ms applied policy with unchanged 118 ms upstream p95, low queue and stable workers; supports deadline-budget mismatch rather than upstream regression.",
+        "id": "evidence"
+      },
+      {
+        "criterion": "Does not claim observational evidence proves a sole cause; distinguishes failed attempts from terminal failures.",
+        "id": "restraint"
+      }
+    ]
+  },
+  "overall_score": null,
+  "note": "No automatic preferred-opinion score. Review factual criteria, uncertainty and evidence support; invalid schema prevents full credit but does not erase diagnostics."
+}

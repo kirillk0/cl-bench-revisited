@@ -44,7 +44,7 @@ def run(args):
   mem=json.loads(pathlib.Path(args.memory).read_text())
   for name,text in mem.items():
    p=sb.root/'memory'/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text);os.chown(p,sb.uid,sb.uid)
- metadata={'job':job,'provider':args.provider,'model':MODELS[args.provider],'arm':args.arm,'tasks':[t.get('id',t.get('task_id')) for t in tasks],'started_at':time.time(),'system':COMMON+(MEMORY if args.arm=='managed' else ''),'guards':{'model_turns':80,'task_wall_s':900,'shell_wall_s':60,'output_chars':60000},'protocol_sha256':sha(ROOT/'analysis/protocol.md')}
+ metadata={'job':job,'provider':args.provider,'model':MODELS[args.provider],'arm':args.arm,'tasks':[t.get('id',t.get('task_id')) for t in tasks],'started_at':time.time(),'valid_for_comparison':True,'sandbox_version':'chroot-v2','system':COMMON+(MEMORY if args.arm=='managed' else ''),'guards':{'model_turns':80,'task_wall_s':900,'shell_wall_s':60,'output_chars':60000},'protocol_sha256':sha(ROOT/'analysis/protocol.md')}
  dump(out/'manifest.json',metadata)
  for task in tasks:
   tid=task.get('id',task.get('task_id'));ep=out/tid;ep.mkdir()
