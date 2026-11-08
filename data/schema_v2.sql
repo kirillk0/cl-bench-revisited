@@ -5,7 +5,7 @@ CREATE TABLE config_change (
   key          TEXT NOT NULL,
   old_value    TEXT,
   new_value    TEXT,
-  changed_at   TEXT NOT NULL,             -- UTC
+  changed_at   TEXT NOT NULL,
   operator_id  INTEGER NOT NULL REFERENCES operator(operator_id),
   ticket       TEXT
 );
@@ -13,9 +13,9 @@ CREATE TABLE deployment (
   deployment_id  INTEGER PRIMARY KEY,
   component_id   INTEGER NOT NULL REFERENCES dim_component(component_id),
   version        TEXT NOT NULL,
-  deployed_at    TEXT NOT NULL,           -- UTC
+  deployed_at    TEXT NOT NULL,
   operator_id    INTEGER NOT NULL REFERENCES operator(operator_id),
-  rolled_back_at TEXT                     -- UTC; NULL = not rolled back
+  rolled_back_at TEXT
 );
 CREATE TABLE dim_acquirer (
   acquirer_id INTEGER PRIMARY KEY,
@@ -40,7 +40,7 @@ CREATE TABLE dim_currency (
   currency_id INTEGER PRIMARY KEY,
   iso_code    TEXT NOT NULL UNIQUE,
   name        TEXT NOT NULL,
-  exponent    INTEGER NOT NULL            -- number of minor-unit digits (EUR=2, JPY=0, KWD=3)
+  exponent    INTEGER NOT NULL
 );
 CREATE TABLE dim_event_type (
   event_type_id INTEGER PRIMARY KEY,
@@ -69,8 +69,8 @@ CREATE TABLE dim_merchant (
 CREATE TABLE dim_merchant_group (
   group_id        INTEGER PRIMARY KEY,
   name            TEXT NOT NULL,
-  parent_group_id INTEGER REFERENCES dim_merchant_group(group_id),   -- NULL = top level
-  level           INTEGER NOT NULL        -- 1 = holding, 2 = division, 3 = chain
+  parent_group_id INTEGER REFERENCES dim_merchant_group(group_id),
+  level           INTEGER NOT NULL
 );
 CREATE TABLE dim_processor (
   processor_id INTEGER PRIMARY KEY,
@@ -112,22 +112,22 @@ CREATE TABLE dim_terminal_model (
 CREATE TABLE fee_schedule (
   fee_schedule_id INTEGER PRIMARY KEY,
   acquirer_id     INTEGER NOT NULL REFERENCES dim_acquirer(acquirer_id),
-  pct_bps         INTEGER NOT NULL,       -- basis points of the settled EUR amount
-  fixed_minor     INTEGER NOT NULL,       -- EUR cents per transaction
+  pct_bps         INTEGER NOT NULL,
+  fixed_minor     INTEGER NOT NULL,
   valid_from      TEXT NOT NULL,
   valid_to        TEXT
 );
 CREATE TABLE "fx_rate_daily" (
   fx_id  INTEGER PRIMARY KEY,
-  rate_date   TEXT NOT NULL,              -- YYYY-MM-DD
+  rate_date   TEXT NOT NULL,
   currency_id INTEGER NOT NULL REFERENCES dim_currency(currency_id),
-  eur_per_unit REAL NOT NULL               -- EUR value of 1 unit of the currency on rate_date
+  eur_per_unit REAL NOT NULL
 );
 CREATE TABLE incident (
   incident_id   INTEGER PRIMARY KEY,
-  code          TEXT NOT NULL UNIQUE,     -- 'INC-2025-NNNN'
-  opened_at     TEXT NOT NULL,            -- UTC
-  closed_at     TEXT,                     -- UTC
+  code          TEXT NOT NULL UNIQUE,
+  opened_at     TEXT NOT NULL,
+  closed_at     TEXT,
   severity_id   INTEGER NOT NULL REFERENCES dim_severity(severity_id),
   component_id  INTEGER NOT NULL REFERENCES dim_component(component_id),
   root_cause_id INTEGER REFERENCES dim_root_cause(root_cause_id),
@@ -135,7 +135,7 @@ CREATE TABLE incident (
 );
 CREATE TABLE incident_link (
   incident_id    INTEGER NOT NULL REFERENCES incident(incident_id),
-  correlation_id TEXT NOT NULL,           -- joins service_event.correlation_id
+  correlation_id TEXT NOT NULL,
   PRIMARY KEY (incident_id, correlation_id)
 );
 CREATE TABLE operator (
@@ -152,22 +152,22 @@ CREATE TABLE response_code_dict (
   meaning        TEXT NOT NULL,
   is_decline     INTEGER NOT NULL,
   is_timeout     INTEGER NOT NULL,
-  valid_from     TEXT NOT NULL,           -- inclusive, UTC
-  valid_to       TEXT                     -- exclusive, UTC; NULL = current version
+  valid_from     TEXT NOT NULL,
+  valid_to       TEXT
 );
 CREATE TABLE route (
   route_id     INTEGER PRIMARY KEY,
   acquirer_id  INTEGER NOT NULL REFERENCES dim_acquirer(acquirer_id),
   processor_id INTEGER NOT NULL REFERENCES dim_processor(processor_id),
-  priority     INTEGER NOT NULL,          -- 1 = primary route of the acquirer
+  priority     INTEGER NOT NULL,
   code         TEXT NOT NULL UNIQUE,
   is_active    INTEGER NOT NULL DEFAULT 1
 );
 CREATE TABLE service_event_h1 (
   event_id       INTEGER PRIMARY KEY,
-  ts_utc         TEXT NOT NULL,           -- UTC, 2025-01-01 .. 2025-06-30
+  ts_utc         TEXT NOT NULL,
   component_id   INTEGER NOT NULL REFERENCES dim_component(component_id),
-  level          TEXT NOT NULL,           -- INFO / WARN / ERROR / FATAL
+  level          TEXT NOT NULL,
   event_type_id  INTEGER NOT NULL REFERENCES dim_event_type(event_type_id),
   correlation_id TEXT NOT NULL,
   route_id       INTEGER REFERENCES route(route_id),
@@ -175,9 +175,9 @@ CREATE TABLE service_event_h1 (
 );
 CREATE TABLE service_event_h2 (
   event_id       INTEGER PRIMARY KEY,
-  ts_utc         TEXT NOT NULL,           -- UTC, 2025-07-01 .. 2025-12-31
+  ts_utc         TEXT NOT NULL,
   component_id   INTEGER NOT NULL REFERENCES dim_component(component_id),
-  level          TEXT NOT NULL,           -- INFO / WARN / ERROR / FATAL
+  level          TEXT NOT NULL,
   event_type_id  INTEGER NOT NULL REFERENCES dim_event_type(event_type_id),
   correlation_id TEXT NOT NULL,
   route_id       INTEGER REFERENCES route(route_id),
@@ -186,10 +186,10 @@ CREATE TABLE service_event_h2 (
 CREATE TABLE settlement (
   settlement_id     INTEGER PRIMARY KEY,
   txn_id            INTEGER NOT NULL UNIQUE REFERENCES txn(txn_id),
-  settled_at        TEXT NOT NULL,        -- UTC
-  fx_rate_applied   REAL NOT NULL,        -- EUR per unit of the txn currency, as applied by fx-service
-  settled_eur_minor INTEGER NOT NULL,     -- settled amount, EUR cents
-  fee_minor         INTEGER NOT NULL,     -- acquiring fee, EUR cents
+  settled_at        TEXT NOT NULL,
+  fx_rate_applied   REAL NOT NULL,
+  settled_eur_minor INTEGER NOT NULL,
+  fee_minor         INTEGER NOT NULL,
   fee_schedule_id   INTEGER NOT NULL REFERENCES fee_schedule(fee_schedule_id)
 );
 CREATE TABLE sqlite_stat1(tbl,idx,stat);
@@ -197,17 +197,17 @@ CREATE TABLE "terminal_merchant_link" (
   link_id INTEGER PRIMARY KEY,
   terminal_id   INTEGER NOT NULL REFERENCES dim_terminal(terminal_id),
   merchant_id   INTEGER NOT NULL REFERENCES dim_merchant(merchant_id),
-  start_ts    TEXT NOT NULL,            -- inclusive, UTC
-  end_ts      TEXT                      -- exclusive, UTC; NULL = still assigned
+  start_ts    TEXT NOT NULL,
+  end_ts      TEXT
 );
 CREATE TABLE txn (
   txn_id        INTEGER PRIMARY KEY,
-  ts_utc        TEXT NOT NULL,            -- 'YYYY-MM-DD HH:MM:SS', UTC
+  ts_utc        TEXT NOT NULL,
   terminal_id   INTEGER NOT NULL REFERENCES dim_terminal(terminal_id),
-  amount_minor  INTEGER NOT NULL,         -- minor units of currency_id (see dim_currency.exponent)
+  amount_minor  INTEGER NOT NULL,
   currency_id   INTEGER NOT NULL REFERENCES dim_currency(currency_id),
   status_id     INTEGER NOT NULL REFERENCES txn_status_dict(status_id),
-  response_code TEXT NOT NULL,            -- see response_code_dict (versioned)
+  response_code TEXT NOT NULL,
   route_id      INTEGER NOT NULL REFERENCES route(route_id),
   latency_ms    INTEGER NOT NULL,
   card_scheme   TEXT NOT NULL

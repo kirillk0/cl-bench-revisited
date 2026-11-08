@@ -1,6 +1,7 @@
 """DDL of payops.db (v1), the v1 -> v2 migration script, and the SQLite writer."""
 from __future__ import annotations
 
+import re
 import sqlite3
 from pathlib import Path
 
@@ -9,6 +10,14 @@ import pandas as pd
 
 from .common import Dataset
 from .stories import RC_V3_FROM
+
+
+def strip_sql_comments(sql: str) -> str:
+    """Remove ``-- ...`` line comments so the DDL stored in sqlite_master carries no
+    documentation (production schemas rarely do; the comments in DDL_V1/MIGRATION_V2 are
+    kept in the source for maintainers only)."""
+    return "\n".join(re.sub(r"\s*--[^\n]*", "", line) for line in sql.splitlines())
+
 
 DDL_V1 = """
 CREATE TABLE dim_region (
@@ -312,7 +321,7 @@ def write_v1(ds: Dataset, path: Path) -> None:
         path.unlink()
     con = sqlite3.connect(path)
     con.executescript("PRAGMA journal_mode=OFF; PRAGMA synchronous=OFF; PRAGMA page_size=4096;")
-    con.executescript(DDL_V1)
+    con.executescript(strip_sql_comments(DDL_V1))
     for name in TABLE_ORDER:
         df = ds[name]
         cols = ", ".join(df.columns)
@@ -336,7 +345,7 @@ def migrate_v2(ds: Dataset, src: Path, dst: Path) -> None:
     src_con.backup(dst_con)
     src_con.close()
     dst_con.executescript("PRAGMA journal_mode=OFF; PRAGMA synchronous=OFF;")
-    dst_con.executescript(MIGRATION_V2)
+    dst_con.executescript(strip_sql_comments(MIGRATION_V2))
     v3 = ds.meta["response_code_dict_v2db"]
     v3 = v3[v3.scheme_version == 3]
     dst_con.executemany("INSERT INTO response_code_dict (rc_id, code, scheme_version, meaning, is_decline, is_timeout, "
