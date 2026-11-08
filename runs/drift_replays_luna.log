@@ -1,1 +1,67 @@
 2026-11-08 20:05:52,384 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (5.64s)
+2026-11-08 20:05:56,913 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (4.52s)
+2026-11-08 20:06:00,831 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (3.91s)
+2026-11-08 20:06:04,743 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (3.91s)
+2026-11-08 20:06:06,360 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (1.61s)
+2026-11-08 20:06:11,779 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (5.42s)
+2026-11-08 20:06:13,314 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (1.53s)
+2026-11-08 20:06:18,566 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (5.25s)
+2026-11-08 20:06:20,393 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (1.42s)
+2026-11-08 20:06:20,464 INFO clrev.runner: replay q15_r1: ✓ answer='2463087.54' gt=2463087.54 sql=8 bash=0 cost=$0.0025 wall=33.7s
+2026-11-08 20:06:26,245 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (5.47s)
+2026-11-08 20:06:32,886 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (6.64s)
+2026-11-08 20:06:36,677 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (3.79s)
+2026-11-08 20:06:39,720 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (3.04s)
+2026-11-08 20:06:44,999 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (5.28s)
+2026-11-08 20:06:46,693 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (1.69s)
+2026-11-08 20:06:52,207 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (5.51s)
+2026-11-08 20:06:54,294 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (1.65s)
+2026-11-08 20:06:54,362 INFO clrev.runner: replay q15_r2: ✓ answer='2463087.54' gt=2463087.54 sql=9 bash=0 cost=$0.0022 wall=33.5s
+2026-11-08 20:07:00,511 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (5.75s)
+2026-11-08 20:07:04,882 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (4.36s)
+2026-11-08 20:07:08,937 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (4.05s)
+2026-11-08 20:07:14,259 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (5.32s)
+2026-11-08 20:07:18,653 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (4.39s)
+2026-11-08 20:07:24,132 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (5.47s)
+2026-11-08 20:07:25,688 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (1.55s)
+2026-11-08 20:07:31,605 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (5.91s)
+2026-11-08 20:07:33,355 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (1.75s)
+2026-11-08 20:07:38,630 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (5.27s)
+2026-11-08 20:07:40,742 INFO clrev.providers: codex[luna_icl_r1:icl]: attempt 1 ok (1.56s)
+2026-11-08 20:07:40,890 INFO clrev.runner: replay q15_r3: ✓ answer='2463087.54' gt=2463087.54 sql=10 bash=0 cost=$0.0032 wall=46.0s
+2026-11-08 20:07:40,893 INFO clrev.runner: replay done: 3/3 correct
+2026-11-08 20:07:43,085 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r1]: attempt 1 ok (1.38s)
+2026-11-08 20:07:45,848 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r1]: attempt 1 ok (2.76s)
+2026-11-08 20:07:47,589 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r1]: attempt 1 ok (1.74s)
+2026-11-08 20:07:52,820 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r1]: attempt 1 ok (5.23s)
+2026-11-08 20:07:55,101 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r1]: attempt 1 ok (1.79s)
+2026-11-08 20:07:55,120 INFO clrev.runner: replay q15_r1: ✗ answer='13693060.50' gt=2463087.54 sql=7 bash=0 cost=$0.0007 wall=13.4s
+2026-11-08 20:07:56,997 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r2]: attempt 1 ok (1.57s)
+2026-11-08 20:08:00,581 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r2]: attempt 1 ok (3.58s)
+2026-11-08 20:08:05,842 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r2]: attempt 1 ok (5.26s)
+2026-11-08 20:08:08,670 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r2]: attempt 1 ok (2.83s)
+2026-11-08 20:08:14,994 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r2]: attempt 1 ok (6.32s)
+2026-11-08 20:08:17,292 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r2]: attempt 1 ok (1.39s)
+2026-11-08 20:08:17,323 INFO clrev.runner: replay q15_r2: ✓ answer='2463087.54' gt=2463087.54 sql=11 bash=0 cost=$0.0008 wall=21.9s
+2026-11-08 20:08:20,129 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r3]: attempt 1 ok (2.34s)
+2026-11-08 20:08:22,192 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r3]: attempt 1 ok (2.06s)
+2026-11-08 20:08:25,229 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r3]: attempt 1 ok (3.04s)
+2026-11-08 20:08:28,347 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r3]: attempt 1 ok (3.12s)
+2026-11-08 20:08:34,661 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r3]: attempt 1 ok (6.31s)
+2026-11-08 20:08:41,314 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r3]: attempt 1 ok (6.65s)
+2026-11-08 20:08:43,779 INFO clrev.providers: codex[luna_stateless_r1:replay:q15_r3]: attempt 1 ok (1.63s)
+2026-11-08 20:08:43,802 INFO clrev.runner: replay q15_r3: ✓ answer='2463087.54' gt=2463087.54 sql=11 bash=0 cost=$0.0012 wall=26.0s
+2026-11-08 20:08:43,804 INFO clrev.runner: replay done: 2/3 correct
+2026-11-08 20:08:50,909 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (6.16s)
+2026-11-08 20:09:04,178 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (12.47s)
+2026-11-08 20:09:07,011 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.91s)
+2026-11-08 20:09:07,049 INFO clrev.runner: replay q22_r1: ✓ answer='Helios Grocery' gt='Helios Grocery' sql=2 bash=0 cost=$0.0010 wall=22.3s
+2026-11-08 20:09:15,555 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (8.07s)
+2026-11-08 20:09:26,546 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (10.99s)
+2026-11-08 20:09:31,223 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (3.91s)
+2026-11-08 20:09:31,260 INFO clrev.runner: replay q22_r2: ✓ answer='Helios Grocery' gt='Helios Grocery' sql=2 bash=0 cost=$0.0011 wall=23.7s
+2026-11-08 20:09:33,016 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (1.44s)
+2026-11-08 20:09:39,456 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (6.44s)
+2026-11-08 20:09:49,582 INFO clrev.providers: codex[luna_icl_r2:icl]: attempt 1 ok (9.23s)
+2026-11-08 20:09:49,618 INFO clrev.runner: replay q22_r3: ✗ answer='Aurora Hospitality' gt='Helios Grocery' sql=2 bash=0 cost=$0.0009 wall=18.0s
+2026-11-08 20:09:49,620 INFO clrev.runner: replay done: 2/3 correct

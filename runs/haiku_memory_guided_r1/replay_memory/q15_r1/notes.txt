@@ -14,3 +14,4 @@ Q15 (rolled-back 2025 deployment live with most ERROR events from own component)
 Q16 (2025 weekly txn-count OLS slope, level-2 divisions, any status, time-valid terminal_assignment, ISO week via Thursday trick): CORRECT = Helios Grocery (slope 27.98; next Borealis Cafés & Bakeries 8.35). Level-2 groups: 2,6,10,15,19,23,27,31,35,38,41,44,48,51.
 Q17 (2025-09-18 timed-out txns retried within 90s on same terminal): submitted 35. Timeout codes v2 = 91,96,Z1,Z3 (is_timeout=1; 68 not). total 102, LEAD over terminal_id ordered by ts_utc,txn_id.
 Q18 (ERROR events same component within 60min after 2025 config change, change time inclusive): submitted 83 (component 5, 2025-07-15 09:41, 40 ERRORs; next 15 with 30). Used level='ERROR' exactly (FATAL excluded). ts_utc text compare, formats consistent.
+Q19 (Aurora Collective CAPTURED 2025 EUR): 2463087.54 (n=29004). Schema: terminal_merchant_link(start_ts,end_ts), dim_merchant.merchant_group_id. Top group 18.
